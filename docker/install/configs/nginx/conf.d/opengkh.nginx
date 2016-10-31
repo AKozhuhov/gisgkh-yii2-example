@@ -1,0 +1,29 @@
+server {
+    set $root /opengkh/app/web;
+
+    listen 80;
+    server_name starday starday.maxek.xyz;
+
+    index index.php;
+
+    location /favicon.ico {
+        alias $root/favicon.ico;
+    }
+
+    location /assets/ {
+        root $root;
+        access_log        off;
+        expires           1;
+        add_header        Cache-Control private;
+        try_files $uri $uri/ =404;
+    }
+
+    location / {
+        root $root;
+        rewrite ^/(.*)$ /index.php?$1 break;
+
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php7.0-fpm.sock;
+        break;
+    }
+}

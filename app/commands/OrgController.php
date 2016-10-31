@@ -20,6 +20,6 @@ class OrgController extends Controller
     public function actionByOgrn($ogrn = '1037739877295')
     {
         $gisOrg = GisOrganization::searchByOgrn($ogrn);
-        print_r($gisOrg);
+        print_r(ArrayHelper::toArray($gisOrg));
     }
 }

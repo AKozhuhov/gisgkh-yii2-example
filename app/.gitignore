@@ -1,3 +1,5 @@
+config/*pem
+
 # phpstorm project files
 .idea
 

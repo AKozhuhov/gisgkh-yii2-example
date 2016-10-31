@@ -51,16 +51,13 @@ $config = [
         'gisgkh' => [
             'class' => 'opengkh\gis\Module',
             'version' => '10.0.2.3',
-            'sslCert' => '@app/config/rgd20161023.pem',
-            'sslKey' => '@app/config/rgd20161023.pem',
-            'caInfo' => '@app/config/cacert3.pem',
+            'sslCert' => '@app/config/cert.pem',
+            'sslKey' => '@app/config/key.pem',
+            'caInfo' => '@app/config/cacert.pem',
             'username' => 'lanit',
             'password' => 'tv,n8!Ya',
             'ip' => '217.107.108.147',
             'port' => '10081',
-            'classesPath' => '@app/gisgkh',
-            'SenderId' => null,//'a319a81d-b10e-4d1e-b9e5-953f699bf301',
-            'orgPPAGUID' => '4e254e2a-98a2-4006-af79-cee92cbec248'
         ]
     ],
     'params' => $params,

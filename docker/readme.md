@@ -65,4 +65,4 @@ alias opengkh-services='cd /path/to/yii-opengkh-example/docker && npm run servic
 
 ---
  
-Лиценщия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)
+Лицензия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)

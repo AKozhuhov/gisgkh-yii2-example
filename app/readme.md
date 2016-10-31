@@ -63,4 +63,4 @@
 
 ---
  
-Лиценщия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)
+Лицензия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)

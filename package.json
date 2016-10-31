@@ -1,0 +1,24 @@
+{
+  "name": "LabHD",
+  "version": "1.0.0",
+  "description": "LabHD environment",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "app-root-path": "^1.2.1",
+    "shell-done": "git://github.com/maxeko/shell-done.git",
+    "shelljs": "^0.7.0",
+    "yargs": "^4.7.1"
+  },
+  "scripts": {
+    "install-web": "./install.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/startuplab/labhd.git"
+  },
+  "author": "Maxim Korshunov <korshunov.m.e@gmail.com>",
+  "homepage": "https://bitbucket.org/startuplab/labhd#readme"
+}

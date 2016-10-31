@@ -30,8 +30,7 @@ npm run services
 После первого запуска нужно также выполнить команды для настройки проекта и установке зависимостей:
 
 ```
-npm run db-install
-npm run site-install
+npm run app-install
 ```
 
 ## Работа в докере
@@ -43,9 +42,9 @@ npm run site-install
 Для удобства в `~/.bash_aliases` можно добавить алиасы (`/path/to/yii-opengkh-example` нужно заменить на путь к директории проекта):
 
 ```
-alias starday='docker exec -it -u dvp starday /bin/bash'
-alias starday-run='cd /path/to/yii-opengkh-example/docker && npm run docker'
-alias starday-services='cd /path/to/yii-opengkh-example/docker && npm run services-restart'
+alias opengkh='docker exec -it -u dvp starday /bin/bash'
+alias opengkh-run='cd /path/to/yii-opengkh-example/docker && npm run docker'
+alias opengkh-services='cd /path/to/yii-opengkh-example/docker && npm run services-restart'
 ```
 
 ---

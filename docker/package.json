@@ -8,7 +8,7 @@
     "docker-update": "./build.js -f -u && ./run.js -f",
     "services": "./execute.js -u root -c /opengkh/docker/services/start.js",
     "services-restart": "./execute.js -u root -c /opengkh/docker/services/restart.js",
-    "app-install": "./execute.js -u dvp -c /opengkh/app/install.sh"
+    "app-install": "./execute.js -u dvp -c /opengkh/install.sh"
   },
   "dependencies": {
     "app-root-path": "^1.2.1",

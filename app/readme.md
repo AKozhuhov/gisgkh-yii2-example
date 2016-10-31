@@ -28,9 +28,9 @@
         'gisgkh' => [
             'class' => 'opengkh\gis\Module',
             'version' => '10.0.2.3',
-            'sslCert' => '@app/config/rgd20161023.pem',
-            'sslKey' => '@app/config/rgd20161023.pem',
-            'caInfo' => '@app/config/cacert3.pem',
+            'sslCert' => '@app/config/cert.pem',
+            'sslKey' => '@app/config/key.pem',
+            'caInfo' => '@app/config/cacert.pem',
             'username' => '<http-login>',
             'password' => '<http-password>',
             'ip' => '217.107.108.147',

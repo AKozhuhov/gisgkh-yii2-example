@@ -26,4 +26,6 @@
 - [Инструкция по подключению и использованию модуля](https://github.com/opengkh/yii2-gisgkh/blob/master/README.md)
 - [Инструкция по настройке рабочего окружения](/docker/readme.md)
  
-
+---
+ 
+Лиценщия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)

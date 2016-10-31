@@ -59,3 +59,7 @@ alias opengkh-services='cd /path/to/yii-opengkh-example/docker && npm run servic
 - `./build.js` - сбока образа
 - `./run.js` - запуск контейнера
 - `./execute.js` - выполнение комманды в контейнере
+
+---
+ 
+Лиценщия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)

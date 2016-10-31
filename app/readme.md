@@ -60,3 +60,7 @@
 ```
 
 2. ...
+
+---
+ 
+Лиценщия: [http://open-gkh.ru/license.html](http://open-gkh.ru/license.html)

@@ -35,8 +35,6 @@
             'password' => '<http-password>',
             'ip' => '217.107.108.147',
             'port' => '10081',
-            'SenderId' => null,
-            'orgPPAGUID' => '4e254e2a-98a2-4006-af79-cee92cbec248'
         ]
     ],
 ```

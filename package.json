@@ -1,7 +1,7 @@
 {
-  "name": "LabHD",
+  "name": "Open-GKH-demo-app",
   "version": "1.0.0",
-  "description": "LabHD environment",
+  "description": "Open GKH demo-application",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -17,8 +17,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/startuplab/labhd.git"
+    "url": "git+ssh://git@github.com:opengkh/yii2-gisgkh-example.git"
   },
   "author": "Maxim Korshunov <korshunov.m.e@gmail.com>",
-  "homepage": "https://bitbucket.org/startuplab/labhd#readme"
+  "homepage": "https://github.com/opengkh/yii2-gisgkh-example#readme"
 }

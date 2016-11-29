@@ -24,6 +24,7 @@ body {
 .jumbotron {
     text-align: center;
     background-color: transparent;
+    padding-bottom: 0;
 }
 
 .jumbotron .btn {
@@ -112,4 +113,34 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+.navbar-inverse {
+    background-color: #007546 !important;
+    border-color: #007546 !important;
+}
+
+.navbar-collapse {
+    background-color: #007546 !important;
+    border-color: #007546 !important;
+}
+
+.navbar-toggle
+{
+    background-color: #007546 !important;
+    border-color: #007546 !important;
+}
+
+.navbar-inverse a {
+    color: white !important;
+}
+
+.footer {
+    background: none !important;
+    border-top: 1px solid lightgrey;
+}
+
+.btn {
+    white-space: normal;
+    margin-bottom: 5px;
 }

@@ -6,6 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'gisgkh'],
+    'language' => 'ru-RU',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -38,26 +39,29 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'GET nsi/<registryNumber:\d+>' => 'nsi/view'
             ],
         ],
-        */
+        'nsiStorage' => [
+            'class' => 'app\nsi\NSIStorage'
+        ],
     ],
     'modules' => [
         'gisgkh' => [
             'class' => 'opengkh\gis\Module',
-            'version' => '10.0.2.3',
+            'version' => '10.0.2.10',
             'sslCert' => '@app/config/cert.pem',
             'sslKey' => '@app/config/key.pem',
             'caInfo' => '@app/config/cacert.pem',
-            'username' => 'lanit',
-            'password' => 'tv,n8!Ya',
+            'username' => 'sit',
+            'password' => 'rZ_GG72XS^Vf55ZW',
             'ip' => '217.107.108.147',
             'port' => '10081',
+            'nsiManager' => 'nsiStorage'
         ]
     ],
     'params' => $params,

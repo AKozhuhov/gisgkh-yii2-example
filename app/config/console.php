@@ -25,12 +25,12 @@ $config = [
     'modules' => [
         'gisgkh' => [
             'class' => 'opengkh\gis\Module',
-            'version' => '10.0.2.3',
+            'version' => '10.0.2.10',
             'sslCert' => '@app/config/cert.pem',
             'sslKey' => '@app/config/key.pem',
             'caInfo' => '@app/config/cacert.pem',
-            'username' => 'lanit',
-            'password' => 'tv,n8!Ya',
+            'username' => 'sit',
+            'password' => 'rZ_GG72XS^Vf55ZW',
             'ip' => '217.107.108.147',
             'port' => '10081',
         ]

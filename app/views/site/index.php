@@ -1,51 +1,58 @@
 <?php
 
+use \yii\helpers\Html;
+
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
 ?>
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
+        <h1>Модуль интеграции с ГИС ЖКХ</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <h2>Демонстрационное приложение</h2>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <br/>
+        <p>
+            <a class="btn btn-default" href="https://github.com/opengkh/yii2-gisgkh-example">
+                Исходный код на GitHub
+            </a>
+        </p>
     </div>
 
     <div class="body-content">
 
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+            <div class="col-lg-12">
+                <h2>Подключение к ГИС ЖКХ</h2>
+                <p>
+                    Приложение подключено к тестовому стенду ГИС ЖКХ <?= Html::a('СИТ-1', 'https://217.107.108.147/ ') ?>
+                </p>
+                <p>
+                    Для установления соединения используется ключ тестовой ИС. Ключ также доступен в составе исходного кода,
+                    поэтому пример может быть легко воспроизведён.
+                </p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+        </div>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Пример 1: НСИ</h2>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                <p>
+                    Получение полного перечня справочников НСИ ГИС ЖКХ. Просмотр элементов по каждому справочнику.
+                </p>
+
+                <p><a class="btn btn-default" href="/nsi">Перейти к примеру &raquo;</a></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-lg-6">
+                <h2>Пример 2: реестр организаций</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>
+                    Получение сведений об организации по ОГРН
+                </p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <p><a class="btn btn-default" href="/org">Перейти к примеру &raquo;</a></p>
             </div>
         </div>
 

@@ -44,6 +44,7 @@ module.exports = {
             'apt-get update -y',
             'cd /root/install && npm install',
             '/root/install/users.js',
+            '/root/install/php.js',
             '/root/install/nginx.js',
             '/root/install/ssh.js'
         ],

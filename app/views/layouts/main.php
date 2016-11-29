@@ -10,6 +10,9 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+$this->title = ($this->title ?: 'Интеграция с ГИС ЖКХ с помощью модуля yii2-gisgkh') . ' — демо OpenGKH';
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -27,8 +30,8 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandLabel' => 'Open GKH',
+        'brandUrl' => 'http://open-gkh.ru',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
@@ -36,21 +39,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+            ['label' => 'Пример 1: НСИ', 'url' => ['/nsi']],
+            ['label' => 'Пример 2: Организации', 'url' => ['/site/org']],
         ],
     ]);
     NavBar::end();
@@ -66,7 +56,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Html::a('Open-GKH', 'http://open-gkh.ru') ?>, <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

@@ -1,4 +1,5 @@
 config/*pem
+web/assets
 
 # phpstorm project files
 .idea

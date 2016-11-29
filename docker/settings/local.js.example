@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var settings = require('./settings');
+var settings = require('./common');
 
 // uncomment and edit lines below if you need to change common config
 

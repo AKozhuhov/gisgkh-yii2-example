@@ -40,7 +40,7 @@ $this->title = ($this->title ?: 'Интеграция с ГИС ЖКХ с пом
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Пример 1: НСИ', 'url' => ['/nsi']],
-            ['label' => 'Пример 2: Организации', 'url' => ['/site/org']],
+            ['label' => 'Пример 2: Организации', 'url' => ['/org']],
         ],
     ]);
     NavBar::end();

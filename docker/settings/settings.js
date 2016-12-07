@@ -6,7 +6,6 @@ var settings = {};
 try {
     settings = require('./local');
 } catch (e) {
-    console.log(e);
     settings = require('./common');
 }
 

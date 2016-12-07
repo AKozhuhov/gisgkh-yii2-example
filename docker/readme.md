@@ -4,7 +4,7 @@
 
 Для локальной установки окружения необходимо предварительно установить:
 
-1. Node.js -- [инструкция по установке](https://nodejs.org/en/download/package-manager/)
+1. Node.js (не ниже 6-й версии) -- [инструкция по установке](https://nodejs.org/en/download/package-manager/)
 2. Docker -- [инструкция по установке](https://docs.docker.com/engine/installation/)
 
 ## Установка

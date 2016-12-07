@@ -7,6 +7,7 @@ var steps = [
             'sudo chown dvp:dvp -R ' + __dirname + '/app',
             'sudo chown dvp:www-data -R ' + __dirname + '/app/runtime',
             'sudo chmod g+w -R ' + __dirname + '/app/runtime',
+            'sudo mkdir ' + __dirname + '/app/web/assets',            
             'sudo chown dvp:www-data -R ' + __dirname + '/app/web/assets',
             'sudo chmod g+w -R ' + __dirname + '/app/web/assets'
         ]

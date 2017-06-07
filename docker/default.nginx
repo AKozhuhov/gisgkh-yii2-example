@@ -1,0 +1,58 @@
+server {
+    set $root /example;
+
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    index index.php;
+
+    location /favicon.ico {
+        alias $root/web/favicon.ico;
+    }
+
+    location /assets/ {
+        root $root/web;
+        access_log        off;
+        expires           1;
+        add_header        Cache-Control private;
+        try_files $uri $uri/ =404;
+    }
+
+    location /images/ {
+        root $root/web;
+        access_log        off;
+        expires           1;
+        add_header        Cache-Control private;
+        try_files $uri $uri/ =404;
+    }
+
+    location /files/ {
+        root $root/web;
+        access_log        off;
+        expires           1;
+        add_header        Cache-Control private;
+        try_files $uri $uri/ =404;
+    }
+
+    location /fonts/ {
+        root $root/web;
+        access_log        off;
+        expires           1;
+        add_header        Cache-Control private;
+        try_files $uri $uri/ =404;
+    }
+
+    location / {
+        root $root/web;
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        root $root/web;
+
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+        break;
+    }
+}

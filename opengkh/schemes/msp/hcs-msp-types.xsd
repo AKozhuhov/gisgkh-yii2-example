@@ -1,0 +1,1408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by S (H) -->
+<!---->
+<!---->
+<xs:schema xmlns:tns="http://dom.gosuslugi.ru/schema/integration/msp/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:nsi="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:bills="http://dom.gosuslugi.ru/schema/integration/bills-base/" xmlns:premises="http://dom.gosuslugi.ru/schema/integration/premises-base/" xmlns:ind="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/msp/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="11.1.0.8">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/bills-base/" schemaLocation="../lib/hcs-bills-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/premises-base/" schemaLocation="../lib/hcs-premises-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" schemaLocation="../lib/hcs-individual-registry-base.xsd"/>
+	<!--Общие типы-->
+	<xs:simpleType name="MoneyType">
+		<xs:annotation>
+			<xs:documentation>Денежная сумма (с любым знаком)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="20"/>
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MoneyPositiveType">
+		<xs:annotation>
+			<xs:documentation>Положительная денежная сумма</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="tns:MoneyType">
+			<xs:minExclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MoneyNonNegativeType">
+		<xs:annotation>
+			<xs:documentation>Неотрицательная денежная сумма</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="tns:MoneyType">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceType">
+		<xs:annotation>
+			<xs:documentation>Расходы на оплату жилого помещения и коммунальных услуг, подлежащие компенсации. ColdWater - Холодное водоснабжение, HotWater - Горячее водоснабжение, Sewerage - Отведение сточных вод, Electricity - Электроснабжение, Gas - Газоснабжение, SolidFuel - Твердое топливо, LiquidGas - Газ в баллонах, Heating - Отопление, Waste - Обращение с твердыми коммунальными отходами, Maintenance - Содержание жилого помещения, Repairs - Взносы на капитальный ремонт, Rent - Наем жилого помещения</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ColdWater"/>
+			<xs:enumeration value="HotWater"/>
+			<xs:enumeration value="Sewerage"/>
+			<xs:enumeration value="Electricity"/>
+			<xs:enumeration value="Gas"/>
+			<xs:enumeration value="SolidFuel"/>
+			<xs:enumeration value="LiquidGas"/>
+			<xs:enumeration value="Heating"/>
+			<xs:enumeration value="Waste"/>
+			<xs:enumeration value="Maintenance"/>
+			<xs:enumeration value="Repairs"/>
+			<xs:enumeration value="Rent"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="MSPIndType">
+		<xs:annotation>
+			<xs:documentation>Физическое лицо</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ind:FIOType">
+				<xs:sequence>
+					<xs:element ref="ind:SNILS"/>
+					<xs:element name="Sex" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Пол (Male- мужской, Female-женский)</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Male"/>
+								<xs:enumeration value="Female"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element ref="ind:DateOfBirth" minOccurs="0"/>
+					<xs:element ref="ind:PlaceBirth" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="String36Type">
+		<xs:annotation>
+			<xs:documentation>Скалярный тип. Строка не более 36 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="36"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String255Type">
+		<xs:annotation>
+			<xs:documentation>Скалярный тип. Строка не более 256 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String256Type">
+		<xs:annotation>
+			<xs:documentation>Скалярный тип. Строка не более 256 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="256"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String1000Type">
+		<xs:annotation>
+			<xs:documentation>Скалярный тип. Строка не более 256 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="DecisionType">
+		<xs:annotation>
+			<xs:documentation>Решение</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="tns:String256Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер решения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата решения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionTypeCode" type="nsi:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Тип решения (НСИ 301)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionReasonCode" type="nsi:nsiRef" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Основание решения (НСИ 302). Под основанием понимается (в зависимости от типа решения):
+- Основание приостановления
+- Основание возобновления
+- Основание прекращения. Обязательно для заполнения для всех типов решений, кроме решений о предоставлении. Для решений о предоставлении поле не заполняется</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EventDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата события. Под датой события понимается (в зависимости от типа решения):
+- Дата приостановления
+- Дата возобновления
+- Дата прекращения
+Обязательно для заполнения для всех типов решений, кроме решений о предоставлении. Для решений о предоставлении поле не заполняется</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachment" type="base:AttachmentType" minOccurs="0" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Файлы решения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentType">
+		<xs:annotation>
+			<xs:documentation>Выплата гражданину, получающему субсидии/компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PaymentType">
+				<xs:annotation>
+					<xs:documentation>Тип выплаты. Требуется указать одно из двух возможных значений: Payment - выплата гражданину, Refund - возврат гражданином излишне полученной суммы</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="Payment"/>
+						<xs:enumeration value="Refund"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата выплаты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PaymentSum" type="tns:MoneyPositiveType">
+				<xs:annotation>
+					<xs:documentation>Сумма выплаты, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportPaymentType">
+		<xs:annotation>
+			<xs:documentation>Тип для экcпорта информации о выплате</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:PaymentType">
+				<xs:sequence>
+					<xs:element name="PaymentGuid" type="base:GUIDType">
+						<xs:annotation>
+							<xs:documentation>Идентификатор информации о выплате</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="tns:Status"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Status">
+		<xs:annotation>
+			<xs:documentation>Статус размещения объекта. Возможные значения: Published - Размещено в ГИС ЖКХ, Canceled - Аннулировано, Draft - Проект</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="Published"/>
+				<xs:enumeration value="Draft"/>
+				<xs:enumeration value="Canceled"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>Граждане, получающие субсидии</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="CitizenSubsidyOverviewType">
+		<xs:annotation>
+			<xs:documentation>Общие сведения о гражданине, получающем субсидии </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:MSPIndType">
+				<xs:sequence>
+					<xs:element name="Address" type="premises:FIASHouseGUIDType">
+						<xs:annotation>
+							<xs:documentation>Адрес жилого помещения, по которому предоставляется субсидия. Глобальный уникальный идентификатор дома по ФИАС</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ApartmentNumber" type="tns:String36Type" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Номер кваритры</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FlatNumber" type="tns:String36Type" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Номер комнаты</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RegistrationType">
+						<xs:annotation>
+							<xs:documentation>Тип регистрации в жилом помещении. Требуется указать одно из двух значений: Permanent - по месту жительства, Temporary - по месту пребывания</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:token">
+								<xs:enumeration value="Permanent"/>
+								<xs:enumeration value="Temporary"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="FromDate" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>Дата начала предоставления субсидии</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ToDate" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>Дата окончания предоставления субсидии</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Decision" type="tns:DecisionType" minOccurs="0" maxOccurs="1000">
+						<xs:annotation>
+							<xs:documentation>Решения. При импорте обязательно должно быть хотя бы одно решение о предоставлении</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CitizenSubsidyCalculationType">
+		<xs:annotation>
+			<xs:documentation>Расчеты и перерасчеты для гражданина, получающего субсидии</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PeriodDate" type="xs:gYearMonth">
+				<xs:annotation>
+					<xs:documentation>Период, за который выполнен расчет субсидии</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CalculationDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата расчета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FamilySize">
+				<xs:annotation>
+					<xs:documentation>Количество членов семьи, на которых распространаяется предоставление субсидии</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ActualExpensesSum" type="tns:MoneyType">
+				<xs:annotation>
+					<xs:documentation>Размер фактических расходов, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SubsidySum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер субсидии, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecalculationSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер перерасчета за прошлые периоды, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalSum" type="tns:MoneyType">
+				<xs:annotation>
+					<xs:documentation>Размер предоставляемой субсидии, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportCitizenSubsidyCalculationType">
+		<xs:annotation>
+			<xs:documentation>Расчеты и перерасчеты для гражданина, получающего субсидии</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:CitizenSubsidyCalculationType">
+				<xs:sequence>
+					<xs:element name="CalculationGuid" type="base:GUIDType">
+						<xs:annotation>
+							<xs:documentation>Идентификатор информации о расчетах и перерасчетах</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="tns:Status"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ExportCitizenSubsidyType">
+		<xs:annotation>
+			<xs:documentation>Экспортирумые сведения о гражданине, получающем субсидии</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Overview">
+				<xs:annotation>
+					<xs:documentation>Общие сведения</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:CitizenSubsidyOverviewType">
+							<xs:sequence>
+								<xs:element name="CitizenSubsidyGuid" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Идентификатор информации о гражданине, получающем субсидии</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element ref="tns:Status"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Calculation" type="tns:ExportCitizenSubsidyCalculationType" minOccurs="0" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Расчеты и перерасчеты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Payment" minOccurs="0" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Выплаты</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:ExportPaymentType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation>Граждане, получающие компенсации расходов</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="CitizenCompensationOverviewType">
+		<xs:annotation>
+			<xs:documentation>Общие сведения о гражданине, получающем компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:MSPIndType">
+				<xs:sequence>
+					<xs:element name="Address" type="premises:FIASHouseGUIDType">
+						<xs:annotation>
+							<xs:documentation>Адрес жилого помещения, по которому предоставляется компенсация расходов. Глобальный уникальный идентификатор дома по ФИАС</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ApartmentNumber" type="tns:String36Type" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Номер кваритры</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FlatNumber" type="tns:String36Type" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Номер комнаты</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RegistrationType">
+						<xs:annotation>
+							<xs:documentation>Тип регистрации в жилом помещении. Требуется указать одно из двух значений: Permanent - по месту жительства, Temporary - по месту пребывания</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:token">
+								<xs:enumeration value="Permanent"/>
+								<xs:enumeration value="Temporary"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Category" type="tns:CitizenCompensationCategoryType" minOccurs="0" maxOccurs="1000">
+						<xs:annotation>
+							<xs:documentation>Категории. При импорте должна быть указана хотя бы одна категория</xs:documentation>
+						</xs:annotation>
+						<xs:unique name="CategoryServiceUnique">
+							<xs:selector xpath=".//tns:Service"/>
+							<xs:field xpath="."/>
+						</xs:unique>
+					</xs:element>
+					<xs:element name="Decision" type="tns:DecisionType" minOccurs="0" maxOccurs="1000">
+						<xs:annotation>
+							<xs:documentation>Решения. При импорте обязательно должно быть хотя бы одно решение о предоставлении</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CitizenCompensationCategoryType">
+		<xs:annotation>
+			<xs:documentation>Категория гражданина, получающего компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CategoryGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор отдельной категории гражданин</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PeriodFrom" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Период предоставления компенсации по данной категории С</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PeriodTo" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Период предоставления компенсации по данной категории ПО</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Service" type="tns:ServiceType" minOccurs="0" maxOccurs="12">
+				<xs:annotation>
+					<xs:documentation>Расходы на оплату жилого помещения и коммунальных услуг, подлежащие компенсации. Поле обязательно для заполнения, если порядок расчета компенсации расходов в указанной категории - от фактических расходов на оплату жилищно-коммунальных услуг</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CitizenCompensationCalculationType">
+		<xs:annotation>
+			<xs:documentation>Расчеты и перерасчеты для гражданина, получающего компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PeriodFrom" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата начала периода, за который выполнен расчет компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PeriodTo" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата окончания периода, за который выполнен расчет компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CalculationDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата расчета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompensationSum" type="tns:MoneyType">
+				<xs:annotation>
+					<xs:documentation>Размер компенсационной выплаты, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:sequence>
+				<xs:annotation>
+					<xs:documentation>Расчет компенсации расходов</xs:documentation>
+				</xs:annotation>
+				<xs:element name="Actual" type="tns:ActualCompensationType" minOccurs="0" maxOccurs="12">
+					<xs:annotation>
+						<xs:documentation>Расчет компенсации от фактических расходов на оплату жилищно-коммунальных услуг</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Standard" type="tns:StandardCompensationType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Расчет компенсации по стандартам стоимости жилищно-коммунальных услуг</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Fixed" type="tns:FixedCompensationType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Расчет компенсации в виде фиксированного размера денежной выплаты</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ActualCompensationType">
+		<xs:annotation>
+			<xs:documentation>Расходы на оплату жилого помещения и коммунальных услуг и их компенсация</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Service" type="tns:ServiceType">
+				<xs:annotation>
+					<xs:documentation>Расходы на оплату жилого помещения и коммунальных услуг, подлежащие компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FamilySize">
+				<xs:annotation>
+					<xs:documentation>Количество членов семьи, на которых распространаяется предоставление компенсации расходов</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ServicePaymentSum" type="tns:MoneyType">
+				<xs:annotation>
+					<xs:documentation>Размер платы, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompensationSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер компенсации расходов, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecalculationSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер перерасчета компенсации расходов за прошлые периоды, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardCompensationType">
+		<xs:annotation>
+			<xs:documentation>Расчет компенсации по стандартам стоимости жилищно-коммунальных услуг</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FamilySize" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Количество членов семьи, на которых распространаяется предоставление компенсации расходов</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер платы, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompensationSum" type="tns:MoneyNonNegativeType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер компенсации расходов, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecalculationSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер перерасчета компенсации расходов за прошлые периоды, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FixedCompensationType">
+		<xs:annotation>
+			<xs:documentation>Расчет компенсации в виде фиксированного размера денежной выплаты</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FamilySize" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Количество членов семьи, на которых распространаяется предоставление компенсации расходов</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер платы, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompensationSum" type="tns:MoneyNonNegativeType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер компенсации расходов, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecalculationSum" type="tns:MoneyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер перерасчета компенсации расходов за прошлые периоды, руб.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportCitizenCompensationCalculationType">
+		<xs:annotation>
+			<xs:documentation>Расчеты и перерасчеты для гражданина, получающего компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:CitizenCompensationCalculationType">
+				<xs:sequence>
+					<xs:element name="CalculationGuid" type="base:GUIDType">
+						<xs:annotation>
+							<xs:documentation>Идентификатор информации о расчетах и перерасчетах гражданина в ГИС ЖКХ</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="tns:Status"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ExportCitizenCompensationType">
+		<xs:annotation>
+			<xs:documentation>Экспортируемые сведения о гражданине, получающем компансации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Overview">
+				<xs:annotation>
+					<xs:documentation>Общие сведения</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:CitizenCompensationOverviewType">
+							<xs:sequence>
+								<xs:element name="CitizenCompensationGuid" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Идентификатор информации о гражданине в ГИС ЖКХ</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element ref="tns:Status"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Calculation" type="tns:ExportCitizenCompensationCalculationType" minOccurs="0" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Расчеты и перерасчеты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Payment" type="tns:ExportPaymentType" minOccurs="0" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Выплаты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation>Импорт сведений о гражданах, получающих субсидии</xs:documentation>
+	</xs:annotation>
+	<xs:element name="importCitizenSubsidyRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос импорта сведений о гражданах, получающих субсидии. Импорт расчетов и выплат по гражданам, получающим субсидии</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="importCitizenSubsidy" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Импорт сведений о гражданах, получающих субсидии. Импорт расчетов и выплат по гражданам, получающим субсидии</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CitizenSubsidyGuid" type="base:GUIDType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Идентификатор информации о гражданине в ГИС ЖКХ. Заполняется при изменении ранее загруженных общих сведений о гражданине, а также при импорте информации о расчетах и выплатах</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:sequence minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Ветка для загрузки общей информации о гражданине, получающем субсидии (добавление,изменение и аннулирование информации о гражданине)</xs:documentation>
+										</xs:annotation>
+										<xs:element name="TransportGuid" type="base:GUIDType">
+											<xs:annotation>
+												<xs:documentation>Транспортный идентификатор для выполнения операции с информацией о гражданине</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:choice>
+											<xs:element name="LoadOverview" type="tns:CitizenSubsidyOverviewType">
+												<xs:annotation>
+													<xs:documentation>Добавить/Изменить общую информацию о гражданах, получающих субсидии. При изменении необходимо присылать всю информацию о гражданине в актуальном состоянии.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="Cancel" type="xs:boolean" fixed="true">
+												<xs:annotation>
+													<xs:documentation>Аннулировать информацию о гражданине, получающем субсидии</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+									</xs:sequence>
+									<xs:element name="Calculation" minOccurs="0" maxOccurs="1000">
+										<xs:annotation>
+											<xs:documentation>Ветка для загрузки расчетов и перерасчетов по гражданину, получающему субсидии (добавление,изменение и аннулирование информации о расчетах и перерасчетах)</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TransportGuid" type="base:GUIDType">
+													<xs:annotation>
+														<xs:documentation>Транспортный идентификатор для выполнения операции с информацией о расчетах и перерасчетах</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="CalculationGuid" type="base:GUIDType" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Идентификатор информации о расчетах и перерасчетах гражданина в ГИС ЖКХ</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:element name="LoadCalculation" type="tns:CitizenSubsidyCalculationType">
+														<xs:annotation>
+															<xs:documentation>Добавить/Изменить информацию о расчетах и перерасчетах</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Cancel" type="xs:boolean" fixed="true">
+														<xs:annotation>
+															<xs:documentation>Аннулировать информацию</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Payment" minOccurs="0" maxOccurs="1000">
+										<xs:annotation>
+											<xs:documentation>Ветка для загрузки выплат по гражданину, получающему субсидии (добавление,изменение и аннулирование информации о выплатах)</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TransportGuid" type="base:GUIDType">
+													<xs:annotation>
+														<xs:documentation>Транспортный идентификатор для выполнения операции с информацией о выплатах гражданину</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="PaymentGuid" type="base:GUIDType" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Идентификатор информации о выплатах гражданину в ГИС ЖКХ</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:element name="LoadPayment" type="tns:PaymentType">
+														<xs:annotation>
+															<xs:documentation>Добавить/Изменить информацию о выплатах</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Cancel" type="xs:boolean" fixed="true">
+														<xs:annotation>
+															<xs:documentation>Аннулировать информацию о выплатах</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:unique name="importCitizenSubsidyInfoRequest_TransportGuidUnique">
+			<xs:selector xpath=".//tns:TransportGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+		<xs:unique name="importCitizenSubsidyInfoRequest_CitizenSubsidyInfoGuidUnique">
+			<xs:selector xpath=".//tns:CitizenSubsidyGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+		<xs:unique name="importCitizenSubsidyInfoRequest_CalculationGuidUnique">
+			<xs:selector xpath=".//tns:CalculationGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+		<xs:unique name="importCitizenSubsidyInfoRequest_PaymentsGuidUnique">
+			<xs:selector xpath=".//tns:PaymentGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>Импорт сведений о гражданах, получающих компенсации расходов</xs:documentation>
+	</xs:annotation>
+	<xs:element name="importCitizenCompensationRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос импорта сведений о гражданах, получающих компенсации расходов. Импорт расчетов и выплат по гражданам, получающим компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="importCitizenCompensation" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Импорт сведений о гражданах, получающих компенсации расходов. Импорт расчетов и выплат по гражданам, получающим компенсации расходов</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CitizenCompensationGuid" type="base:GUIDType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Идентификатор информации о гражданине в ГИС ЖКХ. Заполняется при изменении ранее загруженных общих сведений о гражданине, а также при импорте информации о расчетах и выплатах</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:sequence minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Ветка для загрузки общей информации о гражданине, получающем компенсации расходов (добавление,изменение и аннулирование информации о гражданине)</xs:documentation>
+										</xs:annotation>
+										<xs:element name="TransportGuid" type="base:GUIDType">
+											<xs:annotation>
+												<xs:documentation>Транспортный идентификатор для выполнения операции с информацией о гражданине</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:choice>
+											<xs:element name="LoadOverview" type="tns:CitizenCompensationOverviewType">
+												<xs:annotation>
+													<xs:documentation>Добавить/Изменить общую информацию о гражданах, получающих компенсации расходов. При изменении необходимо присылать всю информацию о гражданине в актуальном состоянии.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="Cancel" type="xs:boolean" fixed="true">
+												<xs:annotation>
+													<xs:documentation>Аннулировать информацию о гражданине, получающем компенсации расходов</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+									</xs:sequence>
+									<xs:element name="Calculation" minOccurs="0" maxOccurs="1000">
+										<xs:annotation>
+											<xs:documentation>Ветка для загрузки расчетов и перерасчетов по гражданину, получающему компенсации расходов (добавление,изменение и аннулирование информации о расчетах и перерасчетах)</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TransportGuid" type="base:GUIDType">
+													<xs:annotation>
+														<xs:documentation>Транспортный идентификатор для выполнения операции с информацией о расчетах и перерасчетах</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="CalculationGuid" type="base:GUIDType" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Идентификатор информации о расчетах и перерасчетах гражданина в ГИС ЖКХ</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:element name="LoadCalculations" type="tns:CitizenCompensationCalculationType">
+														<xs:annotation>
+															<xs:documentation>Добавить/Изменить информацию о расчетах и перерасчетах</xs:documentation>
+														</xs:annotation>
+														<xs:key name="ServiceKey">
+															<xs:selector xpath=".//tns:Service"/>
+															<xs:field xpath="."/>
+														</xs:key>
+													</xs:element>
+													<xs:element name="Cancel" type="xs:boolean" fixed="true">
+														<xs:annotation>
+															<xs:documentation>Аннулировать информацию</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Payment" minOccurs="0" maxOccurs="1000">
+										<xs:annotation>
+											<xs:documentation>Ветка для загрузки выплат по гражданину, получающему компенсации расходов (добавление,изменение и аннулирование информации о выплатах)</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TransportGuid" type="base:GUIDType">
+													<xs:annotation>
+														<xs:documentation>Транспортный идентификатор для выполнения операции с информацией о выплатах гражданину</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="PaymentGuid" type="base:GUIDType" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Идентификатор информации о выплатах гражданину в ГИС ЖКХ</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:element name="LoadPayments" type="tns:PaymentType">
+														<xs:annotation>
+															<xs:documentation>Добавить/Изменить информацию о выплатах</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Cancel" type="xs:boolean" fixed="true">
+														<xs:annotation>
+															<xs:documentation>Аннулировать информацию о выплатах</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:unique name="importCitizenCompInfoRequest_TransportGuidUnique">
+			<xs:selector xpath=".//tns:TransportGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+		<xs:unique name="importCitizenCompInfoRequest_CitizenCompInfoGuidUnique">
+			<xs:selector xpath=".//tns:CitizenCompensationGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+		<xs:unique name="importCitizenCompInfoRequest_CalculationGuidUnique">
+			<xs:selector xpath=".//tns:CalculationGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+		<xs:unique name="importCitizenCompInfoRequest_PaymentsGuidUnique">
+			<xs:selector xpath=".//tns:PaymentGuid"/>
+			<xs:field xpath="."/>
+		</xs:unique>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>Экспорт перечня отдельных категорий граждан, имеющих право на получение компенсации расходов</xs:documentation>
+	</xs:annotation>
+	<xs:element name="exportCategoriesRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на экспорт перечня отдельных категорий граждан</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="FromDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата начала предоставления компенсации расходов</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ToDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата окончания предоставления компенсации расходов</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportCategoriesResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос экспорта перечня отдельных категорий граждан</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="Category" type="tns:ExportCategoryType" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Информация об отдельной категории граждан</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ActType">
+		<xs:annotation>
+			<xs:documentation>Нормативный правовой акт</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DocNumber" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер документа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AcceptanceDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата принятия документа органом власти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Name" type="tns:String1000Type">
+				<xs:annotation>
+					<xs:documentation>Наименование документа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachment" type="base:AttachmentType" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Файлы</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportCategoryType">
+		<xs:annotation>
+			<xs:documentation>Экспортируемые сведения об отдельной категории граждан</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CategoryGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор отдельной категории граждан</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FromDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата начала предоставления компенсаций расходов</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ToDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата окончания предоставления компенсаций расходов</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Territory">
+				<xs:annotation>
+					<xs:documentation>Территория предоставления компенсации расходов</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="Region" type="base:RegionType">
+							<xs:annotation>
+								<xs:documentation>Субъект РФ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Municipality" type="base:OKTMORefType">
+							<xs:annotation>
+								<xs:documentation>Муниципальное образование</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CategoryName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Наименование отдельной категории граждан</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NsiCategory" type="nsi:nsiRef" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Ссылка на справочник НСИ "Отдельные категории граждан, для которых право на получение компенсаций расходов определено в НПА федерального уровня" (заполняется для категорий, для которых право на получение компенсаций расходов определено в НПА федерального уровня)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BudgetLevel">
+				<xs:annotation>
+					<xs:documentation>Бюджет, за счет которого осуществляются выплаты. Возможные значения: Federal - Федеральный, Regional -  Региональный, Municipal - Муниципальный</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Federal"/>
+						<xs:enumeration value="Regional"/>
+						<xs:enumeration value="Municipal"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PayoutTerm" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Срок перечисления компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProvisionDocuments" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Перечень документов, необходимых для получения компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DenialReasons" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Основания для отказа в предоставлении компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SuspensionReasons" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Основания для приостановления предоставления компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TerminationReasons" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Основания для прекращения предоставления компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ResumptionReasons" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Основания для возобновления предоставления компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecalculationReasons" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Основания для перерасчета компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RefundReasons" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Основания возврата излишне полученной суммы компенсации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Act" type="tns:ActType" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Нормативные правовые акты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>Порядок расчета компенсации расходов</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>В виде фиксированного размера денежной выплаты</xs:documentation>
+					</xs:annotation>
+					<xs:element name="FixedCompensationSum" type="bills:MoneyPositiveType">
+						<xs:annotation>
+							<xs:documentation>Фиксированный размер денежной выплаты, руб.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FixedSumEstablishmentDate" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>Дата установления фиксированного размера</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Comment" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Примечание</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>По стандартам стоимости жилищно-коммунальных услуг</xs:documentation>
+					</xs:annotation>
+					<xs:element name="Description" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Описание порядка расчета</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:element name="Actual" maxOccurs="12">
+					<xs:annotation>
+						<xs:documentation>От фактических расходов на оплату жилищно-коммунальных услуг</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Service" type="tns:ServiceType">
+								<xs:annotation>
+									<xs:documentation>Расходы на оплату жилого помещения и коммунальных услуг, подлежащие компенсации</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Housing" maxOccurs="3">
+								<xs:annotation>
+									<xs:documentation>Тип жилищного фонда. PrivateHousing - Частный, MunicipalHousing - Муниципальный, StateHousing - Государственный</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="PrivateHousing"/>
+										<xs:enumeration value="MunicipalHousing"/>
+										<xs:enumeration value="StateHousing"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NsiDiscountAmountLimitationCode" type="nsi:nsiRef">
+								<xs:annotation>
+									<xs:documentation>Норматив для начисления компенсации. Код из справочника "Ограничение объема предоставляемой компенсации расходов" (НСИ)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AppliesToAllFamilyMembers" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>Распространяется на всех членов семьи?</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DiscountSize">
+								<xs:annotation>
+									<xs:documentation>Размер, предоставляемой компенсации</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:decimal">
+										<xs:minInclusive value="0"/>
+										<xs:maxInclusive value="100"/>
+										<xs:fractionDigits value="2"/>
+										<xs:totalDigits value="5"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ValidFrom" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>Дата начала предоставления компенсации</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ValidTo" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Дата окончания предоставления компенсации</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Comment" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Примечание</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation>Экспорт сведений о гражданах, получающих субсидии</xs:documentation>
+	</xs:annotation>
+	<xs:element name="exportCitizenSubsidyRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на экспорт сведений о гражданах, получающих субсидии</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="LoadCanceled" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Выгружать аннулированные сведения?</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:choice>
+							<xs:element name="CitizenSubsidyGuid" type="base:GUIDType" maxOccurs="1000">
+								<xs:annotation>
+									<xs:documentation>Идентификатор информации о гражданине в ГИС ЖКХ</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:sequence>
+								<xs:element name="FromDate" type="xs:date">
+									<xs:annotation>
+										<xs:documentation>Дата начала предоставления субсидии</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="ToDate" type="xs:date" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Дата окончания предоставления субсидии</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.5"/>
+					<xs:attribute name="Offset" use="required">
+						<xs:annotation>
+							<xs:documentation>Сдвиг относительно первого элемента (первый элемент имеет позицию 0)</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="Limit" use="required">
+						<xs:annotation>
+							<xs:documentation>Количество строк с информацией о гражданах, которые необходимо экспортировать</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:maxInclusive value="1000"/>
+								<xs:minExclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportCitizenSubsidyResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос экспорта сведений о гражданах, получающих субсидии</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="CitizenSubsidy" type="tns:ExportCitizenSubsidyType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Информация о гражданах, получающих субсидии</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.5"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>Экспорт сведений о гражданах, получающих компенсации расходов</xs:documentation>
+	</xs:annotation>
+	<xs:element name="exportCitizenCompensationRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на экспорт сведений о гражданах, получающих компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="LoadCanceled" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Выгружать аннулированные сведения?</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:choice>
+							<xs:element name="CitizenCompensationGuid" type="base:GUIDType" maxOccurs="1000">
+								<xs:annotation>
+									<xs:documentation>Идентификатор информации о гражданине в ГИС ЖКХ</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:sequence>
+								<xs:element name="CategoryGuid" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Идентификатор отдельной категории гражданин</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="FromDate" type="xs:date">
+									<xs:annotation>
+										<xs:documentation>Дата начала предоставления компенсации расходов</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="ToDate" type="xs:date" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Дата окончания предоставления компенсации расходов</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.5"/>
+					<xs:attribute name="Offset" use="required">
+						<xs:annotation>
+							<xs:documentation>Сдвиг относительно первого элемента (первый элемент имеет позицию 0)</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="Limit" use="required">
+						<xs:annotation>
+							<xs:documentation>Количество строк с информацией о гражданах, которые необходимо экспортировать</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:maxInclusive value="1000"/>
+								<xs:minExclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportCitizenCompensationResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос экспорта сведений о гражданах, получающих компенсации расходов</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="CitizenCompensation" type="tns:ExportCitizenCompensationType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Информация о гражданах, получающих компенсации расходов</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.5"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Асинхронные методы-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice>
+						<xs:element name="ImportResult" type="base:CommonResultType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Результат импорта</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Category" type="tns:ExportCategoryType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Информация об отдельной категории граждан</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="CitizenSubsidy" type="tns:ExportCitizenSubsidyType" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Информация о гражданах, получающих субсидии</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CitizenCompensation" type="tns:ExportCitizenCompensationType" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Информация о гражданах, получающих компенсации расходов</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,2802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 (http://www.altova.com) by Alexander (Lanit) -->
+<!---->
+<!---->
+<!---->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/inspection/" xmlns:organizations-registry-base="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" xmlns:nsi-base="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:premises-base="http://dom.gosuslugi.ru/schema/integration/premises-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/inspection/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="11.1.0.9">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" schemaLocation="../lib/hcs-organizations-registry-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/premises-base/" schemaLocation="../lib/hcs-premises-base.xsd"/>
+	<!-- Скалярные типы -->
+	<xs:simpleType name="InspectionPlanVersionStateType">
+		<xs:annotation>
+			<xs:documentation>Статус версии плана проверок. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Draft">
+				<xs:annotation>
+					<xs:documentation>Черновик.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Signed">
+				<xs:annotation>
+					<xs:documentation>Подписан.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PlannedExaminationVersionStateType">
+		<xs:annotation>
+			<xs:documentation>Статус версии плановой проверки. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Draft">
+				<xs:annotation>
+					<xs:documentation>Черновик.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Active">
+				<xs:annotation>
+					<xs:documentation>Опубликована.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PlannedExaminationStateType">
+		<xs:annotation>
+			<xs:documentation>Статус плановой проверки.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Planned">
+				<xs:annotation>
+					<xs:documentation>Запланирована.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Cancelled">
+				<xs:annotation>
+					<xs:documentation>Отменена.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Finished"/>
+			<xs:enumeration value="Annulled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ExaminationVersionStateType">
+		<xs:annotation>
+			<xs:documentation>Статус версии проверки.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Draft">
+				<xs:annotation>
+					<xs:documentation>Черновик.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Active">
+				<xs:annotation>
+					<xs:documentation>Опубликована.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ExaminationStateType">
+		<xs:annotation>
+			<xs:documentation>Статус проверки.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Planned">
+				<xs:annotation>
+					<xs:documentation>Выполняется.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Finished">
+				<xs:annotation>
+					<xs:documentation>Завершена.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Cancelled">
+				<xs:annotation>
+					<xs:documentation>Отменена.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Annulled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="URIExaminationStateType">
+		<xs:annotation>
+			<xs:documentation>Cтатус размещения проверки в ЕРП</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Placed"/>
+			<xs:enumeration value="NotPlaced"/>
+			<xs:enumeration value="Sent"/>
+			<xs:enumeration value="NotSent"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PreceptStateType">
+		<xs:annotation>
+			<xs:documentation>Статус предписания.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Active">
+				<xs:annotation>
+					<xs:documentation>Не отменено (не отозвано).</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Cancelled">
+				<xs:annotation>
+					<xs:documentation>Отменено (отозвано).</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Fulfiled"/>
+			<xs:enumeration value="NotFilled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OffenceStateType">
+		<xs:annotation>
+			<xs:documentation>Статус протокола.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Active">
+				<xs:annotation>
+					<xs:documentation>Не отменен.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Cancelled">
+				<xs:annotation>
+					<xs:documentation>Отменен.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Fulfiled"/>
+			<xs:enumeration value="NotFilled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String50Type">
+		<xs:annotation>
+			<xs:documentation>Строка не более 50 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String30Type">
+		<xs:annotation>
+			<xs:documentation>Строка не более 30 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String255Type">
+		<xs:annotation>
+			<xs:documentation>Строка не более 255 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="String2000Type">
+		<xs:annotation>
+			<xs:documentation>Строка не более 2000 символов.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="2000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TimeUnitCountType">
+		<xs:annotation>
+			<xs:documentation>Число временных единиц.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumberType">
+		<xs:annotation>
+			<xs:documentation>Порядковый номер.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FunctionRegistryNumberType">
+		<xs:annotation>
+			<xs:documentation>Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»*</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{1,36}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RegulatoryAuthorityIDType">
+		<xs:annotation>
+			<xs:documentation>Идентификатор контролирующего органа в системе «Федеральный реестр государственных и муниципальных услуг»*</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{1,36}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Объекты предметной области -->
+	<xs:complexType name="CitizenInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о физическом лице.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LastName" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Фамилия.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FirstName" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Имя.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MiddleName" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Отчество.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportCitizenInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о физическом лице. (экспорт)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LastName" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фамилия.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FirstName" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имя.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MiddleName" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Отчество.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ScheduledExaminationSubjectInPlanInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о субъекте проверки для плановой проверки в плане</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Organization">
+				<xs:annotation>
+					<xs:documentation>Юридическое лицо.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Individual">
+				<xs:annotation>
+					<xs:documentation>Индивидуальный предприниматель.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ScheduledExaminationSubjectInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о субъекте проверки для плановой проверки в реестре</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Organization">
+				<xs:annotation>
+					<xs:documentation>Юридическое лицо.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Individual">
+				<xs:annotation>
+					<xs:documentation>Индивидуальный предприниматель.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="UnscheduledExaminationSubjectInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о субъекте проверки для внеплановой проверки в реестре</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Organization">
+				<xs:annotation>
+					<xs:documentation>Юридическое лицо.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Individual">
+				<xs:annotation>
+					<xs:documentation>Индивидуальный предприниматель.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Citizen" type="tns:CitizenInfoType">
+				<xs:annotation>
+					<xs:documentation>Гражданин.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ExportUnscheduledExaminationSubjectInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о субъекте проверки для внеплановой проверки в реестре (экспорт)</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Organization">
+				<xs:annotation>
+					<xs:documentation>Юридическое лицо.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Individual">
+				<xs:annotation>
+					<xs:documentation>Индивидуальный предприниматель.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:RegOrgType">
+							<xs:sequence>
+								<xs:element name="ActualActivityPlace" type="tns:String2000Type">
+									<xs:annotation>
+										<xs:documentation>Место фактического осуществления деятельности.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="OtherPersons" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Другие физические лица, в отношении которых проводится проверка</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Citizen" type="tns:ExportCitizenInfoType">
+				<xs:annotation>
+					<xs:documentation>Гражданин.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="InspectionPlanType">
+		<xs:annotation>
+			<xs:documentation>Основные реквизиты плана проверок.(экспорт)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Year" type="base:YearType">
+				<xs:annotation>
+					<xs:documentation>Год плана.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ShouldNotBeRegistered" type="xs:boolean" fixed="true">
+				<xs:annotation>
+					<xs:documentation>Не должен быть зарегистрирован в Едином реестре проверок.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlannedExaminationType">
+		<xs:annotation>
+			<xs:documentation>Плановая проверка (пункт плана проверок)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NumberInPlan">
+				<xs:annotation>
+					<xs:documentation>Номер проверки в плане</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:NumberType">
+						<xs:totalDigits value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegulatoryAuthorityInformation">
+				<xs:annotation>
+					<xs:documentation>Информация об органе контроля </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FunctionRegistryNumber" type="tns:FunctionRegistryNumberType">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AuthorizedPersons" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность лиц, уполномоченных на проведение проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="InvolvedExperts" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность экспертов, привлекаемых к проведению проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Subject" type="tns:ScheduledExaminationSubjectInPlanInfoType">
+				<xs:annotation>
+					<xs:documentation>Субъект проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PlannedExaminationInfo">
+				<xs:annotation>
+					<xs:documentation>Описание проверки</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Objective" type="tns:String2000Type">
+							<xs:annotation>
+								<xs:documentation>Цель проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Base" type="nsi-base:nsiRef" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Основание проведения проверки. НСИ "Основание проведения проверки" (реестровый номер 68).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfoAboutExamBase" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация об основаниях проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LastExaminationEndDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата окончания последней проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MonthFrom" type="base:MonthType">
+							<xs:annotation>
+								<xs:documentation>Месяц начала проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="YearFrom" type="base:YearType">
+							<xs:annotation>
+								<xs:documentation>Год начала проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Duration">
+							<xs:annotation>
+								<xs:documentation>Срок проведения плановой проверки</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="WorkDays">
+										<xs:annotation>
+											<xs:documentation>рабочих дней</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="WorkHours">
+										<xs:annotation>
+											<xs:documentation>рабочих часов (для МСП и МКП)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ExaminationForm" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Форма проведеня проверки. НСИ "Форма проведения проверки" (реестровый номер 71).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CooperationWith" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Орган государственного надзора (контроля) и/или орган муниципального контроля,  с которым  проверка проводится совместно.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ProsecutorAgreementInformation" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Информация о согласовании проведения проверки с органами прокуратуры</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="exportPlannedExaminationType">
+		<xs:annotation>
+			<xs:documentation>Плановая проверка (пункт плана проверок) - экспорт</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NumberInPlan">
+				<xs:annotation>
+					<xs:documentation>Номер проверки в плане</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:NumberType">
+						<xs:totalDigits value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="URIRegistrationNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Учетный номер проверки в едином реестре проверок</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="URIRegistrationDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата присвоения учетного номера проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Subject" type="tns:ScheduledExaminationSubjectInPlanInfoType">
+				<xs:annotation>
+					<xs:documentation>Субъект проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegulatoryAuthorityInformation">
+				<xs:annotation>
+					<xs:documentation>Информация об органе контроля </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FunctionRegistryNumber" type="tns:FunctionRegistryNumberType">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AuthorizedPersons" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность лиц, уполномоченных на проведение проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="InvolvedExperts" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность экспертов, привлекаемых к проведению проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PlannedExaminationInfo">
+				<xs:annotation>
+					<xs:documentation>Описание проверки</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Objective" type="tns:String2000Type">
+							<xs:annotation>
+								<xs:documentation>Цель проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Base" type="nsi-base:nsiRef" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Основание проведения проверки. НСИ "Основание проведения проверки" (реестровый номер 68).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfoAboutExamBase" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация об основаниях проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LastExaminationEndDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата окончания последней проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MonthFrom" type="base:MonthType">
+							<xs:annotation>
+								<xs:documentation>Месяц начала проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="YearFrom" type="base:YearType">
+							<xs:annotation>
+								<xs:documentation>Год начала проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Duration">
+							<xs:annotation>
+								<xs:documentation>Срок проведения плановой проверки</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="WorkDays">
+										<xs:annotation>
+											<xs:documentation>рабочих дней</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="WorkHours">
+										<xs:annotation>
+											<xs:documentation>рабочих часов (для МСП и МКП)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ExaminationForm" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Форма проведеня проверки. НСИ "Форма проведения проверки" (реестровый номер 71).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CooperationWith" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Орган государственного надзора (контроля) и/или орган муниципального контроля,  с которым  проверка проводится совместно.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ProsecutorAgreementInformation" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Информация о согласовании проведения проверки с органами прокуратуры</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExaminationType">
+		<xs:annotation>
+			<xs:documentation>Проверка.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ExaminationOverview">
+				<xs:annotation>
+					<xs:documentation>Общая информация о проверке</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:choice>
+							<xs:element name="ShouldNotBeRegistered" type="xs:boolean" fixed="true">
+								<xs:annotation>
+									<xs:documentation>Проверка не должна быть зарегистрирована в Едином реестре проверок.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:sequence>
+								<xs:element name="ShouldBeRegistered" type="xs:boolean" fixed="true">
+									<xs:annotation>
+										<xs:documentation>Проверка должна быть зарегистрирована в Едином реестре проверок.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="URIRegistrationNumber" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Учетный номер проверки в Едином реестре проверок. </xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:integer">
+											<xs:minInclusive value="0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+								<xs:element name="URIRegistrationDate" type="xs:date" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Дата присвоения учетного номера проверки</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:choice>
+						<xs:element name="ExaminationTypeType">
+							<xs:annotation>
+								<xs:documentation>Вид проверки, информация о субъекте проверки</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Scheduled">
+										<xs:annotation>
+											<xs:documentation>Плановая проверка.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Subject" type="tns:ScheduledExaminationSubjectInfoType">
+													<xs:annotation>
+														<xs:documentation>Субъект проверки (ЮЛ, ИП).</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Unscheduled">
+										<xs:annotation>
+											<xs:documentation>Внеплановая проверка.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="UnscheduledType" type="nsi-base:nsiRef" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Тип внеплановой проверки. НСИ "Тип внеплановой проверки" (реестровый номер 167).  Заполняется, если ShouldNotBeRegistered не присылается</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="Subject" type="tns:UnscheduledExaminationSubjectInfoType">
+													<xs:annotation>
+														<xs:documentation>Субъект проверки (ЮЛ, ИП, Гражданин).</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="OversightActivitiesRef" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Вид осуществления контрольной деятельности. НСИ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ExaminationForm" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Форма проведения проверки. НСИ "Форма проведения проверки" (реестровый номер 71).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderNumber" type="tns:String255Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер распоряжения (приказа).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата утверждения распоряжения (приказа).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RegulatoryAuthorityInformation">
+				<xs:annotation>
+					<xs:documentation>Информация об органе контроля </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FunctionRegistryNumber" type="tns:FunctionRegistryNumberType">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RegulatoryAuthorityID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Идентификатор контролирующего органа в системе «Федеральный реестр государственных и муниципальных услуг». Доступно и обязательно для заполнения, только если для проверки присылается ShouldBeRegistered</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="tns:RegulatoryAuthorityIDType">
+									<xs:pattern value="\d{1,22}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="AuthorizedPersons" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность лиц, уполномоченных на проведение проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="InvolvedExperts" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность экспертов, привлекаемых к проведению проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="NotificationInfo">
+				<xs:annotation>
+					<xs:documentation>Информация об уведомлении</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NotRequired" type="xs:boolean" fixed="true">
+							<xs:annotation>
+								<xs:documentation>Уведомление не требуется </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RequiredAndNotSent" type="xs:boolean" fixed="true">
+							<xs:annotation>
+								<xs:documentation>Уведомление требуется, не  отправлено </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Уведомление требуется,  отправлено </xs:documentation>
+							</xs:annotation>
+							<xs:element name="NotificationDate" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>Дата уведомления</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NotificationMethod" type="tns:String2000Type">
+								<xs:annotation>
+									<xs:documentation>Способ уведомления о проведении проверки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ExaminationInfo">
+				<xs:annotation>
+					<xs:documentation>Сведения о проверке</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Base" type="nsi-base:nsiRef" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Основание проведения проверки. НСИ "Основание проведения проверки" (реестровый номер 68).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BasedOnPrecept" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Предписание, на основании которого проводится проверка (заполняется для Основания «Истечение срока исполнения юридическим лицом, индивидуальным предпринимателем ранее выданного предписания об устранении выявленного нарушения обязательных требований и (или) требований, установленных муниципальными правовыми актами».)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PreceptGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор предписания в ГИС ЖКХ</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Objective" type="tns:String2000Type">
+							<xs:annotation>
+								<xs:documentation>Цель проведения проверки с реквизитами докуентов основания.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfoAboutExamBase" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация об основаниих проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Tasks" type="tns:String2000Type">
+							<xs:annotation>
+								<xs:documentation>Задачи проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Object" type="nsi-base:nsiRef" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Предмет проверки. НСИ "Предмет проверки" (реестровый номер 69).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="From" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>Срок проведения проверки с (включительно) - дата начала проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="To" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Срок проведения проверки по (включительно) - дата окончания проведения проверки.       Обязательно для заполнения для внеплановой проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Duration">
+							<xs:annotation>
+								<xs:documentation>Срок проведения проверки.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="WorkDays">
+										<xs:annotation>
+											<xs:documentation>Рабочих дней.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="tns:TimeUnitCountType"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="WorkHours">
+										<xs:annotation>
+											<xs:documentation>Рабочих часов (для МСП и МКП).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="tns:TimeUnitCountType"/>
+										</xs:simpleType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="CooperationWith" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Орган государственного надзора (контроля) и/или орган муниципального контроля,  с которым  проверка проводится совместно.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ProsecutorAgreementInformation" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Информация о согласовании проведения проверки с органами прокуратуры</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация о проверке.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="InspectionInabilityReason" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Причины невозможности проведения проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ExecutingInfo">
+				<xs:annotation>
+					<xs:documentation>Информация о проведении проверки.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Event" type="tns:ExaminationEventType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Мероприятие проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Place" type="tns:ExaminationPlaceType" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Место проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ResultsInfo" type="tns:ResultsInfoType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения о результатах проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachments" type="base:AttachmentType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Документы проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="exportExaminationType">
+		<xs:annotation>
+			<xs:documentation>Проверка (экспорт)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ExaminationOverview">
+				<xs:annotation>
+					<xs:documentation>Общая информация о проверке</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:choice>
+							<xs:element name="ShouldNotBeRegistered" type="xs:boolean" fixed="true">
+								<xs:annotation>
+									<xs:documentation>Проверка не должна быть зарегистрирована в Едином реестре проверок.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:sequence>
+								<xs:element name="ShouldBeRegistered" type="xs:boolean" fixed="true">
+									<xs:annotation>
+										<xs:documentation>Проверка должна быть зарегистрирована в Едином реестре проверок.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="URIRegistrationNumber" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Учетный номер проверки в едином реестре проверок</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:integer">
+											<xs:minInclusive value="0"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+								<xs:element name="URIRegistrationDate" type="xs:date" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Дата присвоения учетного номера проверки</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:choice>
+						<xs:element name="ExaminationTypeType">
+							<xs:annotation>
+								<xs:documentation>Вид проверки, информация о субъекте проверки</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Scheduled">
+										<xs:annotation>
+											<xs:documentation>Плановая проверка.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Subject" type="tns:ScheduledExaminationSubjectInfoType">
+													<xs:annotation>
+														<xs:documentation>Субъект проверки (ЮЛ, ИП).</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Unscheduled">
+										<xs:annotation>
+											<xs:documentation>Внеплановая проверка.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="UnscheduledType" type="nsi-base:nsiRef" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Тип внеплановой проверки. НСИ "Тип внеплановой проверки" (реестровый номер 167).</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="Subject" type="tns:ExportUnscheduledExaminationSubjectInfoType">
+													<xs:annotation>
+														<xs:documentation>Субъект проверки (ЮЛ, ИП, Гражданин).</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="OversightActivitiesRef" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Вид осуществления контрольной деятельности. НСИ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ExaminationForm" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Форма проведения проверки. НСИ "Форма проведения проверки" (реестровый номер 71).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderNumber" type="tns:String255Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер распоряжения (приказа).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата утверждения распоряжения (приказа).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RegulatoryAuthorityInformation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информация об органе контроля </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FunctionRegistryNumber" type="tns:FunctionRegistryNumberType">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RegulatoryAuthorityID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Идентификатор контролирующего органа в системе «Федеральный реестр государственных и муниципальных услуг». </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="tns:RegulatoryAuthorityIDType">
+									<xs:pattern value="\d{1,22}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="AuthorizedPersons" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность лиц, уполномоченных на проведение проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="InvolvedExperts" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ФИО и должность экспертов, привлекаемых к проведению проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="NotificationInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информация об уведомлении</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NotRequired" type="xs:boolean" fixed="true">
+							<xs:annotation>
+								<xs:documentation>Уведомление не требуется </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RequiredAndNotSent" type="xs:boolean" fixed="true">
+							<xs:annotation>
+								<xs:documentation>Уведомление требуется, не  отправлено </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Уведомление требуется,  отправлено </xs:documentation>
+							</xs:annotation>
+							<xs:element name="NotificationDate" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>Дата уведомления</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NotificationMethod" type="tns:String2000Type">
+								<xs:annotation>
+									<xs:documentation>Способ уведомления о проведении проверки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ExaminationInfo">
+				<xs:annotation>
+					<xs:documentation>Сведения о проверке</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Base" type="nsi-base:nsiRef" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Основание проведения проверки. НСИ "Основание проведения проверки" (реестровый номер 68).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BasedOnPrecept" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Предписание, на основании которого проводится проверка (заполняется для Основания «Истечение срока исполнения юридическим лицом, индивидуальным предпринимателем ранее выданного предписания об устранении выявленного нарушения обязательных требований и (или) требований, установленных муниципальными правовыми актами».)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PreceptGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор предписания в ГИС ЖКХ</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Objective" type="tns:String2000Type">
+							<xs:annotation>
+								<xs:documentation>Цель проведения проверки с реквизитами докуентов основания.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfoAboutExamBase" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация об основаниих проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Tasks" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Задачи проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Object" type="nsi-base:nsiRef" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Предмет проверки. НСИ "Предмет проверки" (реестровый номер 69).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="From" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>Срок проведения проверки с (включительно) - дата начала проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="To" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Срок проведения проверки по (включительно) - дата окончания проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Duration">
+							<xs:annotation>
+								<xs:documentation>Срок проведения проверки.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="WorkDays">
+										<xs:annotation>
+											<xs:documentation>Рабочих дней.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="tns:TimeUnitCountType"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="WorkHours">
+										<xs:annotation>
+											<xs:documentation>Рабочих часов (для МСП и МКП).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="tns:TimeUnitCountType"/>
+										</xs:simpleType>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="CooperationWith" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Орган государственного надзора (контроля) и/или орган муниципального контроля,  с которым  проверка проводится совместно.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ProsecutorAgreementInformation" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Информация о согласовании проведения проверки с органами прокуратуры</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация о проверке.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="InspectionInabilityReason" type="tns:String2000Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Причины невозможности проведения проверки</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ExecutingInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информация о проведении проверки.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Event" type="tns:ExaminationEventType" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Мероприятие проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Place" type="tns:ExaminationPlaceType" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Место проведения проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ResultsInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения о результатах проверки</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:ExportResultsInfoType">
+							<xs:sequence>
+								<xs:element name="CancelExaminationResults" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация об отмене результата</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ExaminationChangeInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информация об изменении провери</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:ExaminationChangeInfoType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CancelledInfo" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информция об отмене проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachments" type="base:AttachmentType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Документы проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExaminationChangeInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения об изменении проверки</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ChangeReason" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Причина изменения (НСИ 271)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ChangeDecisionNumber" type="tns:String30Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер решения об изменении (обязательно, если «Причина изменения» = «Решение суда» или «Решение уполномоченного органа / вышестоящей организации»)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ChangeDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата изменения проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Organization" type="organizations-registry-base:RegOrgType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Организация, принявшая решение</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionChangeInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachments" type="base:AttachmentType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Прикрепленные файлы</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExaminationEventType">
+		<xs:annotation>
+			<xs:documentation>Сведения о мероприятии.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" type="tns:String2000Type">
+				<xs:annotation>
+					<xs:documentation>Мероприятие.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExaminationPlaceType">
+		<xs:annotation>
+			<xs:documentation>Место проведения проверки.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OrderNumber" type="tns:NumberType">
+				<xs:annotation>
+					<xs:documentation>Порядковый номер.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FIASHouseGuid" type="premises-base:FIASHouseGUIDType">
+				<xs:annotation>
+					<xs:documentation>Адрес дома.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информция.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExaminationResultType">
+		<xs:annotation>
+			<xs:documentation>Результат проверки.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DocumentType" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Вид документа результата проверки. НСИ "Вид документа по результатам проверки" (реестровый номер 64).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер документа результата проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время составления документа результата проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>Результат проверки.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="HasNoOffence" type="xs:boolean" fixed="true">
+					<xs:annotation>
+						<xs:documentation>Нарушений не выявлено.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="HasOffence" type="xs:boolean" fixed="true">
+						<xs:annotation>
+							<xs:documentation>Выявлены нарушения</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="IdentifiedOffencesInfo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Информация о выявленных нарушениях </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="IdentifiedOffences" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Выявленные нарушения законодательства РФ</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="DetailsMismatch" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Несоответствие поданных сведений о начале осуществления предпринимательской деятельности</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MaterialsDirectionAgency" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Орган, в который направлены материалы о выявленных нарушениях</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MaterialsDirectionDate" type="xs:date" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Дата направления материалов о выявленных нарушениях в органы государственной власти</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="ApplyingMeasures" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Перечень примененных мер обеспечения производства по делу об административном правонарушении  </xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="PersonsAdministrativeResponsibilityInfo" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация о привлечении проверяемых лиц к административной ответственности</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="PermittingDocumensAnnulmentInfo" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация о приостановлении или об аннулировании документов, имеющих разрешительный характер</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="AppealInfo" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация об обжаловании решений органа контроля</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:choice>
+			<xs:element name="From" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время начала проведения проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="To" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата окончания проведения проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Duration">
+				<xs:annotation>
+					<xs:documentation>Продолжительность проведения проверки</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Place" type="tns:String2000Type">
+				<xs:annotation>
+					<xs:documentation>Место проведения проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InspectionPersons" type="tns:String2000Type">
+				<xs:annotation>
+					<xs:documentation>ФИО и должность лиц, проводивших проверку</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RepresentativesRegionPersons" type="tns:String2000Type">
+				<xs:annotation>
+					<xs:documentation>ФИО и должность представителей субъекта проверки, присутствовавших при проведении проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SettlingDocumentPlace" type="tns:String2000Type">
+				<xs:annotation>
+					<xs:documentation>Место составления документа результата проверки </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация о результате проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportExaminationResultsType">
+		<xs:annotation>
+			<xs:documentation>Результат проверки для экспорта</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DocumentType" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Вид документа результата проверки. НСИ "Вид документа по результатам проверки" (реестровый номер 64).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер документа результата проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время составления документа результата проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>Результат проверки.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="HasNoOffence" type="xs:boolean" fixed="true">
+					<xs:annotation>
+						<xs:documentation>Нарушений не выявлено.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="HasOffence" type="xs:boolean" fixed="true">
+						<xs:annotation>
+							<xs:documentation>Выявлены нарушения</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="IdentifiedOffencesInfo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Информация о выявленных нарушениях </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="IdentifiedOffences" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Выявленные нарушения законодательства РФ</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="DetailsMismatch" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Несоответствие поданных сведений о начале осуществления предпринимательской деятельности</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MaterialsDirectionAgency" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Орган, в который направлены материалы о выявленных нарушениях</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MaterialsDirectionDate" type="xs:date" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Дата направления материалов о выявленных нарушениях в органы государственной власти</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="ApplyingMeasures" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Перечень примененных мер обеспечения производства по делу об административном правонарушении  </xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="PersonsAdministrativeResponsibilityInfo" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация о привлечении проверяемых лиц к административной ответственности</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="PermittingDocumensAnnulmentInfo" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация о приостановлении или об аннулировании документов, имеющих разрешительный характер</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="AppealInfo" type="tns:String2000Type" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Информация об обжаловании решений органа контроля</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:choice>
+			<xs:element name="From" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата и время начала проведения проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="To" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата окончания проведения проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Продолжительность проведения проверки</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Place" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Место проведения проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InspectionPersons" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ФИО и должность лиц, проводивших проверку</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RepresentativesRegionPersons" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ФИО и должность представителей субъекта проверки, присутствовавших при проведении проверки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SettlingDocumentPlace" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Место составления документа результата проверки </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация о результате проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PreceptType">
+		<xs:annotation>
+			<xs:documentation>Предписание.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер документа.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата документа.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Deadline" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Срок исполнения требований</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FIASHouseGUID" type="premises-base:FIASHouseGUIDType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Адрес дома.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ShortInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Краткая информация.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsFulfiledPrecept" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения об исполнении True - исполнено, False - не исполнено</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActualFulfiledPreceptDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фактическая дата исполнения требований</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachment" type="base:AttachmentType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Вложение.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="exportPreceptType">
+		<xs:annotation>
+			<xs:documentation>Предписание (экспорт)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер документа.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата документа.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Deadline" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Срок исполнения требований</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FIASHouseGUID" type="premises-base:FIASHouseGUIDType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Адрес дома.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ShortInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Краткая информация.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsFulfiledPrecept" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения об исполнении True - исполнено, False - не исполнено</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActualFulfiledPreceptDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фактическая дата исполнения требований</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachment" type="base:AttachmentType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Вложение.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OffenceType">
+		<xs:annotation>
+			<xs:documentation>Протоколол об административном правонарушении.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер протокола.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата составления протокола.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ShortInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Краткая информация.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsFulfiledOffence" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения об исполнении True - исполнено, False - не исполнено</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActualFulfiledProtocolDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фактическая дата исполнения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachment" type="base:AttachmentType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Вложение.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="exportOffenceType">
+		<xs:annotation>
+			<xs:documentation>Протоколол об административном правонарушении. (экспорт)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="tns:String255Type">
+				<xs:annotation>
+					<xs:documentation>Номер протокола.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата составления протокола.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ShortInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Краткая информация.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsFulfiledOffence" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения об исполнении True - исполнено, False - не исполнено</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActualFulfiledProtocolDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фактическая дата исполнения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachment" type="base:AttachmentType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Вложение.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CancelledInfoWithAttachmentsType">
+		<xs:annotation>
+			<xs:documentation>Сведения об отмене</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Reason" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Причина отмены (НСИ 271)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Date" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата отмены</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Number" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер решения об отмене.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:String255Type">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Organisation" type="organizations-registry-base:RegOrgType">
+				<xs:annotation>
+					<xs:documentation>Организация, принявшая решение</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInfo" type="tns:String2000Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachments" type="base:AttachmentType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Документы по отмене. Поле является обязательным, если причина отмены = Решение суда</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultsInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о результатах проверки</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FinishedInfo">
+				<xs:annotation>
+					<xs:documentation>Информация о результате проверки.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Result" type="tns:ExaminationResultType">
+							<xs:annotation>
+								<xs:documentation>Сведения о результате проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OtherDocument" type="base:AttachmentType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Другие документы по итогам проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FamiliarizationInfo">
+				<xs:annotation>
+					<xs:documentation>Информация об ознакомлении с результатами проверки</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NotFamiliarize" type="xs:boolean" fixed="true">
+							<xs:annotation>
+								<xs:documentation>Не ознакомлен</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Отказ от ознакомления</xs:documentation>
+							</xs:annotation>
+							<xs:element name="PersonRefused" type="tns:String2000Type">
+								<xs:annotation>
+									<xs:documentation>ФИО должностного лица, отказавшегося от ознакомления с актом проверки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Ознакомлен</xs:documentation>
+							</xs:annotation>
+							<xs:element name="FamiliarizationDate" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>Дата ознакомления </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="IsSigned" type="xs:boolean" fixed="true" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Наличие подписи</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FamiliarizedPerson" type="tns:String2000Type">
+								<xs:annotation>
+									<xs:documentation>ФИО должностного лица, ознакомившегося с актом проверки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExportResultsInfoType">
+		<xs:annotation>
+			<xs:documentation>Сведения о результатах проверки для экспорта</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FinishedInfo">
+				<xs:annotation>
+					<xs:documentation>Информация о результате проверки.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Result" type="tns:ExportExaminationResultsType">
+							<xs:annotation>
+								<xs:documentation>Сведения о результате проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OtherDocument" type="base:AttachmentType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Другие документы по итогам проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FamiliarizationInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информация об ознакомлении с результатами проверки</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NotFamiliarize" type="xs:boolean" fixed="true">
+							<xs:annotation>
+								<xs:documentation>Не ознакомлен</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Отказ от ознакомления</xs:documentation>
+							</xs:annotation>
+							<xs:element name="PersonRefused" type="tns:String2000Type">
+								<xs:annotation>
+									<xs:documentation>ФИО должностного лица, отказавшегося от ознакомления с актом проверки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Ознакомлен</xs:documentation>
+							</xs:annotation>
+							<xs:element name="FamiliarizationDate" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>Дата ознакомления </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="IsSigned" type="xs:boolean" fixed="true" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Наличие подписи</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FamiliarizedPerson" type="tns:String2000Type">
+								<xs:annotation>
+									<xs:documentation>ФИО должностного лица, ознакомившегося с актом проверки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="URIInformationType">
+		<xs:annotation>
+			<xs:documentation>Информация о регистрации в ЕРП</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="ShouldNotBeRegistered" type="xs:boolean" fixed="true">
+				<xs:annotation>
+					<xs:documentation>Не должен быть зарегистрирован в Едином реестре проверок.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="URIRegistrationNumber">
+				<xs:annotation>
+					<xs:documentation>Регистрационный номер плана в едином реестре проверок</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<!-- Импорт плана проверок. -->
+	<xs:element name="importInspectionPlanRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт плана проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportInspectionPlan" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Создание/изменение плана проверок</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:sequence>
+										<xs:element ref="base:TransportGUID"/>
+										<xs:element name="InspectionPlanGuid" type="base:GUIDType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Идентификатор плана проверок в ГИС ЖКХ.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:choice>
+										<xs:sequence>
+											<xs:element name="Sign" type="xs:boolean" fixed="true" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Признак подписания плана проверок для публикации в ГИС ЖКХ. </xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="InspectionPlan" type="tns:InspectionPlanType" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Добавляемый/изменяемый план проверок. Не заполяется при выполнении операций только с плановыми проверками.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="ImportPlannedExamination" minOccurs="0" maxOccurs="1000">
+												<xs:annotation>
+													<xs:documentation>Создание/изменение плановой проверки в плане проверок.</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:sequence>
+															<xs:element ref="base:TransportGUID"/>
+															<xs:element name="PlannedExaminationGuid" type="base:GUIDType" minOccurs="0">
+																<xs:annotation>
+																	<xs:documentation>Идентификатор плановой проверки в ГИС ЖКХ.</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:sequence>
+														<xs:element name="PlannedExamination" type="tns:PlannedExaminationType" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Плановая проверка.</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="CancelPlannedExamination" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Отмена плановой проверки.</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="DeletePlannedExamination" type="xs:boolean" fixed="true" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Удаление плановой проверки</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="AnnulPlannedExamination" type="xs:boolean" fixed="true" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Аннулирование плановой проверки</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:element name="DeleteInspectionPlan" type="xs:boolean" fixed="true" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Удаление плана проверок. Также удаляются все плановые проверки.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.9"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importInspectionPlanRequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<!-- Экспорт планов проверок. -->
+	<xs:element name="exportInspectionPlansRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на экспорт планов проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="YearFrom" type="base:YearType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Начальный год (включительно). Если не заполнено, то без ограничения начального года.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="YearTo" type="base:YearType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Конечный год (включительно). Если не заполнено, то без ограничения конечного года.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.9"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportInspectionPlansResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос на экспорт планов проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="exportInspectionPlanResult" type="tns:exportInspectionPlanResultType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Возвращаемый план проверок.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.9"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportInspectionPlanResultType">
+		<xs:annotation>
+			<xs:documentation>Возвращаемый план проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InspectionPlanGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор плана проверок.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistryNumber" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Реестровый номер плана проверок.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VersionState" type="tns:InspectionPlanVersionStateType">
+				<xs:annotation>
+					<xs:documentation>Статус версии плана проверок
+Допустимые значения: 
+Draft - Проект
+Signed - Подписан</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InspectionPlan">
+				<xs:annotation>
+					<xs:documentation>План проверок.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:URIInformationType">
+							<xs:sequence>
+								<xs:element name="Year" type="base:YearType">
+									<xs:annotation>
+										<xs:documentation>Год плана.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PlannedExamination" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Плановая проверка.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PlannedExaminationGuid" type="base:GUIDType">
+							<xs:annotation>
+								<xs:documentation>Идентификатор плановой проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RegistryNumber" type="tns:String255Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер плановой проверки.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="State" type="tns:PlannedExaminationStateType">
+							<xs:annotation>
+								<xs:documentation>Статус плановой проверки.
+Допустимые значения:
+Planned - Запланировна
+Cancelled - Отменена
+Finished - Завершена
+Annulled - Аннулирована</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="VersionState" type="tns:PlannedExaminationVersionStateType">
+							<xs:annotation>
+								<xs:documentation>Статус версии плановой проверки.
+Допустимые значения: 
+Draft - Проект
+Active - Действующая</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PlannedExaminationInfo">
+							<xs:annotation>
+								<xs:documentation>Плановая проверка.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="tns:exportPlannedExaminationType">
+										<xs:sequence>
+											<xs:element name="CancelledInfo" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Информация об отмене проверки.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Импорт проверок. -->
+	<xs:element name="importExaminationsRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportExamination" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Импорт проверки</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:sequence>
+										<xs:element ref="base:TransportGUID"/>
+										<xs:element name="ExaminationGuid" type="base:GUIDType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Идентификатор проверки в ГИС ЖКХ.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:element name="Examination" type="tns:ExaminationType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Проверка. Не заполняется при импорте предписаний и протоколов к существующей проверке</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="ExaminationChangeInfo" type="tns:ExaminationChangeInfoType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Информация об изменении проверки</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="CancelExamination" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Отмена проверки. Возможна только, если не размещен И не отменен результат</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="AnnulExamination" type="xs:boolean" fixed="true" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Аннулирование проверки. Возможно только, если не размещен И не отменен результат</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="Results" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Результаты проверки</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:choice>
+												<xs:element name="ResultsInfo" type="tns:ResultsInfoType">
+													<xs:annotation>
+														<xs:documentation>Добавление сведений о результатах проверки. Заполняется, если сведения о самой проверке не изменяются</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="CancelExaminationResults" type="tns:CancelledInfoWithAttachmentsType">
+													<xs:annotation>
+														<xs:documentation>Информация об отмене результата</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="AnnulExaminationResults" type="xs:boolean" fixed="true">
+													<xs:annotation>
+														<xs:documentation>Аннулировать результат проверки</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:choice>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="ImportPrecept" minOccurs="0" maxOccurs="unbounded">
+										<xs:annotation>
+											<xs:documentation>Предписание</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:sequence>
+													<xs:element ref="base:TransportGUID"/>
+													<xs:element name="PreceptGuid" type="base:GUIDType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Идентификатор предписания в ГИС ЖКХ</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:choice>
+													<xs:element name="Precept" type="tns:PreceptType">
+														<xs:annotation>
+															<xs:documentation>Создание/изменение предписания </xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CancelPrecept" type="tns:CancelledInfoWithAttachmentsType">
+														<xs:annotation>
+															<xs:documentation>Отмена (отзыв) предписания</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="IsFulfiledPrecept" type="xs:boolean">
+														<xs:annotation>
+															<xs:documentation>Сведения об исполнении True - исполнено, False - не исполнено</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DeletePrecept" type="xs:boolean" fixed="true">
+														<xs:annotation>
+															<xs:documentation>Удаление предписания</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="ImportOffence" minOccurs="0" maxOccurs="unbounded">
+										<xs:annotation>
+											<xs:documentation>Протокол </xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:sequence>
+													<xs:element ref="base:TransportGUID"/>
+													<xs:element name="OffenceGuid" type="base:GUIDType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Идентификатор протокола в ГИС ЖКХ</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:choice>
+													<xs:element name="Offence" type="tns:OffenceType">
+														<xs:annotation>
+															<xs:documentation>Создание/изменение протокола</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CancelOffence" type="tns:CancelledInfoWithAttachmentsType">
+														<xs:annotation>
+															<xs:documentation>Отмена протокола</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="IsFulfiledOffence" type="xs:boolean">
+														<xs:annotation>
+															<xs:documentation>Сведения об исполнении True - исполнено, False - не исполнено</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DeleteOffence" type="xs:boolean" fixed="true">
+														<xs:annotation>
+															<xs:documentation>Удаление протокола</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.8"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importExaminationsRequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<!-- Экспорт проверок. -->
+	<xs:element name="exportExaminationsRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на экспорт проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="From" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Начало периода даты начала проведения проверки (включительно).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="To" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Конец периода даты начала проведения проверки (включительно).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportExaminationsResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос на экспорт проверок.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="exportExaminationResult" type="tns:exportExaminationResultType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Эксортируемая проверка.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.8"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportExaminationResultType">
+		<xs:annotation>
+			<xs:documentation>Экспортируемая проверка.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ExaminationGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор проверки в ГИС ЖКХ.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistryNumber" type="tns:String255Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Реестровый номер проверки.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ExaminationState" type="tns:ExaminationStateType">
+				<xs:annotation>
+					<xs:documentation>Статус проверки Planned - Запланировна
+Cancelled - Отменена
+Finished - Завершена
+Annulled - Аннулирована</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ExaminationVersionState" type="tns:ExaminationVersionStateType">
+				<xs:annotation>
+					<xs:documentation>Статус версии проверки Draft - Проект
+Active - Действующая</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Examination" type="tns:exportExaminationType">
+				<xs:annotation>
+					<xs:documentation>Проверка.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ExportPrecept" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Предписание.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PreceptGuid" type="base:GUIDType">
+							<xs:annotation>
+								<xs:documentation>Идентификатор предписания в ГИС ЖКХ.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PreceptState" type="tns:PreceptStateType">
+							<xs:annotation>
+								<xs:documentation>Статус предписания</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Precept" type="tns:exportPreceptType">
+							<xs:annotation>
+								<xs:documentation>Реквизиты предписания.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CancelledInfo" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Сведения об отмене предписания.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ExportOffence" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Протокол.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OffenceGuid" type="base:GUIDType">
+							<xs:annotation>
+								<xs:documentation>Идентификатор протокола в ГИС ЖКХ.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OffenceState" type="tns:OffenceStateType">
+							<xs:annotation>
+								<xs:documentation>Статус протокола.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Offence" type="tns:exportOffenceType">
+							<xs:annotation>
+								<xs:documentation>Реквизиты протокола.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CancelledInfo" type="tns:CancelledInfoWithAttachmentsType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Сведения об отмене протокола.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Экспорт статуса проверки в ЕРП-->
+	<xs:element name="exportExaminationURIStateRequest">
+		<xs:annotation>
+			<xs:documentation>Экспорт статуса размещения проверки в ЕРП</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="ExaminationGuid" type="base:GUIDType" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Идентификатор проверки в ГИС ЖКХ.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="URIRegistrationNumber" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Учетный номер проверки в ЕРП.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="0"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.8"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportExaminationURIStateResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос на экспорт статуса размещения проверки в ЕРП</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="exportURIExaminationStatusResult" type="tns:exportExaminationURIStateResultType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Статус размещения проверки в ЕРП</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.8"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportExaminationURIStateResultType">
+		<xs:annotation>
+			<xs:documentation>Статус размещения проверки в ЕРП</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ExaminationGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор проверки в ГИС ЖКХ.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="ShouldNotBeRegistered" type="xs:boolean" fixed="true">
+					<xs:annotation>
+						<xs:documentation>Проверка не должна быть зарегистрирована в Едином реестре проверок.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="ShouldBeRegistered" type="xs:boolean" fixed="true">
+						<xs:annotation>
+							<xs:documentation>Проверка должна быть зарегистрирована в Едином реестре проверок.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="URIRegistrationNumber" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Учетный номер проверки.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:integer">
+								<xs:minInclusive value="0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="URIRegistrationDate" type="xs:date" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Дата присвоения учетного номера проверки</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="URIExaminationState">
+						<xs:annotation>
+							<xs:documentation>Статус размещения проверки в ЕРП:                                         Placed - Размещена                   NotPlaced - Не размещена         Sent - Отправлена                     NotSent - Не отправлена</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="tns:URIExaminationStateType">
+								<xs:enumeration value="Placed"/>
+								<xs:enumeration value="NotPlaced"/>
+								<xs:enumeration value="Sent"/>
+								<xs:enumeration value="NotSent"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="ReceievedFromURI" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Учетный номер проверки получен из ЕРП. Факт подтверждения ГИС ЖКХ наличия успешно размещенной проверки в ЕРП с указанным учетным номером </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Типы для реализации асинхронной версии сервиса.-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="CommonResult" type="base:CommonResultType" maxOccurs="unbounded"/>
+						<xs:element name="exportInspectionPlanResult" type="tns:exportInspectionPlanResultType" maxOccurs="unbounded"/>
+						<xs:element name="exportExaminationResult" type="tns:exportExaminationResultType" maxOccurs="unbounded"/>
+						<xs:element name="exportURIExaminationStateResult" type="tns:exportExaminationURIStateResultType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Статус размещения проверки в ЕРП</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

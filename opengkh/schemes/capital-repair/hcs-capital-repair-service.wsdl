@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by S (H) -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/capital-repair-service/" xmlns:crp="http://dom.gosuslugi.ru/schema/integration/capital-repair/" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:ns="http://www.w3.org/2000/09/xmldsig#" xmlns:ns1="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:ns2="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" xmlns:ns3="http://dom.gosuslugi.ru/schema/integration/bills-base/" xmlns:ns4="http://dom.gosuslugi.ru/schema/integration/organizations-base/" xmlns:ns5="http://dom.gosuslugi.ru/schema/integration/premises-base/" xmlns:ns6="http://dom.gosuslugi.ru/schema/integration/account-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/capital-repair-service/">
+	<wsdl:types>
+		<xs:schema version="11.1.0.3" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+			<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/capital-repair/" schemaLocation="hcs-capital-repair-types.xsd"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="RequestHeader">
+		<wsdl:part name="Header" element="base:RequestHeader"/>
+	</wsdl:message>
+	<wsdl:message name="ResultHeader">
+		<wsdl:part name="Header" element="base:ResultHeader"/>
+	</wsdl:message>
+	<wsdl:message name="importContractsRequest">
+		<wsdl:part name="importContractsRequest" element="crp:importContractsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importContractsResult">
+		<wsdl:part name="importContractsResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportContractsRequest">
+		<wsdl:part name="exportContractsRequest" element="crp:exportContractsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportContractsResult">
+		<wsdl:part name="exportContractsResult" element="crp:exportContractsResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportPlanRequest">
+		<wsdl:part name="exportPlanRequest" element="crp:exportPlanRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportPlanResult">
+		<wsdl:part name="exportPlanResult" element="crp:exportPlanResult"/>
+	</wsdl:message>
+	<wsdl:message name="importAccountRegionalOperatorRequest">
+		<wsdl:part name="importAccountRegionalOperatorRequest" element="crp:importAccountRegionalOperatorRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importAccountRegionalOperatorResult">
+		<wsdl:part name="importAccountRegionalOperatorResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="importAccountSpecialRequest">
+		<wsdl:part name="importAccountSpecialRequest" element="crp:importAccountSpecialRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importAccountSpecialResult">
+		<wsdl:part name="importAccountSpecialResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportAccountRequest">
+		<wsdl:part name="exportAccountRequest" element="crp:exportAccountRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportAccountResult">
+		<wsdl:part name="exportAccountResult" element="crp:exportAccountResult"/>
+	</wsdl:message>
+	<wsdl:message name="importDecisionsFormingFundRequest">
+		<wsdl:part name="importDecisionsFormingFundRequest" element="crp:importDecisionsFormingFundRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importDecisionsFormingFundResult">
+		<wsdl:part name="importDecisionsFormingFundResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportDecisionsFormingFundRequest">
+		<wsdl:part name="exportDecisionsFormingFundRequest" element="crp:exportDecisionsFormingFundRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportDecisionsFormingFundResult">
+		<wsdl:part name="exportDecisionsFormingFundResult" element="crp:exportDecisionsFormingFundResult"/>
+	</wsdl:message>
+	<wsdl:message name="importCertificatesRequest">
+		<wsdl:part name="importCertificatesRequest" element="crp:importCertificatesRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importCertificatesResult">
+		<wsdl:part name="importCertificatesResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="importPaymentsInfoRequest">
+		<wsdl:part name="importPaymentsInfoRequest" element="crp:importPaymentsInfoRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importPaymentsInfoResult">
+		<wsdl:part name="importPaymentsInfoResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="importOperationAndBalanceRequest">
+		<wsdl:part name="importOperationAndBalanceRequest" element="crp:importOperationAndBalanceRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importOperationAndBalanceResult">
+		<wsdl:part name="importOperationAndBalanceResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportCreditContractRequest">
+		<wsdl:part name="exportCreditContractRequest" element="crp:exportCreditContractRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportCreditContractResult">
+		<wsdl:part name="exportCreditContractResult" element="crp:exportCreditContractResult"/>
+	</wsdl:message>
+	<wsdl:message name="Fault">
+		<wsdl:part name="Fault" element="base:Fault"/>
+	</wsdl:message>
+	<wsdl:message name="importFundSizeInfoRequest">
+		<wsdl:part name="importFundSizeInfoRequest" element="crp:importFundSizeInfoRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importFundSizeInfoResult">
+		<wsdl:part name="importFundSizeInfoResult" element="crp:CapRemImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportFundSizeInfoRequest">
+		<wsdl:part name="exportFundSizeInfoRequest" element="crp:exportFundSizeInfoRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportFundSizeInfoResult">
+		<wsdl:part name="exportFundSizeInfoResult" element="crp:exportFundSizeInfoResult"/>
+	</wsdl:message>
+	<wsdl:portType name="CapitalRepairPort">
+		<wsdl:operation name="importContracts">
+			<wsdl:documentation>Импорт договоров на выполнение работ (оказание услуг) по капитальному ремонту</wsdl:documentation>
+			<wsdl:input message="tns:importContractsRequest"/>
+			<wsdl:output message="tns:importContractsResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportContracts">
+			<wsdl:documentation>Экспорт договоров на выполнение работ (оказание услуг) по капитальному ремонту</wsdl:documentation>
+			<wsdl:input message="tns:exportContractsRequest"/>
+			<wsdl:output message="tns:exportContractsResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportPlan">
+			<wsdl:documentation>Экспорт КПР</wsdl:documentation>
+			<wsdl:input message="tns:exportPlanRequest"/>
+			<wsdl:output message="tns:exportPlanResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importRegionalOperatorAccounts">
+			<wsdl:documentation>Импорт счетов регионального оператора</wsdl:documentation>
+			<wsdl:input message="tns:importAccountRegionalOperatorRequest"/>
+			<wsdl:output message="tns:importAccountRegionalOperatorResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importSpecialAccounts">
+			<wsdl:documentation>Импорт специальных счетов</wsdl:documentation>
+			<wsdl:input message="tns:importAccountSpecialRequest"/>
+			<wsdl:output message="tns:importAccountSpecialResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportAccounts">
+			<wsdl:documentation>Экспорт счетов регионального оператора и специальных счетов</wsdl:documentation>
+			<wsdl:input message="tns:exportAccountRequest"/>
+			<wsdl:output message="tns:exportAccountResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importDecisionsFormingFund">
+			<wsdl:documentation>Импорт решений о выборе способа формирования фонда капитального ремонта</wsdl:documentation>
+			<wsdl:input message="tns:importDecisionsFormingFundRequest"/>
+			<wsdl:output message="tns:importDecisionsFormingFundResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportDecisionsFormingFund">
+			<wsdl:documentation>Экспорт решений о выборе способа формирования фонда капитального ремонта</wsdl:documentation>
+			<wsdl:input message="tns:exportDecisionsFormingFundRequest"/>
+			<wsdl:output message="tns:exportDecisionsFormingFundResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importCertificates">
+			<wsdl:documentation>Импорт актов выполненных работ</wsdl:documentation>
+			<wsdl:input message="tns:importCertificatesRequest"/>
+			<wsdl:output message="tns:importCertificatesResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importPaymentsInfo">
+			<wsdl:documentation>Импорт информации об оплате работ по капитальному ремонту</wsdl:documentation>
+			<wsdl:input message="tns:importPaymentsInfoRequest"/>
+			<wsdl:output message="tns:importPaymentsInfoResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importOperationAndBalance">
+			<wsdl:documentation>Импорт информации о совершенных операциях и остатках по счетам</wsdl:documentation>
+			<wsdl:input message="tns:importOperationAndBalanceRequest"/>
+			<wsdl:output message="tns:importOperationAndBalanceResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportCreditContract">
+			<wsdl:documentation>Экспорт кредитных договоров/договоров займа</wsdl:documentation>
+			<wsdl:input message="tns:exportCreditContractRequest"/>
+			<wsdl:output message="tns:exportCreditContractResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importFundSizeInfo">
+			<wsdl:documentation>Импорт информации о размере фондов капитального ремонта</wsdl:documentation>
+			<wsdl:input message="tns:importFundSizeInfoRequest"/>
+			<wsdl:output message="tns:importFundSizeInfoResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportFundSizeInfo">
+			<wsdl:documentation>Экспорт информации о размере фондов капитального ремонта</wsdl:documentation>
+			<wsdl:input message="tns:exportFundSizeInfoRequest"/>
+			<wsdl:output message="tns:exportFundSizeInfoResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CapitalRepairBinding" type="tns:CapitalRepairPort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="importContracts">
+			<soap:operation soapAction="urn:importContracts"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportContracts">
+			<soap:operation soapAction="urn:exportContracts"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportPlan">
+			<soap:operation soapAction="urn:exportPlan"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importRegionalOperatorAccounts">
+			<soap:operation soapAction="urn:importRegionalOperatorAccounts"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importSpecialAccounts">
+			<soap:operation soapAction="urn:importSpecialAccounts"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportAccounts">
+			<soap:operation soapAction="urn:exportAccounts"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importDecisionsFormingFund">
+			<soap:operation soapAction="urn:importDecisionsFormingFund"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportDecisionsFormingFund">
+			<soap:operation soapAction="urn:exportDecisionsFormingFund"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importCertificates">
+			<soap:operation soapAction="urn:importCertificates"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importPaymentsInfo">
+			<soap:operation soapAction="urn:importPaymentsInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importOperationAndBalance">
+			<soap:operation soapAction="urn:importOperationAndBalance"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportCreditContract">
+			<soap:operation soapAction="urn:exportCreditContract"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importFundSizeInfo">
+			<soap:operation soapAction="urn:importFundSizeInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportFundSizeInfo">
+			<soap:operation soapAction="urn:exportFundSizeInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CapitalRepairService">
+		<wsdl:documentation>Сервис Капитальный ремонт</wsdl:documentation>
+		<wsdl:port name="CapitalRepairPort" binding="tns:CapitalRepairBinding">
+			<soap:address location="https://api.dom.gosuslugi.ru/ext-bus-capital-repair-programs-service/services/CapitalRepair"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,959 @@
+﻿Изменения в форматах данных от версии 11.1.1.1 до версии 11.1.1.2
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCS-59302
+Добавлен простой тип для ДР OtherQualityIndicatorNameType - строка, не более 1000 символов.
+Тип OtherQualityIndicatorNameType присвоен следующим элементам:
+//element(*,tns:ExportSupplyResourceContractType)/tns:OtherQualityIndicator/tns:IndicatorName
+//element(*,tns:SupplyResourceContractType)/tns:OtherQualityIndicator/tns:IndicatorName
+
+Изменения в форматах данных от версии 11.1.0.12 до версии 11.1.1.1
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCSANALYST-3185
+//element(*,tns:ApartmentHouseOMSType)/tns:BasicCharacteristicts/tns:UsedYear сделан необязательным
+
+HCS-59112
+//element(*,tns:exportNotificationsOfOrderExecutionResultType)/tns:NotificationOfOrderExecutionWithStatus/payments-base:RecipientInfo/payments-base:PaymentInformation/payments-base:BankName увеличен до 160
+
+Изменения в форматах данных от версии 11.1.0.11 до версии 11.1.0.12
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCS-55676
+Элемент сделан необязательным tns:exportCAChResult/tns:exportCACh/tns:Charter/tns:MeetingProtocol
+
+Изменения в форматах данных от версии 11.1.0.10 до версии 11.1.0.11
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCS-58512
+
+Добавлена возможность отправки заявок на аннулирование ДУ tns:importContractRequest/tns:Contract/tns:AnnulmentContract/tns:LicenseRequest и расторжение ДУ tns:importContractRequest/tns:Contract/tns:TerminateContract/tns:LicenseRequest
+
+HCS-58546
+
+Удалены tns:importCharterRequest/tns:PlacingCharter/tns:RISUHouseRequest, tns:importCharterRequest/tns:EditCharter/tns:RISUHouseRequest, tns:importCharterRequest/tns:RollOverCharter/tns:RISUHouseRequest в связи с откатом функциональности по заявкам в уставах.
+
+Изменения в форматах данных от версии 11.1.0.9 до версии 11.1.0.10
+=================================================================================================================================
+<!--hcs-payments-base.xsd->
+HCS-55601
+Добавлен тип AcknowledgmentRequestInfoExportType
+
+<!--hcs-bills-types.xsd->
+HCS-55601
+Тип //element(*,tns:exportNotificationsOfOrderExecutionResultType)/tns:NotificationOfOrderExecutionWithStatus/tns:AcknowledgmentRequestsList/tns:AcknowledgmentRequest изменен на AcknowledgmentRequestInfoExportType
+
+<!--hcs-organizations-registry-common-types-->
+HCS-57770
+Элемент tns:exportOrgRegistryResult/tns:OrgData/tns:OrgVersion/tns:Subsidiary/organizations-registry-base:Address сделан необязательным
+
+<!--hcs-individual-registry-base-->
+добавлен комплексный тип FIOExportType
+
+<!--hcs-housemanagement-types-->
+HCS-58217
+//element(*,tns:exportAccountResultType)/account-base:ServiceID сделан необязательным для старых ЛС, у которых нет оснований.
+HCS-57654
+В элементе tns:exportCAChResult/tns:exportCACh/tns:Contract/tns:Validity/tns:Year увеличено количество допустимых символов до 4.
+HCS-57762
+tns:exportAccountResult/tns:Accounts/tns:PayerInfo/tns:Ind/individual-registry-base:Surname и tns:exportAccountResult/tns:Accounts/tns:PayerInfo/tns:Ind/individual-registry-base:FirstName сделаны необязательными при экспорте
+
+
+Изменения в форматах данных от версии 11.1.0.8 до версии 11.1.0.9
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCS-57989
+В схемах импорта и экспорта договоров ресурсоснабжения увеличена размерность элемента tns:ContractNumber до 100 символов. 
+<!--hcs-housemanagement-types-->
+HCS-57188
+При экспорте ДУ (ранее было только для Устава) элемент tns:exportCAChResult/tns:exportCACh/tns:Contract/tns:ContractPaymentsInfo/tns:ServicePayment/tns:ServicePaymentSize сделан необязательным.
+
+<!--hcs-bills-types.xsd-->
+HCS-53810
+Изменен тип //element(*,tns:ServicePDType)/tns:TotalPayable на xs:decimal (влияет на importPaymentDocument и exportPaymentDocument)
+
+<!--hcs-inspection-types-->
+HCSINT-31239
+В схеме импорта проверок поправлена аннотация для поля tns:importExaminationsRequest/tns:ImportExamination/tns:Examination/tns:RegulatoryAuthorityInformation/tns:RegulatoryAuthorityID на "Идентификатор контролирующего органа в системе «Федеральный реестр государственных и муниципальных услуг». Доступно и обязательно для заполнения, только если для проверки присылается ShouldBeRegistered"
+
+<!--hcs-inspection-types-->
+HCS-57822
+1. В схеме импорта плана проверок для плановой проверки добавлен блок "Информация об органе контроля": 
+tns:importInspectionPlanRequest/tns:ImportInspectionPlan/tns:ImportPlannedExamination/tns:PlannedExamination/tns:RegulatoryAuthorityInformation
+2. В блок "Информация об органе контроля" добавлены следующие элементы:
+tns:importInspectionPlanRequest/tns:ImportInspectionPlan/tns:ImportPlannedExamination/tns:PlannedExamination/tns:RegulatoryAuthorityInformation/tns:FunctionRegistryNumber (Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»)
+tns:importInspectionPlanRequest/tns:ImportInspectionPlan/tns:ImportPlannedExamination/tns:PlannedExamination/tns:RegulatoryAuthorityInformation/tns:AuthorizedPersons (ФИО и должность лиц, уполномоченных на проведение проверки)
+tns:importInspectionPlanRequest/tns:ImportInspectionPlan/tns:ImportPlannedExamination/tns:PlannedExamination/tns:RegulatoryAuthorityInformation/tns:InvolvedExperts (ФИО и должность экспертов, привлекаемых к проведению проверки)
+3. В схему экспорта плана проверок для плановой проверки добавлен блок "Информация об органе контроля":
+tns:exportInspectionPlansResult/tns:exportInspectionPlanResult/tns:PlannedExamination/tns:PlannedExaminationInfo/tns:RegulatoryAuthorityInformation
+В схему экспорта добавлены поля:
+tns:exportInspectionPlansResult/tns:exportInspectionPlanResult/tns:PlannedExamination/tns:PlannedExaminationInfo/tns:RegulatoryAuthorityInformation/tns:FunctionRegistryNumber (Реестровый номер функции органа жилищного надзора в системе «Федеральный реестр государственных и муниципальных услуг»)
+tns:exportInspectionPlansResult/tns:exportInspectionPlanResult/tns:PlannedExamination/tns:PlannedExaminationInfo/tns:RegulatoryAuthorityInformation/tns:AuthorizedPersons (ФИО и должность лиц, уполномоченных на проведение проверки)
+tns:exportInspectionPlansResult/tns:exportInspectionPlanResult/tns:PlannedExamination/tns:PlannedExaminationInfo/tns:RegulatoryAuthorityInformation/tns:InvolvedExperts (ФИО и должность экспертов, привлекаемых к проведению проверки)
+
+Изменения в форматах данных от версии 11.1.0.7 до версии 11.1.0.8
+=================================================================================================================================
+HCSANALYST-4170
+<!--hcs-inspection-types-->
+<!--hcs-inspection-service-->
+<!--hcs-inspection-service-async-->
+1. В схеме импорта плана проверок (importInspectionPlanRequest) убраны поля tns:URIRegistrationNumber (Учетный номер проверки в ЕРП/Регистрационный номер плана в едином реестре проверок), tns:URIRegistrationDate (Дата присвоения учетного номера проверки)
+2. В схеме импорта проверок (importExaminationsRequest) добавлены условно-обязательные для заполнения поля  tns:URIRegistrationNumber (Учетный номер проверки в ЕРП), tns:URIRegistrationDate (Дата присвоения учетного номера проверки). Также добавлен обязательный  элемент tns:ShouldBeRegistered (Проверка должна быть зарегистрирована в Едином реестре проверок.)
+3. В результат экспорта проверок (exportExaminationsResult) добавлены  поля tns:ShouldNotBeRegistered (Проверка не должна быть зарегистрирована в Едином реестре проверок.) и tns:URIRegistrationDate (Дата присвоения учетного номера проверки)
+4. Добавлен тип exportPlannedExaminationType (Плановая проверка (пункт плана проверок) - экспорт)
+5. Добавлены новый метод: Экспорт статуса размещения проверки в ЕРП (exportExaminationURIStatusRequest)
+6. Добавлены элемент Ответ на запрос на экспорт статуса размещения проверки в ЕРП (exportExaminationURIStatusResult) и тип Статус размещения проверки в ЕРП (exportExaminationURIStatusResultType)
+7. В схему экспорта плана проверко добавлен новый тип URIInrormationType (Информация о регистрации в ЕРП)
+8. В wsdl добавлен метод exportExaminationURIState
+
+HCSINT-30422
+<!--hcs-msp-types-->
+Ключ ServiceKey перенесен на уровень tns:importCitizenCompensationRequest/tns:importCitizenCompensation/tns:Calculation/tns:LoadCalculations
+
+HCS-57475
+<!--hcs-house-management-types-->
+MeteringDeviceBasicCharacteristicsType/CommissioningDate сделано необязательным. Добавлена аннотацию "Поле обязательно, если вид ПУ отличен от "Коллективный (общедомовой)""
+
+<!--hcs-services-types-->
+HCS-57395
+HCS-57396
+Удален элемент tns:exportWorkingListResult/tns:exportWorkingListResult/tns:WorkingList/tns:Attachment
+
+<!--hcs-housemanagement-types-->
+HCS-57452
+Проставлен тип boolean для:
+tns:exportStatusCAChRequest/tns:Criteria/tns:ControlObjects/tns:IsConflicted
+tns:exportStatusCAChRequest/tns:Criteria/tns:ControlObjects/tns:IsBlocked
+tns:exportStatusCAChResult/tns:exportStatusCACh/tns:ContractObject/tns:IsConflicted
+tns:exportStatusCAChResult/tns:exportStatusCACh/tns:ContractObject/tns:IsBlocked
+HCS-57188
+HCS-56084
+Снята обязательность с элемента tns:exportCAChResult/tns:exportCACh/tns:Charter/tns:CharterPaymentsInfo/tns:ServicePayment/tns:ServicePaymentSize
+
+<!--hcs-bills-types.xsd-->
+HCS-55601
+Снята обязательность заполнения элементов
+tns:exportNotificationsOfOrderExecutionResult/tns:exportNotificationsOfOrderExecutionResult/tns:NotificationOfOrderExecutionWithStatus/payments-base:OrderInfo/payments-base:AddressAndConsumer/payments-base:Ind
+и
+tns:exportNotificationsOfOrderExecutionResult/tns:exportNotificationsOfOrderExecutionResult/tns:NotificationOfOrderExecutionWithStatus/payments-base:OrderInfo/payments-base:AddressAndConsumer/payments-base:INN
+
+HCS-55199
+<!--hcs-metering-device-base.xsd-->
+Создан тип ExportOneRateMeteringValueType и ExportElectricMeteringValueType.
+
+<!--hcs-device-metering-types.xsd-->
+Создан тип ExportOneRateMeteringValueKindType и ExportElectricMeteringValueKindType
+Внесены правки в exportMeteringDeviceHistoryResultType
+1. для элемента tns:OneRateDeviceValue/tns:BaseValue присвоен тип ExportOneRateMeteringValueType
+2. для элемента tns:OneRateDeviceValue/tns:Values присвоен тип ExportOneRateMeteringValueKindType
+3. для элемента tns:ElectricDeviceValue/tns:BaseValue присвоен тип ExportElectricMeteringValueType
+4. для элемента tns:ElectricDeviceValue/tns:Values присвоен тип ExportElectricMeteringValueKindType
+Версия tns:exportMeteringDeviceHistoryResult/@base:version изменена на 11.1.0.8
+
+<!--hcs-device-metering-types-->
+HCS-56843
+tns:exportMeteringDeviceHistoryResultType/tns:ElectricDeviceValue/tns:BaseValue сделан необязательным.
+
+<!--hcs-housemanagement-types-->
+importMeteringDeviceDataRequest (в связи с изменением в ответе версионного гуида ПУ на корневой)
+
+Изменения в форматах данных от версии 11.1.0.6 до версии 11.1.0.7
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCS-55601
+элемент tns:exportNotificationsOfOrderExecutionResult/tns:exportNotificationsOfOrderExecutionResult/ tns:NotificationOfOrderExecutionWithStatus/ payments-base:OrderInfo/payments-base:AddressAndConsumer/payments-base:FIASHouseGuid
+сделан необязательным при экспорте извещений о принятии к исполнению распоряжений
+HCS-53810
+HDWORK-15752
+Для элемента комплексного типа tns:ServicePDType/tns:TotalPayable (влияет на importPaymentDocumentRequest) - итого к оплате за расчетный период по ЖКУ, удалено минимально допустимое значение 0, разрешен ввод отрицательных значений
+
+<!--hcs-inspection-types-->
+Поправлена аннотация к полю tns:UnscheduledType (Тип внеплановой проверки) в операции импорта проверок (importExaminationsRequest) - "Заполняется, если ShouldNotBeRegistered не присылается"
+
+<!--hcs-housemanagement-types-->
+1. Исправлены fixed="1" у NoGrossArea.
+2. Исправлена подпись у tns:importCharterRequest/tns:PlacingCharter - уточнено что данный элемент позволяет только создать устав.
+
+Изменения в форматах данных от версии 11.1.0.5 до версии 11.1.0.6
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+HCS-52204
+Добавлены типы AccountExportType и AccountIndExportType для экспорта сведений физлицах, у которых частично отсутствуют атрибуты документов, удостоверящих личность.
+
+HCS-48289
+Удален элемент //element(*,tns:exportAccountResultType)/tns:Obligations, основания выгружаются в //element(*,tns:exportAccountResultType)/tns:AccountReasons.
+
+<!--hcs-organizations-registry-common-types-->
+HCSANALYST-4158
+Добавлен tns:exportOrgRegistryRequest/tns:SearchCriteria/base:orgPPAGUID
+
+Несовместимые изменения: 
+exportHouseRequest
+exportMeteringDeviceDataRequest
+exportMeteringDeviceDataResult
+importForeignBranchRequest
+
+Изменения в форматах данных от версии 11.1.0.4 до версии 11.1.0.5
+=================================================================================================================================
+<!--hcs-housemanagement-types-->
+
+HCS-54930
+//element(*,tns:exportAccountResultType)/tns:AccountNumber - убрана маска номера ЛС для экспорта.
+
+=========================================
+<!--hcs-nsi-types-->
+<!--hcs-nsi-service-->
+<!--hcs-nsi-service-async-->
+
+HCSANALYST-4073 "Интеграция.НСИ.Реализовать выгрузку справочников (SOAP)"
+Добавлены exportDataProviderNsiPagingItemRequest и exportNsiPagingItemResult для операции exportDataProviderPagingNsiItem
+В getStateResult добавлен tns:getStateResult/tns:NsiPagingItem
+
+HCSANALYST-2399 "Импорт справочника "Вид работ капитального ремонта"
+1. Добавлен тип: ImportCapitalRepairWorkType
+2. Добавлены элементы: importCapitalRepairWorkRequest, внесены соответствующие дополнения в wsdl схемы
+3. Добавлен справочник 219 в метод экспорта справочников
+4. в exportDataProviderNsiItemRequest в элемент RegistryNumber добавлен справочник 219 в Enumerations
+5. Добавлена операция: importCapitalRepairWork
+
+HCSANALYST-2400 "Импорт справочника "Причины принятия решений" (МСП)"
+
+1. Добавлен тип: importBaseDecisionMSPType
+2. Добавлены элементы: importBaseDecisionMSPRequest, внесены соответствующие дополнения в wsdl схемы
+3. Добавлен справочник 302 в метод экспорта справочников
+4. в exportDataProviderNsiItemRequest в элемент RegistryNumber добавлен справочник 302 в Enumerations
+5. Добавлена операция: importBaseDecisionMSP
+
+Изменения в форматах данных от версии 11.1.0.3 до версии 11.1.0.4
+=================================================================================================================================
+<!--hcs-capital-repair-types.xsd-->
+HCSINT-29828
+в getStateResult сделан необязательный Choice для вывода детализированной информации
+
+HCS-55986
+По факту реализации: добавлено уточнение в комментарии элементов - Идентификатор версии протокола
+//element(*,tns:DecisionType)/tns:Protocol/tns:VotingProtocolGUID
+<!--hcs-housemanagement-types-->
+HCS-55986
+По факту реализации: добавлено уточнение в комментарии элементов - Идентификатор версии протокола
+tns:importPublicPropertyContractRequest/tns:Contract/tns:PublicPropertyContract/tns:RentAgrConfirmationDocument/tns:ProtocolGUID
+tns:importContractRequest/tns:Contract/tns:PlacingContract/tns:Protocol/tns:VotingProtocolGUID
+tns:importCharterRequest/tns:PlacingCharter/tns:MeetingProtocol/tns:VotingProtocolGUID
+tns:importVotingProtocolRequest/tns:ProtocolGUID
+tns:exportVotingProtocolRequest/tns:VotingProtocolGUID
+tns:exportVotingProtocolResult/tns:VotingProtocol/tns:VotingProtocolGUID
+
+=========================================
+<!--hcs-housemanagement-types-->
+1. Удален tns:importAccountRequest/tns:Account/tns:IndividualServiceReason, привязка индивидуальных услуг к ЛС осуществляется через importAccountIndividualServices
+
+HCSANALYST-3579 Интеграция. ДУ. Доработки по РИСУ.
+1. Добавлен признак //element(*,tns:exportStatusCAChResultType)/tns:ContractObject/tns:IsConflicted, //element 
+2. Статус Locked элемента ManagedObjectStatus выделен в отдельный признак (*,tns:exportStatusCAChResultType)/tns:ContractObject/tns:IsBlocked
+3. Добавлены tns:importCharterRequest/tns:PlacingCharter/tns:RISUHouseRequest, tns:importCharterRequest/tns:EditCharter/tns:RISUHouseRequest, tns:importCharterRequest/tns:RollOverCharter/tns:RISUHouseRequest
+4. в CharterStatus добавлены 3 новых статуса:
+ Reviewed - рассмотрен
+ ApprovalProcess - на утверждении
+ Rejected - отклонен
+
+Изменения в форматах данных от версии 11.1.0.2 до версии 11.1.0.3
+=================================================================================================================================
+<!--hcs-capital-repair-service.xsd-->
+HCSINT-29516
+В ответ на операцию импорта вместо ImportResult возвращается CapRemImportResult
+
+=========================================
+<!--hcs-capital-repair-service-async-->
+HCSINT-29516
+Исправлен SOAP Action для асинхронных методов importCertificates и importPaymentsInfo
+
+=========================================
+<!--hcs-housemanagement-types-->
+Уточнена аннотация для //element(*,tns:ProtocolType)/tns:DecisionList/tns:DecisionsType (используется НСИ №63)
+
+Изменения в форматах данных от версии 11.1.0.1 до версии 11.1.0.2
+=================================================================================================================================
+<!--hcs-bills-types.xsd-->
+HCS-41567
+Поле tns:importPaymentDocumentRequest/tns:PaymentDocument/tns:Insurance/tns:CalcExplanation сделано необязательным при экспорте Платежных документов (exportPaymentDocumentResult).
+Поле tns:exportPaymentDocumentResult/tns:PaymentDocument/tns:PaymentDocument/tns:Insurance/tns:CalcExplanation сделано необязательным при импорте Платежных документов (importPaymentDocumentRequest).
+
+=========================================
+<!--hcs-organizations-registry-base.xsd-->
+HCSANALYST-4046 Интеграция.РО.Возможность указания ОКСМ кодом Альфа-2 (SOAP)
+//element(*,tns:ForeignBranchType)/tns:RegistrationCountry
+Тип данных заменен с NsiRef на string(2)
+
+=========================================
+<!--hcs-organizations-registry-types.xsd-->
+HCSANALYST-4046 Интеграция.РО.Возможность указания ОКСМ кодом Альфа-2 (SOAP)
+//element(*,tns:ForeignBranchImportType)/tns:UpdateForeignBranch/tns:RegistrationCountry
+Тип данных заменен с NsiRef на string(2)
+
+Изменения в форматах данных от версии 11.1.0.1 до версии 11.1.0.2
+=================================================================================================================================
+<!--hcs-bills-types-->
+HCSINT-29496
+Для типа MoneySettlementsType установлено ограничение (xs:decimal,minIncl:0, maxExcl:10000000000 , fracDig:2) для полей tns:Credited, tns:Receipt, tns:Debts, tns:Overpayment в операции importRSOSettlementsRequest, для поля tns:Paid в операции importIKUSettlementsRequest, также в операции экспорта ExportSettlementResultType
+
+=========================================
+<!--hcs-nsi-common-types-->
+HCSANALYST-4003 Интеграция.НСИ.Экспорт 70-го справочника (SOAP)
+Добавлены exportNsiPagingItemRequest и exportNsiPagingItemResult для операции exportNsiPagingItem
+В getStateResult добавлен tns:getStateResult/tns:NsiPagingItem
+
+=========================================
+<!--hcs-bills-types-->
+HCSANALYST-3973 Интеграция. Увеличить размерность полей во Взаиморасчетах (SOAP)
+Добавлен новый тип MoneySettlementsType с ограничением (xs:decimal, totalDig:12, fracDig:2) для полей tns:Credited, tns:Receipt, tns:Debts, tns:Overpayment в операции importRSOSettlementsRequest и для поля tns:Paid в операции importIKUSettlementsRequest
+
+=========================================
+<!--hcs-housemanagement-types-->
+HDWORK-11804
+Удалены элементы tns:exportMeteringDeviceDataRequest/tns:CurrentOrganization и tns:exportMeteringDeviceDataRequest/organizations-registry-base:orgRootEntityGUID.
+Вместо них добавлен необязательный tns:exportMeteringDeviceDataRequest/tns:IsCurrentOrganization.
+tns:exportMeteringDeviceDataResult/tns:MeteringDevice/tns:MeteringOwner сделано необязательным.
+
+HCS-49948
+Корректировка обязательности полей блока //element(*,tns:ExportSupplyResourceContractType)/tns:ContractSubject/tns:PlannedVolume  в схеме экспорта ДРСО
+
+HCS-50910
+Увеличено кол-во максимальных символов для элемента //element(*,tns:GKN_EGRP_KeyExportType)/tns:CadastralNumber, в связи с экспортом исторических данных.
+
+HCSINT-22561
+Удален элемент tns:MeteringDeviceBasicCharacteristicsType/tns:CollectiveDevice/tns:RemoteMeteringInfo.
+Вместо него добавлен tns:MeteringDeviceBasicCharacteristicsType/tns:RemoteMeteringInfo
+
+Удален элемент tns:MeteringDeviceToUpdateAfterDevicesValuesType/tns:CollectiveDevice/tns:RemoteMeteringInfo.
+Вместо него добавлен tns:MeteringDeviceToUpdateAfterDevicesValuesType/tns:RemoteMeteringInfo
+
+=========================================
+<!--hcs-inspection-types-->
+HCS-54827
+Корректировка обязательности поля tns:To (срок проведения проверки по (включительно) - дата окончания проведения проверки) в типах ExaminationType и exportExaminationType в схемах импорта и экспорта проверок
+
+HCSANALYST-3802 Интеграция. Учесть добавление в карточку проверки информации о выполнении предписания (SOAP)
+Поля tns:ActualFulfiledPreceptDate (Фактическая дата исполнения требований) и tns:ActualFulfiledProtocolDate (фактическая дата исполнения) сделаны необязательными
+
+
+=========================================
+<!--hcs-payments-base.xsd-->
+
+SUPP-104971
+Тип ChargeType заменен на элемент PaymentDocument, изменены элементы tns:getStateResult/tns:exportPaymentDocumentDetailsResult/tns:Charge и tns:exportPaymentDocumentDetailsResult/tns:Charge
+
+HCS-35154
+HCS-50937
+Для поля //element(*,tns:AcknowledgmentRequestInfoType)/tns:PaymentDocumentAck/tns:Amount удалено минимально допустимое значение 1 (влияет на tns:exportNotificationsOfOrderExecutionResult), допускается квитирование с нулем.
+
+=========================================
+<!--hcs-bills-types.xsd-->
+Кол-во tns:exportNotificationsOfOrderExecutionRequest/tns:Notifications/tns:AckStatus увеличено до 6.
+
+HCS-54842
+В операции importRSOSettlementsRequest для полей tns:Credted, tns:Receipt, tns:Debts, tns:Overpayment установлен тип xs:decimal с ограничением по вводу максимального количества цифр по аналогии с UI
+В операции importIKUSettlementsRequest в типе ReportPeriodIKUInfoType для поля tns:Paid  установлен тип xs:decimal с ограничением по вводу максимального количества цифр по аналогии с UI
+HCS-50367
+HCS-50395
+HCS-41567
+Поле //element tns:CalcExplanation сделано необязательным при экспорте Платежных документов (exportPaymentDocumentResult).
+Поле //element tns:CalcExplanation сделано необязательным при импорте Платежных документов (importPaymentDocumentRequest).
+HCS-53810
+для элементов //element(*,tns:ServicePDType)/tns:TotalPayable и //element(*,tns:ServicePDType)/tns:AccountingPeriodTotal установлено минимально возможное значение = 0 (влияет на importPaymentDocumentRequest)
+
+=========================================
+<!--hcs-device-metering-types-->
+в поле tns:ElectricMeteringValueKindType/tns:CurrentValue/tns:DateValue установлен тип xs:dateTime.
+tns:exportMeteringDeviceHistoryResult/@base:version установлено 11.0.0.6
+
+=========================================
+<!--hcs-nsi-types-->
+HCS-53415
+Удален элемент 
+tns:importMunicipalServicesRequest/tns:ImportMainMunicipalService/tns:StringDimensionUnit
+HCS-54077
+tns:importAdditionalServicesRequest/tns:ImportAdditionalServiceType/tns:StringDimensionUnit
+добавлено ограничение на минимальную длину строки 1 символ
+
+=========================================
+<!--hcs-base.xsd-->
+HCS-47911
+HCS-47918
+Увеличено до 1024 кол-во максимальных символов в //element(*,tns:AttachmentType)/tns:Name - наименование файла вложения
+HCS-47917
+В элементе AttachmentType (Вложение) параметр //element(*,tns:AttachmentTypeExport)/tns:AttachmentHASH сделан необязательным для заполнения.
+
+=================================================================================================================================
+Изменения в форматах данных от версии 11.0.0.5 до версии 11.1.0.1
+
+<!--hcs-house-management-types-->
+HCS-51765
+Изменение типа полей tns:ApartmentNumber и tns:RoomNumber на тип tns:PremisesNumType в типе tns:ObjectAddressType в схемах импорта/экспорта ДРСО
+
+<!--hcs-house-management-types-->
+HCSINT-25472
+Вместо tns:ImportResult/tns:CommonResult/tns:importMeteringDevice/tns:MeteringDeviceVersionGUID сделан tns:ImportResult/tns:CommonResult/tns:importMeteringDevice/tns:MeteringDeviceGUID (рутовый гуид)
+
+=================================================================================================================================
+<!--hcs-house-management-types-->
+HCS-51096
+Корректировка обязательности полей блока //element(*,tns:ExportSupplyResourceContractType)/tns:Quality/tns:IndicatorValue  в схеме экспорта ДРСО
+
+
+<!--hcs-house-management-types-->
+HCSANALYST-3512 Интеграция РАО. Учесть требование что жилая площадь для УО может не указываться
+1. Для жилых помещений и блоков 
+//element(*,tns:ResidentialPremisesUOType)/tns:GrossArea
+заменен на choise между 
+//element(*,tns:ResidentialPremisesUOType)/tns:GrossArea
+и
+//element(*,tns:ResidentialPremisesUOType)/tns:NoGrossArea
+
+2. Обновлены версия операции
+exportHouseRequest
+
+HCSANALYST-3579 Интеграция. ДУ. Доработки по РИСУ.
+1. Добавлен признак //element(*,tns:exportStatusCAChResultType)/tns:ContractObject/tns:IsConflicted, //element 
+2. Статус Locked элемента ManagedObjectStatus выделен в отдельный признак (*,tns:exportStatusCAChResultType)/tns:ContractObject/tns:IsBlocked
+3. Добавлены tns:importCharterRequest/tns:PlacingCharter/tns:RISUHouseRequest, tns:importCharterRequest/tns:EditCharter/tns:RISUHouseRequest, tns:importCharterRequest/tns:RollOverCharter/tns:RISUHouseRequest
+4. в CharterStatus добавлены 3 новых статуса:
+ Reviewed - рассмотрен
+ ApprovalProcess - на утверждении
+ Rejected - отклонен
+
+<!--hcs-payments-base-types-->
+HCSANALYST-2109 Интеграция. Платежи. Реализовать возможность отмены результатов квитирования поставщиком услуг
+Для поиска извещения добавлены альтернативные элементы //element(*,tns:AcknowledgmentRequestInfoType)/tns:OrderID и 
+orgPPAGUID и //element(*,tns:AcknowledgmentRequestInfoType)/base:orgPPAGUID
+
+<!--hcs-bills-types-->
+HCSANALYST-2109 Интеграция. Платежи. Реализовать возможность отмены результатов квитирования поставщиком услуг
+Добавлен элемент tns:importAcknowledgmentRequest/tns:AckCancellation для отмены квитирования
+
+Изменения в форматах данных от версии 11.0.0.7 до версии 11.0.4.1
+=================================================================================================================================
+HCS-54827
+Корректировка обязательности поля tns:To (срок проведения проверки по (включительно) - дата окончания проведения проверки) в типах ExaminationType и exportExaminationType в схемах импорта и экспорта проверок
+
+=========================================
+<!--hcs-nsi-types-->
+В tns:exportDataProviderNsiItemRequest/tns:RegistryNumber добавлена выгрузка 219 справочника "Вид работ капитального ремонта"
+
+=================================================================================================================================
+Изменения в форматах данных от версии 11.0.0.6 до версии 11.0.0.7
+<!--hcs-inspection-types-->
+HCSINT-28389
+Корректировка обязательности поля (tns:ExaminationChangeInfoType)/tns:Attachments в схемах импорта и экспорта проверок
+
+<!--hcs-inspection-types-->
+HCSANALYST-3802 Интеграция. Учесть добавление в карточку проверки информации о выполнении предписания (SOAP)
+Изменены схемы экспорта и импорта проверок (importExaminations и exportExaminationsResult)
+Добавлены типы tns:exportPreceptType и tns:exportProtocolType в схеме экспорта проверок
+Добавлены элемент tns:ActualFulfiledPreceptDate (Фактическая дата исполнения требований) в типы PreceptType и exportPreceptType и элемент tns:ActualFulfiledProtocolDate (фактическая дата исполнения) в типы OffenceType и exportOffenceType
+
+<!--hcs-inspection-types-->
+HCS-53459
+Добавлен блок tns:ExaminationChangeInfo в схемы импорта и экспорта проверок (importExaminations и exportExaminationsResult)
+
+<!--hcs-bills-service.wsdl-->
+HCS-52001
+Удалены операции:
+openOrgPaymentPeriod - ВИ_ИЛС_РПО_ОТК. открыть расчетный период организации;
+closeHousePaymentPeriod - ВИ_ИЛС_РПД_ЗАК. закрыть расчетный период дома;
+Удалены message:
+exportOrgPeriodDataRequest
+exportOrgPeriodDataResult
+<!--hcs-bills-service-async.wsdl-->
+HCS-52001
+Удалены операции:
+openOrgPaymentPeriod - ВИ_ИЛС_РПО_ОТК. открыть расчетный период организации;
+closeHousePaymentPeriod - ВИ_ИЛС_РПД_ЗАК. закрыть расчетный период дома;
+Удалены message:
+exportOrgPeriodDataRequest
+exportOrgPeriodDataResult  
+<!--hcs-bills-types.xsd-->
+HCS-52001
+Удалены операции:
+openOrgPaymentPeriodRequest - открыть расчетный период организации;
+closeHousePaymentPeriodRequest - закрыть расчетный период дома;
+
+=================================================================================================================================
+Изменения в форматах данных от версии 11.0.0.4 до версии 11.0.0.5
+=================================================================================================================================
+<!--hcs-msp-types-->
+HCSANALYST-3081 Интеграция. МСП (SOAP)
+Добавлены новые элементы:
+exportCitizenSubsidyRequest (Запрос на экспорт сведений о гражданах, получающих субсидии)
+exportCitizenCompensationRequest (Запрос на экспорт сведений о гражданах, получающих компенсации расходов)
+
+<!--hcs-house-management-types-->
+HCS-51765
+Корректировка обязательности полей в схемах импорта и  экспорта ДРСО
+Добавлен новый тип:
+1. DRSORegOrgType - Юридическое лицо или индивидуальный предприниматель в ДРСО. 
+Тип DRSORegOrgType указан в поле RegOrg полей ApartmentBuildingOwner и LivingHouseOwner в типах данных SupplyResourceContractType и ExportSupplyResourceContractType
+
+HCSINT-27588
+Удалены констрейнты на номер подъезда в операциях 
+importHouseUORequest
+importHouseRSORequest
+importHouseOMSRequest
+проверки перенесены в ЧТЗ.
+
+<!--hcs-bills-service-->
+HCS-52001
+Удалена операция exportOrgPeriodData
+
+<!--hcs-inspection-types-->
+HCSINT-27751
+Изменены схемы импорта и экспорта проверок
+Добавлены новые поля в типы ExaminationType и exportExaminationType:
+1. tns:UnscheduledType - Тип внеплановой проверки
+2. tns:RegulatoryAuthorityID - Идентификатор контролирующего органа в системе «Федеральный реестр государственных и муниципальных услуг».
+
+=================================================================================================================================
+Изменения в форматах данных от версии 11.0.0.3 до версии 11.0.0.4
+=================================================================================================================================
+
+=========================================
+
+<!--hcs-metering-device-base.xsd-->
+HCS-50275
+Внесены правки в тип данных MeteringValueType
+
+HCS-50407
+Добавлен tns:importMeteringDeviceValuesRequest/tns:MeteringDevicesValues/tns:OneRateDeviceValue/tns:CurrentValue/tns:DateValue
+Добавлен tns:importMeteringDeviceValuesRequest/tns:MeteringDevicesValues/tns:ElectricDeviceValue/tns:CurrentValue/tns:DateValue
+
+<!--hcs-nsi-types-->
+HCS-52109
+Добавлен признак "Самостоятельное производство коммунальной услуги"
+tns:importMunicipalServicesRequest/tns:ImportMainMunicipalService/tns:SelfProduced
+Вид коммунального ресурса сделан множественным 
+tns:importMunicipalServicesRequest/tns:ImportMainMunicipalService/tns:MunicipalResourceRef
+Добавлен тип данных: choise
+tns:importMunicipalServicesRequest/tns:ImportMainMunicipalService/base:OKEI
+или
+tns:importMunicipalServicesRequest/tns:ImportMainMunicipalService/tns:StringDimensionUnit
+
+=========================================
+<!--hcs-house-management-types-->
+
+HCSANALYST-3382 "Интеграция. Добавить поле Адрес в подъезды для дочерних адресов (если дом является группирующим)"
+1. Добавлен элемент для указания дочернего дома в группирующем доме для 
+подъзедов, жилых помещений и лифтов (FIASChildHouseGuid)
+//element(*,tns:ResidentialPremisesUOType)/tns:
+//element(*,tns:ResidentialPremisesRSOType)/tns:FIASChildHouseGuid
+//element(*,tns:ResidentialPremisesOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:ResidentialPremisesUpdateUOType)/tns:FIASChildHouseGuid
+//element(*,tns:ResidentialPremisesUpdateRSOType)/tns:FIASChildHouseGuid
+//element(*,tns:ResidentialPremisesUpdateOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:ResidentialPremisesExportType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesUOType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesRSOType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesUpdateUOType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesUpdateRSOType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesUpdateOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:NonResidentialPremisesExportType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceUOType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceRSOType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceUpdateUOType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceUpdateRSOType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceUpdateOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:EntranceExportType)/tns:FIASChildHouseGuid
+//element(*,tns:LiftUOType)/tns:FIASChildHouseGuid
+//element(*,tns:LiftOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:LiftUpdateUOType)/tns:FIASChildHouseGuid
+//element(*,tns:LiftUpdateOMSType)/tns:FIASChildHouseGuid
+//element(*,tns:LiftExportType)/tns:FIASChildHouseGuid
+
+2. Поле "дата постройки подъезда" (CreationDate) заменено на "год постройки подъезда" (число)
+(CreationYear)
+
+3. Изменены версии операций 
+importHouseUORequest
+importHouseRSORequest
+importHouseOMSRequest
+exportHouseResult
+
+Изменения в форматах данных от версии 11.0.0.2 до версии 11.0.0.3
+=================================================================================================================================
+
+HCS-49662 Корректировка обязательности полей в схеме импорта и экспорта проверок 
+<!--hcs-inspection-types-->
+Изменена обязательность полей в типе CitizenInfoType 
+Элементы LastName и FirstName в типе CitizenInfoType обязательны при импорте проверки, но необязательны при экспорте проверки 
+
+HCS-50515 Корректировка обязательности полей в схеме экспорта ДРСО
+<!--house-management-types-->
+1.Добавлены типы:
+ExportSupplyResourceContractType - Экспортируемый договор ресурсоснабжения 
+Тип данных exportSupplyResourceContractResultType отнаследован от ExportSupplyResourceContractType
+
+=========================================
+<!--capital-repair-->
+
+HCSANALYST-3061 "Размещение информации о размере фонда капитального ремонта"
+
+<!--hcs-capital-repair-types-->
+1.Добавлены типы:
+  FundSizeInfoType - Тип информации о размере фонда капитального ремонта
+  exportFundSizeInfoType - Экспортируемая информация о размере фондов капитального ремонта
+2. Добавлены элементы:
+  importFundSizeInfoRequest - Импорт информации о размере фондов капитального ремонта
+  exportFundSizeInfoRequest - Запрос на экспорт информации о размере фондов капитального ремонта
+  exportFundSizeInfoResult - Ответ на запрос экспорта информации о размере фондов капитального ремонта
+3. В элемент getStateResult добавлена ветка FundSizeInfo - Экспортируемая информация о размере фондов капитального ремонта
+<!--hcs-capital-repair-service-->
+<!--hcs-capital-repair-service-async-->
+Добавлены методы:
+  importFundSizeInfo - Импорт информации о размере фондов капитального ремонта
+  exportFundSizeInfo - Экспорт информации о размере фондов капитального ремонта
+
+
+HCSANALYST-2030 "Размещение информации о совершенных операциях со счетом капитального ремонта"
+
+<!--hcs-capital-repair--types-->
+1.Добавлены типы для работы с операциями и остатками:
+ReportingPeriodType (Отчетный период)
+OperationType (Операция по счету)
+ExportOperationAndBalanceType (Экспортируемая информация о совершенных операциях и остатках по счету)
+
+CreditContractType (Кредитный договор/договор займа)
+ExportCreditContractType (Экспортируемый кредитный договор/договор займа)
+TerminationInfoType (Сведения о расторжении)
+
+2. Обновлены типы:
+ExportAccountType - добавлен блок tns:OperationAndBalance (Информация о совершенных операциях и остатках по счету)
+
+2.Добавлены элементы:
+importOperationAndBalanceRequest (Импорт информации о совершенных операциях и остатках по счетам)
+tns:exportAccountRequest/tns:WithOperationAndBalance (Отобразить информацию о совершенных операциях и остатках по счету) - для операции exportAccountRequest
+
+exportCreditContractRequest (Запрос на экспорт кредитных договоров/договоров займа)
+exportCreditContractResult (Ответ на запрос экспорта кредитных договоров/договоров займа)
+
+
+3.В элемент getStateResult:
+
+добавлен блок tns:getStateResult/tns:CreditContract (Экспортируемый кредитный договор/договор займа)
+
+<!--hcs-capital-repair-service-->
+<!--hcs-capital-repair-service-async-->
+Добавлены операции:
+
+importOperationAndBalance (Импорт информации о совершенных операциях и остатках по счетам)
+exportCreditContract (Экспорт кредитных договоров/договоров займа)
+
+
+Изменения в форматах данных от версии 11.0.0.1 до версии 11.0.0.2
+=================================================================================================================================
+
+=========================================
+<!--hcs-inspections-types-->
+
+HCS-48625
+
+1. В операции importInspectionPlanRequest элемент tns:DeleteInspectionPlan вынесен в choise
+
+=========================================
+<!--hcs-house-management-->
+Несовместимые изменения: 
+exportAccountResult
+exportHouseResult 
+
+HCSANALYST-2727 "Интеграция. Индивидуальные услуги. Выставление начислений (SOAP)"
+
+Добавлены операции importAccountIndividualServices (Импорт индивидуальных услуг лицевого счета), exportAccountIndividualServices (Экспорт индивидуальных услуг лицевого счета)
+
+HCSANALYST-3266 "Интеграция. Возможность привязки ЛС к ДРСО и ДУ (SOAP)"
+
+Добавлены tns:importAccountRequest/tns:Account/tns:AccountReasons и //element(*,tns:exportAccountResultType)/tns:AccountReasons
+
+
+HCSANALYST-2754 "Интеграция. При добавлении помещения добавить позицию в список "Отсутствует подъезд"
+
+Обновлены типы:
+ResidentialPremisesUOType
+ResidentialPremisesRSOType
+ResidentialPremisesOMSType
+ResidentialPremisesUpdateUOType
+ResidentialPremisesUpdateRSOType
+ResidentialPremisesUpdateOMSType
+ResidentialPremisesExportType
+В каждом из них EntranceNum заменен на choice между EntranceNum и HasNoEntrance
+
+Для exportHouseResult жилые помещения и лифты вынесены из подъезда
+tns:exportHouseResult/tns:exportHouseResult/tns:ApartmentHouse/tns:Entrance/...
+на уровень выше
+tns:exportHouseResult/tns:exportHouseResult/tns:ApartmentHouse/tns:ResidentialPremises
+tns:exportHouseResult/tns:exportHouseResult/tns:ApartmentHouse/tns:Lift
+
+=========================================
+<!--hcs-payments-base-types-->
+
+Изменена подпись NotificationOfOrderExecutionExportTypeRecipientInfo/EntprFIO - "Наименование ИП одной строкой"
+
+HCSANALYST-3108 "Интеграция. Платежи за ЖКУ. Обеспечить уникальность номера платежа (OrderId) в рамках поставщика информации"
+
+//element(*,tns:AcknowledgmentRequestInfoType)/tns:OrderID заменен на //element(*,tns:AcknowledgmentRequestInfoType)/tns:NotificationsOfOrderExecutionGUID
+
+=========================================
+<!--hcs-bills-types-->
+несовместимые изменения:
+importAcknowledgmentRequest
+exportNotificationsOfOrderExecutionResult
+
+HCSANALYST-3108 "Интеграция. Платежи за ЖКУ. Обеспечить уникальность номера платежа (OrderId) в рамках поставщика информации"
+
+1. Добавлена возможность выгрузки по tns:exportNotificationsOfOrderExecutionRequest/tns:Notifications/payments-base:NotificationsOfOrderExecutionGUID
+2. Добавлены //element(*,tns:exportNotificationsOfOrderExecutionResultType)/tns:NotificationOfOrderExecutionWithStatus/payments-base:NotificationsOfOrderExecutionGUID, //element(*,tns:exportNotificationsOfOrderExecutionResultType)/tns:NotificationOfOrderExecutionWithStatus/tns:orgPPAGUID
+3. AckStatus расширен статусом 0 - Новый (не проходил квитирование)
+
+
+Изменения в форматах данных от версии 10.0.2.10 до версии 11.0.0.1
+=================================================================================================================================
+
+=========================================
+<!--hcs-house-management-types-->
+
+HCSANALYST-3081 "Разработка сервиса МСП (меры социальной поддержки)"
+
+=========================================
+<!--hcs-capital-repair-service.wsdl-->
+<!--hcs-capital-repair-service-async.wsdl-->
+
+Добавлен каталог MSP и файлы:
+- hcs-msp-types
+- hcs-msp-service
+- hcs-msp-service-async
+
+=========================================
+<!--hcs-msp-service.wsdl-->
+<!--hcs-msp-service-async.wsdl-->
+
+Добавлены операции:
+1. Импорт информации о гражданах, получающих субсидии, здесь же импорт расчетов и выплат (importCitizenSubsidy)
+2. Импорт информации о гражданах, получающих компенсации расходов, здесь же импорт расчетов и выплат (importCitizenCompensation)
+3. Экспорт перечня отдельных категорий граждан (exportCategories)
+
+=========================================
+<!--hcs-house-management-types-->
+
+Несовместимые изменения:
+- exportMeteringDeviceDataResult
+- importMeteringDeviceDataRequest
+
+HCSANALYST-1136 "Интеграция: Удаление настроек приборов учета"
+
+В элемент exportMeteringDeviceDataResultType добален tns:MeteringDeviceGISGKHNumber
+
+HCSANALYST-2432 "Предоставить доступ к внесению показаний по ОДПУ другой организаци"
+
+1. В запрос exportMeteringDeviceDataRequest добавлен choice с элементами: CurrentOrganization или orgRootEntityGUID. Изменена структура запроса.
+2. В ответ exportMeteringDeviceDataResultType добавлен элемент MeteringOwner
+
+HCSANALYST-2569 "Размещение в Системе нескольких приборов учетов с признаками "Установлен на подающем трубопроводе" или "Установлен на обратном трубопроводе" и установка связи между ними"
+
+1. В типы данных tns:MeteringDeviceFullInformationType и tns:MeteringDeviceToUpdateAfterDevicesValuesType добавлены элементы:
+Если ПУ не связан с другими ПУ - tns:NotLinkedWithMetering
+Если ПУ имеет связь с другими ПУ - LinkedWithMetering:
+Место установки текущего ПУ - tns:InstallationPlace
+Заведенный в ГИС ЖКХ ПУ, с которым установлена связь - tns:LinkedMeteringDeviceVersionGUID
+2. Добавлена ветка для установки связи с другими ПУ tns:importMeteringDeviceDataRequest/tns:MeteringDevice/tns:DeviceDataToUpdate/tns:LinkedWithMetering
+
+=========================================
+<!--hcs-metering-device-base-->
+
+HCSANALYST-2888 "Заведение ПУ ОМС и ОГВ субъекта по договорам соц найма"
+1. MeteringValueType - увеличено число знаков после запятой до 7.
+
+=========================================
+<!--hcs-device-metering-types-->
+
+HCSANALYST-2888 "Заведение ПУ ОМС и ОГВ субъекта по договорам соц найма"
+1. Исправлен тип данных tns:OneRateMeteringValueKindType/tns:CurrentValue/tns:DateValue на dateTime.
+
+=========================================
+<!--hcs-capital-repair-types.xsd-->
+
+HCSANALYST-2031 "Размещение информации об актах выполнения договоров подряда по работам и услугам"
+HCSANALYST-2032 "Размещение информации по оплате работ и услуг по договорам подряда"
+
+1. Добавлены типы данных для актов: WorkCertificateType, CertificateType, exportCertificateType
+2. Добавлены типы данных для сведений об оплатах: PaymentInfoType, exportPaymentInfoType
+3. Добавлен запрос на импорт актов importCertificatesRequest
+4. Добавлен запрос на импорт оплат importPaymentsInfoRequest
+5. Расширен ответ на синхронный экспорт договоров - в элемент exportContractsResult добавлены сведения об актах (tns:Contract/tns:Certificate) и оплатах (tns:Contract/tns:PaymentInfo).
+6. Аналогично расширен ответ на асинхронных экспорт договоров - tns:getStateResult/tns:Contract - добавлены сведения об актах и оплатах.
+
+HCSANALYST-3059 "Размещение информации о решениях о выборе выборе способа формирования фонда капитального ремонта"
+
+1.Добавлены типы данных для работы с решениями:
+  DecisionType - Тип данных для решения о выборе способа формирования фонда капитального ремонта
+  DocumentDecisionType - Документ решения
+  exportDecisionType -   Экспортируемое решение о выборе способа формирования фонда капитального ремонта
+  
+2. Добавлен тип данных для расширенного ответа результата импорта
+  CapRemImportResultType - Расширенный тип ответа на результат импорта
+  CapRemImportResult - Расширенный ответ для результата импорта
+
+
+2.Добавлены элементы:
+  importDecisionsonFormingFundRequest - Запрос на импорт решений о выборе способа формирования фонда капительного ремонта. Вид решения = Решение о выборе способа формирования фонда капитального ремонта
+  exportDecisionsonFormingFundRequest - Запрос на экспорт решений о выборе способа формирования фонда капитального ремонта
+  exportDecisionsonFormingFundResult - Ответ на запрос экспорта решений о выборе способа формирования фонда капитального ремонта
+
+3. В ответе getStateResult для ветки ImportResult присвоен тип CapRemImportResultType 
+
+4. В ответе getStateResult  добавлена ветка Decision
+
+HCSANALYST-3060 "Размещение счетов регионального оператора"
+
+1.Добавлены типы для работы со счетами:
+  AcсountType - Общий тип счета регионального оператора/специального счета
+  ExportAccountType - Экспортируемые счета регионального оператора/специальные счета
+
+2.Добавлены элементы:
+  importAccountRegionalOperatorRequest - Запрос на импорт счетов регионального оператора
+  importAccountSpecialRequest - Запрос на импорт сведений об изменении реквизитов и закрытии специального счета
+  exportAccountRequest - Запрос на экспорт счетов
+  exportAccountResult - Ответ на запрос экспорта счетов
+
+3.В элемент getStateResult добавлена ветка tns:Account
+
+=========================================
+<!--hcs-capital-repair-service.wsdl-->
+<!--hcs-capital-repair-service-async.wsdl-->
+
+HCSANALYST-2031 "Размещение информации об актах выполнения договоров подряда по работам и услугам"
+HCSANALYST-2032 "Размещение информации по оплате работ и услуг по договорам подряда"
+Добавлены методы для импорта актов (importCertificates) и оплат (importPaymentsInfo)
+
+HCSANALYST-3059 "Размещение информации о решениях о выборе выборе способа формирования фонда капитального ремонта"
+Добавлены методы importDecisionsonsFormingFund и exportDecisionsonsFormingFund
+
+HCSANALYST-3060 "Размещение счетов регионального оператора"
+Добавлены операции:
+  importRegionalOperatorAccounts - Импорт счетов регионального оператора
+  importSpecialAccounts - Импорт специальных счетов
+  exportAccounts - Экспорт счетов регионального оператора и специальных счетов
+
+Изменения в форматах данных от версии 10.0.2.3 до версии 10.0.2.10
+=================================================================================================================================
+=========================================
+<!--hcs-inspections-types-->
+1. В PreceptStateType в Enumeration добавлено значение NotFilled
+2. В OffenceStateType в Enumeration добавлено значение NotFilled
+=========================================
+<!--hcs-house-management-types-->
+
+HCSANALYST-3110 "Интеграция. РАО. Импорт домов. РСО против УО и ОМС (SOAP,XLS)"
+1. В операции импорта дома для РСО importHouseRSORequest
+choiсe между 
+tns:importHouseRSORequest/tns:ApartmentHouse/tns:ApartmentHouseToCreate
+и
+tns:importHouseRSORequest/tns:ApartmentHouse/tns:ApartmentHouseToUpdate
+сделан необязательным.
+
+2. В операции импорта дома для РСО importHouseRSORequest
+choiсe между 
+tns:importHouseRSORequest/tns:LivingHouse/tns:LivingHouseToCreate
+и
+tns:importHouseRSORequest/tns:LivingHouse/tns:LivingHouseToUpdate
+сделан необязательным.
+
+HCS-48600
+1. Удалены ограничения на передаваемый номер подъезда у жилого помещения 
+UO_referEntranceNumKey, RSO_referEntranceNumKey, OMS_referEntranceNumKey
+
+HCS-45479
+VotingInitiatorIndType/DateOfBirth сделан необязательным
+
+===========================================
+<!--hcs-bills-->
+
+HCSANALYST-3114 "Интеграция.ЛС. Общая площадь в ПД должно быть обязательным только для ЛС УО"
+
+//element(*,tns:PaymentDocumentType)/tns:AddressInfo/tns:TotalSquare сделан необязательным для всех ЛС, кроме ЛС УО (проверяется контролем INT008074)
+
+HCS-48670
+PaymentRecalculation/recalculationReason добавлено ограничение minOccurs=1
+=================================================================================================================================
+
+Изменения в форматах данных от версии 10.0.2.2 до версии 10.0.2.3
+=================================================================================================================================
+<!--hcs-inspections-types-->
+HCS-48028
+1.Сделаны обязательными элементы:
+//element(*,tns:ExaminationType)/tns:ExecutingInfo
+//element(*,tns:ExaminationType)/tns:ExecutingInfo/tns:Event
+
+=========================================
+<!--hcs-house-management-types-->
+HCS-47279
+1. Удалено ограничение importSupplyResourceContractRequest_House
+
+HCS-48013
+1. в ApartmentHouseUOType добавлен OGFData
+//element(*,tns:ApartmentHouseUOType)/tns:BasicCharacteristicts/tns:OGFData
+2. в LivingHouseOMSType добавлен OGFData
+//element(*,tns:LivingHouseOMSType)/tns:BasicCharacteristicts/tns:OGFData
+3. OGFData добавлена к элементам, описывающий блок, для УО и ОМС 
+//element(*,tns:BlockUOType)/tns:OGFData
+//element(*,tns:BlockOMSType)/tns:OGFData
+//element(*,tns:BlockUpdateUOType)/tns:OGFData
+//element(*,tns:BlockUpdateOMSType)/tns:OGFData
+//element(*,tns:BlockExportType)/tns:OGFData
+
+HCS-47539
+1. EntranceExportType больше не наследуется от EntranceUOType
+и в него добавлен //element(*,tns:EntranceExportType)/tns:TerminationDate
+2. В LiftExportType добавлен //element(*,tns:LiftExportType)/tns:TerminationDate
+
+===========================================
+<!--hcs-bills-service-async.wsdl-->
+
+Исправлено имя wsdl part (стр. 76):
+
+	<wsdl:message name="exportInsuranceProductResult">
+		<wsdl:part name="exportInsuranceProductResult" element="base:AckRequest"/>
+	</wsdl:message>
+
+HCSINT-25079
+Добавлены:
+tns:importPaymentDocumentRequest/tns:PaymentDocument/tns:ChargeDebt/tns:HousingService/tns:orgPPAGUID, tns:importPaymentDocumentRequest/tns:PaymentDocument/tns:ChargeDebt/tns:AdditionalService/tns:orgPPAGUID, tns:importPaymentDocumentRequest/tns:PaymentDocument/tns:ChargeDebt/tns:MunicipalService/tns:orgPPAGUID,
+tns:importPaymentDocumentRequest/tns:PaymentDocument/tns:CapitalRepairDebt/tns:orgPPAGUID,
+tns:importPaymentDocumentRequest/tns:PaymentDocument/tns:CapitalRepairCharge/tns:orgPPAGUID
+
+
+Изменения в форматах данных от версии 10.0.2.1 до версии 10.0.2.2
+=================================================================================================================================
+
+===========================================
+<!--hcs-inspection-type-->
+
+2. Добавлены элементы: importCapitalRepairWorkRequest, внесены соответствующие дополнения в wsdl схемы
+
+3. Добавлен справочник 219 в метод экспорта справочников
+
+4. в exportDataProviderNsiItemRequest в элемент RegistryNumber добавлен справочник 219 в Enumerations
+
+
+
+<!--hcs-nsi-service-->
+<!--hcs-nsi-service-async-->
+Добавлена операция: importCapitalRepairWorkHCSANALYST-4170
+<!--hcs-inspection-types-->
+<!--hcs-inspection-service-->
+<!--hcs-inspection-service-async-->
+1. В схеме импорта плана проверок (importInspectionPlanRequest) убраны поля tns:URIRegistrationNumber (Учетный номер проверки в ЕРП/Регистрационный номер плана в едином реестре проверок), tns:URIRegistrationDate (Дата присвоения учетного номера проверки)
+2. В схеме импорта проверок (importExaminationsRequest) добавлены условно-обязательные для заполнения поля  tns:URIRegistrationNumber (Учетный номер проверки в ЕРП), tns:URIRegistrationDate (Дата присвоения учетного номера проверки). Также добавлен обязательный  элемент tns:ShouldBeRegistered (Проверка должна быть зарегистрирована в Едином реестре проверок.)
+3. В результат экспорта проверок (exportExaminationsResult) добавлены  поля tns:ShouldNotBeRegistered (Проверка не должна быть зарегистрирована в Едином реестре проверок.) и tns:URIRegistrationDate (Дата присвоения учетного номера проверки)
+4. Добавлен тип exportPlannedExaminationType (Плановая проверка (пункт плана проверок) - экспорт)
+5. Добавлены новый метод: Экспорт статуса размещения проверки в ЕРП (exportExaminationURIStatusRequest)
+6. Добавлены элемент Ответ на запрос на экспорт статуса размещения проверки в ЕРП (exportExaminationURIStatusResult) и тип Статус размещения проверки в ЕРП (exportExaminationURIStatusResultType)
+7. В схему экспорта плана проверко добавлен новый тип URIInrormationType (Информация о регистрации в ЕРП)
+8. В wsdl добавлен метод exportExaminationURIState

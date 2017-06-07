@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by Zu (-) -->
+<xs:schema xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/licenses/" xmlns:organizations-base="http://dom.gosuslugi.ru/schema/integration/organizations-base/" xmlns:organizations-registry-base="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" xmlns:individual-registry-base="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" xmlns:nsi-base="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:premises-base="http://dom.gosuslugi.ru/schema/integration/premises-base/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://dom.gosuslugi.ru/schema/integration/licenses/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="10.0.1.2">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-base/" schemaLocation="../lib/hcs-organizations-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" schemaLocation="../lib/hcs-organizations-registry-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/premises-base/" schemaLocation="../lib/hcs-premises-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" schemaLocation="../lib/hcs-individual-registry-base.xsd"/>
+	<!--Экспорт лицензий-->
+	<xs:element name="exportLicenseRequest">
+		<xs:annotation>
+			<xs:documentation>Экспорт информации о лицензиях на управление многоквартирными домами (Реестр лицензий субъекта РФ)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="LicenseNumber" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Номер лицензии</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="\d{9}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="LicenseOrganization" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Лицензиат</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:choice>
+										<xs:element name="OGRN" type="organizations-base:OGRNType">
+											<xs:annotation>
+												<xs:documentation>ОГРН</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OGRNIP" type="organizations-base:OGRNIPType">
+											<xs:annotation>
+												<xs:documentation>ОГРНИП</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+									<xs:element name="Region" type="base:RegionType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Код субьекта</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportLicenseResultType">
+		<xs:complexContent>
+			<xs:extension base="tns:LicenseType">
+				<xs:sequence>
+					<xs:element name="LicenseGUID" type="base:GUIDType">
+						<xs:annotation>
+							<xs:documentation>Идентификатор лицензии в системе</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LicenseVersion" type="xs:nonNegativeInteger">
+						<xs:annotation>
+							<xs:documentation>Версия лицензии</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="exportLicenseResult">
+		<xs:annotation>
+			<xs:documentation>Результат экспорта информации о лицензиях на управление многоквартирными домами</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="License" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="tns:exportLicenseResultType"/>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Экспорт данных о дисквалифицированных лицах-->
+	<xs:element name="exportDisqualifiedPersonRequest">
+		<xs:annotation>
+			<xs:documentation>Экспорт сведений о дисквалифицированных лицах</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="DisqualifiedPerson" maxOccurs="10">
+							<xs:annotation>
+								<xs:documentation>Информация о дисквалифицированном лице</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="FIO" type="individual-registry-base:FIOType">
+										<xs:annotation>
+											<xs:documentation>ФИО</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="DateOfBirth" type="xs:date">
+										<xs:annotation>
+											<xs:documentation>Дата рождения</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="BirthPlace" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Место рождения</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="LicenseNumber" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Номер лицензии</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="\d{9}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="LicenseOrganization" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Лицензиат</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:choice>
+												<xs:element name="OGRN" type="organizations-base:OGRNType">
+													<xs:annotation>
+														<xs:documentation>ОГРН</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="OGRNIP" type="organizations-base:OGRNIPType">
+													<xs:annotation>
+														<xs:documentation>ОГРНИП</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:choice>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportDisqualifiedPersonResult">
+		<xs:annotation>
+			<xs:documentation>Статус экспорта данных о дисквалифицированных лицах</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="DisqualifiedPerson" type="tns:DisqualifiedPersonType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Описание дисквалифицированного лица</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Методы для асинхронного обмена -->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="ImportResult" type="base:CommonResultType" maxOccurs="unbounded"/>
+						<xs:element name="License" type="tns:exportLicenseResultType" maxOccurs="unbounded"/>
+						<xs:element name="DisqualifiedPersonResult" type="tns:DisqualifiedPersonType" maxOccurs="unbounded"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Объекты предметной области-->
+	<xs:complexType name="LicenseType">
+		<xs:annotation>
+			<xs:documentation>Лицензия</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LicenseNumber">
+				<xs:annotation>
+					<xs:documentation>Номер лицензии</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d{9}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LicenseRegDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата регистрации лицензии</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LicenseStatus">
+				<xs:annotation>
+					<xs:documentation>Статус лицензии:    
+    A - ACTIVE - включена в реестр, действующая
+    F - FINISHED - включена в реестр, действие прекращено в зависимости от даты окончания действия лицензии
+    C - CANCELED - аннулирована
+    R - REJECTED - отменена в зависимости от основания</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="A"/>
+						<xs:pattern value="F"/>
+						<xs:pattern value="C"/>
+						<xs:pattern value="R"/>
+						<xs:enumeration value="A"/>
+						<xs:enumeration value="F"/>
+						<xs:enumeration value="C"/>
+						<xs:enumeration value="R"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LicensingAuthority">
+				<xs:annotation>
+					<xs:documentation>Наименование лицензирующего органа</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:LegalType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RegionFIASGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Адрес осуществления лицензируемого вида деятельности (код по ФИАС)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LicensableTypeOfActivity" type="base:LongTextType">
+				<xs:annotation>
+					<xs:documentation>Лицензируемый вид деятельности с указанием выполняемых работ, оказываемых услуг, составляющих лицензируемый вид деятельности</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInformation" type="base:LongTextType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LicenseOrganization" type="tns:LicenseOrganizationType">
+				<xs:annotation>
+					<xs:documentation>Информация о лицензиате</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccompanyingDocument" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Документы лицензионного дела</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:AccompanyingDocumentType">
+							<xs:sequence>
+								<xs:element name="DateFrom" type="xs:date">
+									<xs:annotation>
+										<xs:documentation>Дата вступления документа в силу</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="DocumentStatus">
+									<xs:annotation>
+										<xs:documentation>Статус документа:    
+     A - ACTIVE - Действующий
+     C - CANCELED - Отменен</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="A"/>
+											<xs:enumeration value="C"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="House" type="tns:HouseType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Информация о домах</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CorrectLicenseType">
+		<xs:annotation>
+			<xs:documentation>Изменения в лицензии</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element name="LicenseGUID" type="base:GUIDType">
+					<xs:annotation>
+						<xs:documentation>Идентификатор лицензии в системе</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="LicenseVersion" type="xs:nonNegativeInteger">
+					<xs:annotation>
+						<xs:documentation>Версия лицензии</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="LicenseNumber" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Номер лицензии</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="\d{9}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="LicenseRegDate" type="xs:date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Дата регистрации лицензии</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="LicenseStatus">
+				<xs:annotation>
+					<xs:documentation>Статус лицензии:    
+    A - ACTIVE - включена в реестр, действующая
+    F - FINISHED - включена в реестр, действие прекращено в зависимости от даты окончания действия лицензии
+    C - CANCELED - аннулирована
+    R - REJECTED - отменена в зависимости от основания</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="A"/>
+						<xs:pattern value="F"/>
+						<xs:pattern value="C"/>
+						<xs:pattern value="R"/>
+						<xs:enumeration value="A"/>
+						<xs:enumeration value="F"/>
+						<xs:enumeration value="C"/>
+						<xs:enumeration value="R"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LicensingAuthority">
+				<xs:annotation>
+					<xs:documentation>Наименование лицензирующего органа</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:LegalType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RegionFIASGuid" type="base:GUIDType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Адрес осуществления лицензируемого вида деятельности (код по ФИАС)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Region" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Адрес осуществления лицензируемого вида деятельности</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LicensableTypeOfActivity" type="base:LongTextType">
+				<xs:annotation>
+					<xs:documentation>Лицензируемый вид деятельности с указанием выполняемых работ, оказываемых услуг, составляющих лицензируемый вид деятельности</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInformation" type="base:LongTextType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccompanyingDocument" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Документы лицензионного дела</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:AccompanyingDocumentType">
+							<xs:sequence>
+								<xs:element name="DateFrom" type="xs:date">
+									<xs:annotation>
+										<xs:documentation>Дата вступления документа в силу</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="DocumentStatus">
+									<xs:annotation>
+										<xs:documentation>Статус документа:    
+     A - ACTIVE - Действующий
+     C - CANCELED - Отменен</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="A"/>
+											<xs:enumeration value="C"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="House" type="tns:HouseType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Информация о домах</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LicenseOrganizationType">
+		<xs:annotation>
+			<xs:documentation>Информация о лицензиате</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Legal">
+				<xs:annotation>
+					<xs:documentation>Юридическое лицо</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:LegalType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Entrp">
+				<xs:annotation>
+					<xs:documentation>ИП</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="organizations-registry-base:EntpsType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="AccompanyingDocumentType">
+		<xs:annotation>
+			<xs:documentation>Документы лицензионного дела</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Document">
+				<xs:annotation>
+					<xs:documentation>Реквизиты размещаемого документа</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DocType" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Тип документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RegDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата включения в реестр</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DecisionOrg">
+							<xs:annotation>
+								<xs:documentation>Наименование организации, принявшей решение</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="organizations-registry-base:LegalType"/>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Наименование документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Number" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DocumentStatus">
+							<xs:annotation>
+								<xs:documentation>Статус документа:    
+    A - ACTIVE - Действующиий
+    C - CANCELED - Отменен</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="A"/>
+									<xs:enumeration value="C"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="BaseDocument">
+				<xs:annotation>
+					<xs:documentation>Реквизиты документа, являющегося основанием для размещения информации</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="BaseDocType" type="nsi-base:nsiRef" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Основание размещения (Тип электронного документа)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BaseDocDecisionOrg" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Наименование организации, принявшей решение</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BaseDocName" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Наименование документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BaseDocNumber" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BaseDocDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DateFrom" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата вступления в силу</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInfo" type="base:LongTextType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HouseType">
+		<xs:annotation>
+			<xs:documentation>Информация о доме</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FIASHouseGUID" type="premises-base:FIASHouseGUIDType">
+				<xs:annotation>
+					<xs:documentation>Глобальный уникальный идентификатор дома по ФИАС</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HouseAddress" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Адрес дома</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Contract" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Информация о договоре управления</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ContractGUID" type="base:GUIDType">
+							<xs:annotation>
+								<xs:documentation>Идентификатор ДУ в ГИС ЖКХ </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DocNum">
+							<xs:annotation>
+								<xs:documentation>Номер договора из ДУ по дому</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="base:LongTextType">
+									<xs:maxLength value="255"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SigningDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата заключения договора из ДУ по дому</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Org" type="organizations-registry-base:RegOrgType">
+							<xs:annotation>
+								<xs:documentation>Управляющая организация из ДУ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EffectiveDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата вступления в силу из ДУ </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PlanDateComptetion" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Планируемая дата окончания из ДУ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Validity">
+							<xs:annotation>
+								<xs:documentation>Срок действия (рассчитывается автоматически)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Month" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Месяц</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:totalDigits value="2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Year" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>год/лет</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:totalDigits value="2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element name="StartDate" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Дата начала осуществления полномочий из ДУ</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="EndDate" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Дата окончания осуществления полномочий из ДУ</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:element name="Terminate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата расторжения из ДУ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DisqualifiedPersonType">
+		<xs:annotation>
+			<xs:documentation>Сведение о дисквалифицированном лице</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DisqualifiedPerson">
+				<xs:annotation>
+					<xs:documentation>Информация о дисквалифицированном лице</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FIO" type="individual-registry-base:FIOType">
+							<xs:annotation>
+								<xs:documentation>ФИО</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DateOfBirth" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата рождения</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BirthPlace" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Место рождения</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Position" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Должность</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Org">
+				<xs:annotation>
+					<xs:documentation>Информация об организации, в которой работало дисквалифицированное лицо</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:choice>
+							<xs:element name="Legal">
+								<xs:annotation>
+									<xs:documentation>Юридическое лицо</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="organizations-registry-base:LegalType"/>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Entrp">
+								<xs:annotation>
+									<xs:documentation>ИП</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="organizations-registry-base:EntpsType"/>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+						<xs:element name="LicenseNumber" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер лицензии</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="\d{9}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="LicenseDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата регистрации лицензии</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LicenseRegOrg" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Орган государственного жилищного надзора</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Judgement">
+				<xs:annotation>
+					<xs:documentation>Судебное решение о дисквалификации (Информация о дисквалификации)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DisqualificationBase" type="nsi-base:nsiRef">
+							<xs:annotation>
+								<xs:documentation>Код основание дисквалификации</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JudgementName" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Судебный орган</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JudgementDocumentName" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Наименование документа - решение суда</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JudgementDocumentNumber" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Номер документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JudgementDocumentDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата судебного документа</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DateFrom" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дисквалифицирован с (Дата вступления в силу решения суда)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Duration">
+							<xs:annotation>
+								<xs:documentation>Длительность дисквалификации</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="DurationYears">
+										<xs:annotation>
+											<xs:documentation>Лет (от 0 до 99 включительно)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:nonNegativeInteger">
+												<xs:minInclusive value="0"/>
+												<xs:pattern value="\d{1,2}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="DurationMonths">
+										<xs:annotation>
+											<xs:documentation>Месяцев (от 0 до 11 включительно)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:nonNegativeInteger">
+												<xs:minInclusive value="0"/>
+												<xs:pattern value="(0?\d)|(1[0-1])"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="DurationDays">
+										<xs:annotation>
+											<xs:documentation>Дней (от 0 до 30 включительно)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:nonNegativeInteger">
+												<xs:minInclusive value="0"/>
+												<xs:pattern value="[0-2]?\d|(30)"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ExclusionDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дисквалифицирован по (Плановая дата исключения сведений из реестра)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AdditionalInformation" type="base:LongTextType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дополнительная информация</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

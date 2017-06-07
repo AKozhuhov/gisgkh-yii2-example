@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!---->
+<xs:schema xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.w3.org/2000/09/xmldsig#" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/infrastructure/" xmlns:nsi-base="http://dom.gosuslugi.ru/schema/integration/nsi-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/infrastructure/" elementFormDefault="qualified" version="10.0.1.1">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<xs:element name="importOKIRequest">
+		<xs:annotation>
+			<xs:documentation>Импорт информации об ОКИ </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="RKIItem" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Объект коммунальной инфраструктуры</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:sequence>
+										<xs:element ref="base:TransportGUID"/>
+										<xs:element name="OKIGUID" type="base:GUIDType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Идентификатор ОКИ ГИС ЖКХ</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:choice>
+										<xs:element name="OKI">
+											<xs:annotation>
+												<xs:documentation>ОКИ</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="tns:InfrastructureType"/>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Termination" type="xs:boolean" fixed="true">
+											<xs:annotation>
+												<xs:documentation>Заполняется только ОМС Удалить ОКИ</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importOKIRequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<xs:element name="exportOKIRequest">
+		<xs:annotation>
+			<xs:documentation>Экспорт ОКИ </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="OKIType" type="nsi-base:nsiRef" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Вид ОКИ</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ExpiredManagement" type="xs:boolean" fixed="true" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ОКИ только с истекшим сроком управления </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OKTMO" type="base:OKTMORefType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ОКТМО</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RSOOrganizationGUID" type="base:GUIDType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Заполняется только ОМС      Идентификатор РСО</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportOKIResult">
+		<xs:annotation>
+			<xs:documentation>Ответ на экспорт ОКИ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="ExportOKIResult" type="tns:exportOKIResultType" maxOccurs="unbounded"/>
+						<xs:element ref="base:ErrorMessage" maxOccurs="unbounded"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportOKIResultType">
+		<xs:sequence>
+			<xs:element name="OKIGuid" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор ОКИ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CodeOKI" type="tns:CodeOKIType">
+				<xs:annotation>
+					<xs:documentation>Реестровый номер в РКИ </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OKI">
+				<xs:annotation>
+					<xs:documentation>ОКИ</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:InfrastructureType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Методы для асинхронного обмена-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage" maxOccurs="unbounded"/>
+						<xs:element name="ImportResult" type="base:CommonResultType" maxOccurs="unbounded"/>
+						<xs:element name="ExportOKIResult" type="tns:exportOKIResultType" maxOccurs="unbounded"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ResourceType">
+		<xs:annotation>
+			<xs:documentation>Ресурс </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MunicipalResource" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Вид коммунального ресурса" (реестровый номер 2)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalLoad" type="tns:PowerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Присоединенная нагрузка, в т.ч.:</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IndustrialLoad" type="tns:PowerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Промышленность</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SocialLoad" type="tns:PowerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Социальная сфера</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PopulationLoad" type="tns:PowerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Население</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfrastructureType">
+		<xs:sequence>
+			<xs:element name="Name">
+				<xs:annotation>
+					<xs:documentation>Наименование объекта </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:ShortTextType">
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Base" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Основание эксплуатации объекта инфраструктуры" (Реестровый номер 39)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AttachmentList" type="base:AttachmentType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Основание управления объектом</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="EndManagmentDate" type="xs:date">
+					<xs:annotation>
+						<xs:documentation>Окончание управления</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="IndefiniteManagement" type="xs:boolean" fixed="true">
+					<xs:annotation>
+						<xs:documentation>Бессрочное управление</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="ManagerOKI" type="tns:ManagerOKIType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Заполняется только ОМС Организация, управляющая ОКИ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OKIType">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Вид ОКИ" (реестровый номер 33)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="nsi-base:nsiRef">
+							<xs:choice minOccurs="0">
+								<xs:choice minOccurs="0">
+									<xs:element name="WaterIntakeType" type="nsi-base:nsiRef" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Ссылка на НСИ "Вид водозаборного сооружения" (реестровый номер 34)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="ESubstationType" type="nsi-base:nsiRef" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Ссылка на НСИ "Тип электрической подстанции" (реестровый номер 37)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="PowerPlantType" type="nsi-base:nsiRef" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Ссылка на НСИ "Вид электростанции" (реестровый номер 38)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:choice>
+								<xs:element name="FuelType" type="nsi-base:nsiRef" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Ссылка на НСИ "Вид топлива" (реестровый номер 40)</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="GasNetworkType" type="nsi-base:nsiRef" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Ссылка на НСИ "Тип газораспределительной сети" (реестровый номер 35)</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Services" type="nsi-base:nsiRef" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Вид коммунальной услуги" (реестровый номер 3)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OKTMO" type="base:OKTMORefType">
+				<xs:annotation>
+					<xs:documentation>ОКТМО</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Adress" type="tns:ShortTextType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Адрес объекта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CommissioningYear">
+				<xs:annotation>
+					<xs:documentation>Год ввода в эксплуатацию</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="base:YearType">
+						<xs:minInclusive value="1850"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="IndependentSource" type="xs:boolean" fixed="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Признак автономного источника снабжения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Deterioration">
+				<xs:annotation>
+					<xs:documentation>Уровень износа (%)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:CentesimalType">
+						<xs:totalDigits value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ObjectProperty" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Характеристики объекта </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="Resources" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Характеристика сетевого объекта. Значения указываются в единицах измерения в соответствии с полем «Единица измерения мощности и присоединенной нагрузки (ссылка на справочник «ОКЕИ»)» справочника «Вид коммунальной услуги».</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="tns:ResourceType">
+										<xs:sequence>
+											<xs:element name="SetPower" type="tns:PowerType" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Установленная мощность.Значение указывается в единицах измерения в соответствии с полем "Единица измерения ссылка на справочник «ОКЕИ»" справочника "Вид коммунального ресурса"</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="SitingPower" type="tns:PowerType" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Распологаемая мощность. Значение указывается в единицах измерения в соответствии с полем "Единица измерения ссылка на справочник «ОКЕИ»" справочника "Вид коммунального ресурса"</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element name="TransportationResources" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Характеристика передачи (транспортировки) коммунальных ресурсов. Значения указываются в единицах измерения в соответствии с полем «Единица измерения мощности и присоединенной нагрузки (ссылка на справочник «ОКЕИ»)» справочника «Вид коммунальной услуги».</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="tns:ResourceType">
+											<xs:sequence>
+												<xs:element name="VolumeLosses">
+													<xs:annotation>
+														<xs:documentation>Объем потерь. Значение указывается в единицах измерения в соответствии с полем «Единица измерения (ссылка на справочник «ОКЕИ»)» справочника «Вид коммунальной услуги»</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="tns:PowerType">
+															<xs:totalDigits value="8"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="CoolantType" type="nsi-base:nsiRef" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Ссылка на НСИ "Вид теплоносителя" (реестровый номер 41)</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="NetPieces" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Сведения об участках сети</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Name" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Наименование участка</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="tns:ShortTextType">
+													<xs:maxLength value="100"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Diameter">
+											<xs:annotation>
+												<xs:documentation>Диаметр(мм)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="tns:PowerType">
+													<xs:totalDigits value="8"/>
+													<xs:fractionDigits value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Length">
+											<xs:annotation>
+												<xs:documentation>Протяженность(км)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="tns:PowerType">
+													<xs:totalDigits value="8"/>
+													<xs:fractionDigits value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="NeedReplaced" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Нуждается в замене(км)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="tns:PowerType">
+													<xs:totalDigits value="8"/>
+													<xs:fractionDigits value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Wearout" type="tns:CentesimalType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Износ(%)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PressureType" type="nsi-base:nsiRef" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Ссылка на НСИ "Уровень давления газопровода" (реестровый номер 36 )</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="VoltageType" type="nsi-base:nsiRef" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Ссылка на НСИ "Уровень напряжения" (реестровый номер 45 )</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CountAccidents" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Число аварий на 100 км сетей</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:nonNegativeInteger">
+										<xs:maxInclusive value="100"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="OKILinks" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Ссылки на источники/приемники</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="SourceOKI" type="base:GUIDType" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Cсылка на источник Идентификатор ОКИ в ГИС ЖКХ</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ReceiverOKI" type="base:GUIDType" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Идентификатор ОКИ в ГИС ЖКХ</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AddInfo" type="base:LongTextType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дополнительная информация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AttachmentsEnergyEfficiency" type="base:AttachmentType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Документы, подтверждающие соответствие требованиям энергетической эффективности</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ManagerOKIType">
+		<xs:choice>
+			<xs:element name="RSO">
+				<xs:annotation>
+					<xs:documentation>РСО</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RSOOrganizationGUID" type="base:GUIDType">
+							<xs:annotation>
+								<xs:documentation>Идентификатор РСО</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Name" type="tns:eTextType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Наименование РСО</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Municipalities" type="xs:boolean" fixed="true">
+				<xs:annotation>
+					<xs:documentation>На балансе муниципального образования</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:simpleType name="eTextType">
+		<xs:annotation>
+			<xs:documentation>Текстовое поле 500</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="500"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PowerType">
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="9"/>
+			<xs:pattern value="\d+(\.\d{1,3})?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LongTextType">
+		<xs:annotation>
+			<xs:documentation>текстовое поле 255</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="nsiCodeType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MonthType">
+		<xs:annotation>
+			<xs:documentation>Номер месяца</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="12"/>
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="07"/>
+			<xs:enumeration value="08"/>
+			<xs:enumeration value="09"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CentesimalType">
+		<xs:restriction base="xs:decimal">
+			<xs:maxInclusive value="100"/>
+			<xs:fractionDigits value="1"/>
+			<xs:totalDigits value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ShortTextType">
+		<xs:annotation>
+			<xs:documentation>короткое текстовое поле 140</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="140"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodeOKIType">
+		<xs:annotation>
+			<xs:documentation>Уникальный код объекта инфраструктуры</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[(0-9)]{11}[(А-Я)]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

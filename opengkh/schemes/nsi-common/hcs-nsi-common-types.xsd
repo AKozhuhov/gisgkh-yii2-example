@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by S (H) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:nsi-base="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/nsi-common/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/nsi-common/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="11.1.0.2">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<!-- ВИ_НСИ_ППС. Получить перечень справочников с указанием даты последнего изменения каждого из них. -->
+	<xs:element name="exportNsiListRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос получения перечня  общесистмного справочников.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element ref="nsi-base:ListGroup" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportNsiListResult">
+		<xs:annotation>
+			<xs:documentation>Перечень общесистмных справочников с датой последнего изменения каждого из них.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Составной тип. Перечень справочников с указанием даты последнего изменения каждого из них.</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="NsiList" type="nsi-base:NsiListType">
+							<xs:annotation>
+								<xs:documentation>Перечень справочников с указанием даты последнего изменения каждого из них.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!-- ВИ_НСИ_ПДС. Получить данные справочника. -->
+	<xs:element name="exportNsiItemRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на получение данных общесистмного справочника.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="RegistryNumber" type="nsi-base:NsiItemRegistryNumberType">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="nsi-base:ListGroup"/>
+						<xs:element name="ModifiedAfter" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата и время, измененные после которой элементы справочника должны быть возвращены в ответе. Если не указана, возвращаются все элементы справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportNsiItemResult">
+		<xs:annotation>
+			<xs:documentation>Возврат данных  общесистмного справочника.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Составной тип. Данные справочника.</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="NsiItem" type="nsi-base:NsiItemType">
+							<xs:annotation>
+								<xs:documentation>Данные справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--ВИ_НСИ_ПДС_ПОСТР. Получить данные справочника с разбивкой по страницам -->
+	<xs:element name="exportNsiPagingItemRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на получение данных общесистмного справочника.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="RegistryNumber" type="nsi-base:NsiItemRegistryNumberType">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="nsi-base:ListGroup"/>
+						<xs:element name="Page">
+							<xs:annotation>
+								<xs:documentation>Страница выборки. Возвращается по 1000 элементов.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:minInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedAfter" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата и время, измененные после которой элементы справочника должны быть возвращены в ответе. Если не указана, возвращаются все элементы справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportNsiPagingItemResult">
+		<xs:annotation>
+			<xs:documentation>Возврат данных  общесистмного справочника.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Составной тип. Данные справочника.</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="NsiItem">
+							<xs:annotation>
+								<xs:documentation>Данные справочника.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="nsi-base:NsiItemType">
+										<xs:sequence>
+											<xs:element name="TotalItemsCount" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество записей в справочнике</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="TotalPages" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество страниц</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="CurrentPage">
+												<xs:annotation>
+													<xs:documentation>Номер текущей страницы</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Методы для асинхронного обмена-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="NsiItem" type="nsi-base:NsiItemType"/>
+						<xs:element name="NsiPagingItem">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="nsi-base:NsiItemType">
+										<xs:sequence>
+											<xs:element name="TotalItemsCount" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество записей в справочнике</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="TotalPages" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество страниц</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="CurrentPage">
+												<xs:annotation>
+													<xs:documentation>Номер текущей страницы</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="NsiList" type="nsi-base:NsiListType"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

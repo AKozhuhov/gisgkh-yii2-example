@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by Zu (-) -->
+<xs:schema xmlns:tns="http://dom.gosuslugi.ru/schema/integration/fas/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:organizations-base="http://dom.gosuslugi.ru/schema/integration/organizations-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/fas/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="10.0.1.2">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-base/" schemaLocation="../lib/hcs-organizations-base.xsd"/>
+	<!--Запросы-->
+	<xs:element name="importRSORequest">
+		<xs:annotation>
+			<xs:documentation>Импорт сведений о лицах, осуществляющих поставки ресурсов, необходимых для предоставления коммунальных услуг, в многоквартирные дома, жилые дома</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="RSO" maxOccurs="100">
+							<xs:annotation>
+								<xs:documentation>Ресурсоснабжающая организация</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ActualDate" type="xs:date">
+										<xs:annotation>
+											<xs:documentation>Дата актуальности сведений</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:choice>
+										<xs:element name="RSOActualDATA">
+											<xs:annotation>
+												<xs:documentation>Внести актуальные сведения в реестр</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="organizations-base:INN"/>
+													<xs:element ref="organizations-base:KPP" minOccurs="0"/>
+													<xs:element name="Name">
+														<xs:annotation>
+															<xs:documentation>Наименование для ЮЛ или фамилия, имя и отчество для ИП</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="255"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="IsEntpr" type="xs:boolean">
+														<xs:annotation>
+															<xs:documentation>Признак ИП</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:choice minOccurs="0">
+														<xs:element ref="organizations-base:OGRN"/>
+														<xs:element ref="organizations-base:OGRNIP"/>
+													</xs:choice>
+													<xs:element name="Resource" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Регулируемый вид деятельности по поставке ресурсов</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ResourseType" type="tns:ResourseType">
+																	<xs:annotation>
+																		<xs:documentation>Регулируемый вид деятельности по поставке ресурсов по справочнику</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OKTMO" type="base:OKTMORefType" maxOccurs="unbounded">
+																	<xs:annotation>
+																		<xs:documentation>Муниципальное образование, на территории которого юридическое лицо или индивидуальный предприниматель осуществляет регулируемые виды деятельности по поставке ресурсов</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="RegistryOfNaturalMonopolies" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Реестр субъектов естественных монополий</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Number">
+																	<xs:annotation>
+																		<xs:documentation>Номер</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:minLength value="1"/>
+																			<xs:maxLength value="50"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="Date" type="xs:date">
+																	<xs:annotation>
+																		<xs:documentation>Дата включения</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="RegistryGuaranteeingSuppliers" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Федеральный информационный реестр гарантирующих поставщиков и зон их деятельности</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Number">
+																	<xs:annotation>
+																		<xs:documentation>Номер</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:minLength value="1"/>
+																			<xs:maxLength value="50"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="Date" type="xs:date">
+																	<xs:annotation>
+																		<xs:documentation>Дата включения</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RemoveRSO">
+											<xs:annotation>
+												<xs:documentation>Аннулировать сведения в реестре</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="organizations-base:INN"/>
+													<xs:element ref="organizations-base:KPP"/>
+													<xs:choice minOccurs="0">
+														<xs:element ref="organizations-base:OGRN"/>
+														<xs:element ref="organizations-base:OGRNIP"/>
+													</xs:choice>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importRSORequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<!--Типы асинхронного обмена-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="ImportResult" type="base:CommonResultType" maxOccurs="unbounded"/>
+					</xs:choice>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="ResourseType">
+		<xs:annotation>
+			<xs:documentation>Регулируемый вид деятельности по поставке ресурсов (по справочнику Реестр ВД)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ResourseTypeGIS">
+		<xs:annotation>
+			<xs:documentation>Регулируемый вид деятельности по поставке ресурсов (по справочнику видов деятельности ГИС ЖКХ)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01">
+				<xs:annotation>
+					<xs:documentation>Холодное водоснабжение/Транспортировка воды, включая распределение воды</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="02">
+				<xs:annotation>
+					<xs:documentation>Холодное водоснабжение/Подвоз воды (на основании заявления органа местного самоуправления)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="03">
+				<xs:annotation>
+					<xs:documentation>Горячее водоснабжение с использованием закрытых систем теплоснабжения (горячего водоснабжения)/Приготовление воды на нужды горячего водоснабжения</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="04">
+				<xs:annotation>
+					<xs:documentation>Водоотведение, в том числе очистка сточных вод, обращение с осадком сточных вод</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="05">
+				<xs:annotation>
+					<xs:documentation>Теплоснабжение/Сбыт тепловой энергии и теплоносителя</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="06">
+				<xs:annotation>
+					<xs:documentation>Теплоснабжение/Поддержание резервной тепловой мощности при отсутствии потребления тепловой энергии</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="07">
+				<xs:annotation>
+					<xs:documentation>Поставки электрической энергии населению</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="08">
+				<xs:annotation>
+					<xs:documentation>Услуги по поставке (реализации) природного газа/Реализация газа населению</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="09">
+				<xs:annotation>
+					<xs:documentation>Услуги по поставке (реализации) природного газа/Реализация сжиженного газа населению для бытовых нужд</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="10">
+				<xs:annotation>
+					<xs:documentation>Поставка топлива твердого, топлива печного бытового и керосина гражданам/Поставка топлива твердого гражданам </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="11">
+				<xs:annotation>
+					<xs:documentation>Электроснабжение: поставки электрической энергии населению</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="12">
+				<xs:annotation>
+					<xs:documentation>Услуги по поставке (реализации) природного газа: реализация газа населению</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="13">
+				<xs:annotation>
+					<xs:documentation>Услуги по поставке (реализации) природного газа: реализация сжиженного газа населению для бытовых нужд</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="14">
+				<xs:annotation>
+					<xs:documentation>Поставка топлива твердого, топлива печного бытового и керосина гражданам: поставка топлива твердого гражданам</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="15">
+				<xs:annotation>
+					<xs:documentation>Поставка топлива твердого, топлива печного бытового и керосина гражданам: Поставка топлива печного бытового гражданам</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

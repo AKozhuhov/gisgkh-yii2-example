@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 (http://www.altova.com) by Alexander (Lanit) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/payments-base/" xmlns:organizations-base="http://dom.gosuslugi.ru/schema/integration/organizations-base/" xmlns:individual-registry-base="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" xmlns:organizations-registry-base="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" xmlns:account-base="http://dom.gosuslugi.ru/schema/integration/account-base/" xmlns:bills-base="http://dom.gosuslugi.ru/schema/integration/bills-base/" xmlns:premises-base="http://dom.gosuslugi.ru/schema/integration/premises-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/payments-base/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="11.1.0.10">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" schemaLocation="hcs-individual-registry-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-base/" schemaLocation="hcs-organizations-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" schemaLocation="hcs-organizations-registry-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/account-base/" schemaLocation="hcs-account-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/bills-base/" schemaLocation="hcs-bills-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/premises-base/" schemaLocation="hcs-premises-base.xsd"/>
+	<!--Оплата-->
+	<xs:complexType name="NotificationOfOrderExecutionExportType">
+		<xs:annotation>
+			<xs:documentation>Извещение о принятии к исполнению распоряжения</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SupplierInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения о потребителе</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SupplierID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Уникальный идентификатор плательщика</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="25"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SupplierName" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Наименование плательщика</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="160"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RecipientInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения об исполнителе</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="organizations-base:INN"/>
+						<xs:choice>
+							<xs:element name="Entpr" type="individual-registry-base:FIOType">
+								<xs:annotation>
+									<xs:documentation>Исполнитель-ИП</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Legal">
+								<xs:annotation>
+									<xs:documentation>Исполнитель-ЮЛ</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="organizations-base:KPP"/>
+										<xs:element name="Name">
+											<xs:annotation>
+												<xs:documentation>Наименование</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="160"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="EntprFIO">
+								<xs:annotation>
+									<xs:documentation>Наименование ИП одной строкой</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="160"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:choice>
+						<xs:element name="PaymentInformation" type="tns:PaymentInformationExportType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Сведения о платежных реквизитах</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OrderInfo">
+				<xs:annotation>
+					<xs:documentation>Общие сведения о распоряжении</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:OrderID">
+							<xs:annotation>
+								<xs:documentation>Уникальный номер платежа (идентификатор операции)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderNum" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер распоряжения</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="9"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Amount" type="bills-base:MoneyKopeckPositiveType">
+							<xs:annotation>
+								<xs:documentation>Сумма оплаты (в копейках)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PaymentPurpose" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Назначение платежа</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="1000"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Comment" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Произвольный комментарий </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="210"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element ref="bills-base:PaymentDocumentID" minOccurs="0"/>
+							<xs:sequence>
+								<xs:element ref="bills-base:PaymentDocumentNumber" minOccurs="0"/>
+								<xs:sequence minOccurs="0">
+									<xs:element ref="base:Year"/>
+									<xs:element ref="base:Month"/>
+								</xs:sequence>
+								<xs:sequence>
+									<xs:element ref="account-base:UnifiedAccountNumber" minOccurs="0"/>
+									<xs:element name="AddressAndConsumer" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Адрес помещения и реквизиты потребителя</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="FIASHouseGuid" type="premises-base:FIASHouseGUIDType" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Глобальный уникальный идентификатор дома по ФИАС</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:sequence>
+														<xs:element name="Apartment" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Номер жилого помещения</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:minLength value="1"/>
+																	<xs:maxLength value="255"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+														<xs:element name="Placement" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Номер комнаты жилого помещения</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:minLength value="1"/>
+																	<xs:maxLength value="255"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+													</xs:sequence>
+													<xs:element name="NonLivingApartment" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Номер нежилого помещения</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="255"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:choice>
+												<xs:choice minOccurs="0">
+													<xs:element name="Ind" type="individual-registry-base:FIOType">
+														<xs:annotation>
+															<xs:documentation>Физлицо, не являющееся индивидуальным предпринимателем</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="INN" type="organizations-base:INNType">
+														<xs:annotation>
+															<xs:documentation>Индивидуальный предприниматель или юридическое лицо</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Service" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Жилищно-коммунальная услуга</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element ref="account-base:ServiceID"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element ref="account-base:AccountNumber" minOccurs="0"/>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NotificationOfOrderExecutionCancellationType">
+		<xs:annotation>
+			<xs:documentation>Извещение об аннулировании извещения о принятии распоряжения к исполнению</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="tns:OrderID"/>
+			<xs:element name="CancellationDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата аннулирования</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Comment" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Комментарий</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="210"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element ref="base:TransportGUID"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcknowledgmentRequestInfoType">
+		<xs:annotation>
+			<xs:documentation>Запрос на квитирование</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:element ref="tns:NotificationsOfOrderExecutionGUID"/>
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>Поиск среди извещений указанной кредитной организации</xs:documentation>
+					</xs:annotation>
+					<xs:element ref="tns:OrderID">
+						<xs:annotation>
+							<xs:documentation>Уникальный номер платежа (идентификатор операции)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="base:orgPPAGUID"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:choice>
+				<xs:element name="PaymentDocumentAck">
+					<xs:annotation>
+						<xs:documentation>Cквитировано с платежным документом</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="bills-base:PaymentDocumentID"/>
+							<xs:choice>
+								<xs:annotation>
+									<xs:documentation>Вид квитируемой услуги из платежного поручения</xs:documentation>
+								</xs:annotation>
+								<xs:element name="HSType" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Вид ЖУ (справочник "Классификатор видов работ (услуг)")</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MSType" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Вид КУ (справочник "Вид коммунальной услуги")</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="ASType" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Вид ДУ (справочник "Вид дополнительной услуги")</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+							<xs:element name="Amount">
+								<xs:annotation>
+									<xs:documentation>Сумма квитирования (в копейках)</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:decimal">
+										<xs:totalDigits value="13"/>
+										<xs:fractionDigits value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element ref="bills-base:PaymentDocumentNumber" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AckImpossible">
+					<xs:annotation>
+						<xs:documentation>Квитирование невозможно</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="bills-base:PaymentDocumentID" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcknowledgmentRequestInfoExportType">
+		<xs:annotation>
+			<xs:documentation>Запрос на квитирование для экспорта</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="tns:NotificationsOfOrderExecutionGUID"/>
+			<xs:choice>
+				<xs:element name="PaymentDocumentAck">
+					<xs:annotation>
+						<xs:documentation>Cквитировано с платежным документом</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="bills-base:PaymentDocumentID"/>
+							<xs:choice>
+								<xs:annotation>
+									<xs:documentation>Вид квитируемой услуги из платежного поручения</xs:documentation>
+								</xs:annotation>
+								<xs:element name="HSType" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Вид ЖУ (справочник "Классификатор видов работ (услуг)")</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MSType" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Вид КУ (справочник "Вид коммунальной услуги")</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="ASType" type="base:GUIDType">
+									<xs:annotation>
+										<xs:documentation>Вид ДУ (справочник "Вид дополнительной услуги")</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+							<xs:element name="Amount">
+								<xs:annotation>
+									<xs:documentation>Сумма квитирования (в копейках)</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:decimal">
+										<xs:totalDigits value="13"/>
+										<xs:fractionDigits value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element ref="bills-base:PaymentDocumentNumber" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AckImpossible">
+					<xs:annotation>
+						<xs:documentation>Квитирование невозможно</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="bills-base:PaymentDocumentID" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="OrderID">
+		<xs:annotation>
+			<xs:documentation>Уникальный идентификатор распоряжения</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="32"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="AccountID">
+		<xs:annotation>
+			<xs:documentation>Уникальный идентификатор счета, в уплату которого поступил платеж.
+В случае отсутствия указывается 0.
+</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="25"/>
+				<xs:minLength value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:complexType name="NotificationOfOrderExecutionType">
+		<xs:annotation>
+			<xs:documentation>Извещение о принятии к исполнению распоряжения</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SupplierInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения о потребителе</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SupplierID" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Уникальный идентификатор плательщика</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="25"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SupplierName" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Наименование плательщика</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="160"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RecipientInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сведения об исполнителе</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="organizations-base:INN"/>
+						<xs:choice>
+							<xs:element name="Entpr" type="individual-registry-base:FIOType">
+								<xs:annotation>
+									<xs:documentation>Исполнитель-ИП</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Legal">
+								<xs:annotation>
+									<xs:documentation>Исполнитель-ЮЛ</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="organizations-base:KPP"/>
+										<xs:element name="Name">
+											<xs:annotation>
+												<xs:documentation>Наименование</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="160"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="EntprFIO">
+								<xs:annotation>
+									<xs:documentation>Наименование ИП одной строкой</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="160"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:choice>
+						<xs:element name="PaymentInformation" type="tns:PaymentInformationType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Сведения о платежных реквизитах</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OrderInfo">
+				<xs:annotation>
+					<xs:documentation>Общие сведения о распоряжении</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:OrderID">
+							<xs:annotation>
+								<xs:documentation>Уникальный номер платежа (идентификатор операции)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OrderNum" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Номер распоряжения</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="9"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Amount" type="bills-base:MoneyKopeckPositiveType">
+							<xs:annotation>
+								<xs:documentation>Сумма оплаты (в копейках)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PaymentPurpose" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Назначение платежа</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="1000"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Comment" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Произвольный комментарий </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="210"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element ref="bills-base:PaymentDocumentID" minOccurs="0"/>
+							<xs:sequence>
+								<xs:element ref="bills-base:PaymentDocumentNumber" minOccurs="0"/>
+								<xs:sequence minOccurs="0">
+									<xs:element ref="base:Year"/>
+									<xs:element ref="base:Month"/>
+								</xs:sequence>
+								<xs:sequence>
+									<xs:element ref="account-base:UnifiedAccountNumber" minOccurs="0"/>
+									<xs:element name="AddressAndConsumer" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Адрес помещения и реквизиты потребителя</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="FIASHouseGuid" type="premises-base:FIASHouseGUIDType">
+													<xs:annotation>
+														<xs:documentation>Глобальный уникальный идентификатор дома по ФИАС</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:sequence>
+														<xs:element name="Apartment" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Номер жилого помещения</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:minLength value="1"/>
+																	<xs:maxLength value="255"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+														<xs:element name="Placement" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Номер комнаты жилого помещения</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:minLength value="1"/>
+																	<xs:maxLength value="255"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+													</xs:sequence>
+													<xs:element name="NonLivingApartment" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Номер нежилого помещения</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="255"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:choice>
+												<xs:choice>
+													<xs:element name="Ind" type="individual-registry-base:FIOType">
+														<xs:annotation>
+															<xs:documentation>Физлицо, не являющееся индивидуальным предпринимателем</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="INN" type="organizations-base:INNType">
+														<xs:annotation>
+															<xs:documentation>Индивидуальный предприниматель или юридическое лицо</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Service" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Жилищно-коммунальная услуга</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element ref="account-base:ServiceID"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element ref="account-base:AccountNumber" minOccurs="0"/>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PaymentInformation" type="tns:PaymentInformationType">
+		<xs:annotation>
+			<xs:documentation>Платежные реквизиты</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="PaymentInformationType">
+		<xs:annotation>
+			<xs:documentation>Сведения о платежных реквизитах организации</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RecipientINN" type="organizations-base:INNType">
+				<xs:annotation>
+					<xs:documentation>ИНН получателя платежа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecipientKPP" type="organizations-base:KPPType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>КПП получателя платежа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BankName">
+				<xs:annotation>
+					<xs:documentation>Наименование банка получателя платежа</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="45"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentRecipient">
+				<xs:annotation>
+					<xs:documentation>Наименование получателя </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="160"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="BankBIK" type="organizations-base:BIKType">
+				<xs:annotation>
+					<xs:documentation>БИК банка получателя</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="operatingAccountNumber">
+				<xs:annotation>
+					<xs:documentation>Номер расчетного счета</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CorrespondentBankAccount" type="account-base:AccountType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Корр. счет банка получателя</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentInformationExportType">
+		<xs:annotation>
+			<xs:documentation>Сведения о платежных реквизитах организации</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RecipientINN" type="organizations-base:INNType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ИНН получателя платежа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecipientKPP" type="organizations-base:KPPType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>КПП получателя платежа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BankName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование банка получателя платежа</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="160"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentRecipient" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование получателя </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="160"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="BankBIK" type="organizations-base:BIKType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>БИК банка получателя</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="operatingAccountNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер расчетного счета</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CorrespondentBankAccount" type="account-base:AccountType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Корр. счет банка получателя</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentInformationKeyType">
+		<xs:annotation>
+			<xs:documentation>Ключ поиска платежных реквизитов организации в ГИС ЖКХ</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BankBIK" type="organizations-base:BIKType">
+				<xs:annotation>
+					<xs:documentation>БИК банка получателя</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="operatingAccountNumber">
+				<xs:annotation>
+					<xs:documentation>Номер расчетного счета</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="BillingInfoGUID" type="base:GUIDType">
+		<xs:annotation>
+			<xs:documentation>Идентификатор платежных реквизитов ЮЛ/ИП</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="NotificationsOfOrderExecutionGUID" type="base:GUIDType">
+		<xs:annotation>
+			<xs:documentation>Идентификатор извещения о принятии к исполнению распоряжения</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>

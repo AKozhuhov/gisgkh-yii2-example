@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by S (H) -->
+<xs:schema xmlns:tns="http://dom.gosuslugi.ru/schema/integration/organizations-registry-common/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:organizations-base="http://dom.gosuslugi.ru/schema/integration/organizations-base/" xmlns:premises-base="http://dom.gosuslugi.ru/schema/integration/premises-base/" xmlns:nsi-base="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:organizations-registry-base="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/organizations-registry-common/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="11.1.0.10">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-base/" schemaLocation="../lib/hcs-organizations-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/premises-base/" schemaLocation="../lib/hcs-premises-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" schemaLocation="../lib/hcs-organizations-registry-base.xsd"/>
+	<!--Экспорт из реестра организаций-->
+	<xs:element name="exportOrgRegistryRequest">
+		<xs:annotation>
+			<xs:documentation>Экспорт сведений из реестра организаций</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="SearchCriteria" maxOccurs="100">
+							<xs:annotation>
+								<xs:documentation>Критерий поиска организаций.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:choice>
+										<xs:choice>
+											<xs:annotation>
+												<xs:documentation>Поиск по реквизитам.</xs:documentation>
+											</xs:annotation>
+											<xs:element ref="organizations-base:OGRNIP"/>
+											<xs:sequence>
+												<xs:element ref="organizations-base:OGRN"/>
+												<xs:element ref="organizations-base:KPP" minOccurs="0"/>
+											</xs:sequence>
+											<xs:element ref="organizations-base:NZA"/>
+										</xs:choice>
+										<xs:element ref="organizations-registry-base:orgVersionGUID"/>
+										<xs:element ref="organizations-registry-base:orgRootEntityGUID"/>
+										<xs:element ref="base:orgPPAGUID"/>
+									</xs:choice>
+									<xs:element name="isRegistered" type="xs:boolean" fixed="true" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Поиск среди организаций, имеющих личных кабинет</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="lastEditingDateFrom" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Время последнего изменения (от)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.2.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportOrgRegistryResult">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="OrgData" type="tns:exportOrgRegistryResultType" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Найденная организация.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.2.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportOrgRegistryResultType">
+		<xs:sequence>
+			<xs:element ref="organizations-registry-base:orgRootEntityGUID"/>
+			<xs:element name="OrgVersion">
+				<xs:annotation>
+					<xs:documentation>Версия организации в реестре организаций</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="organizations-registry-base:orgVersionGUID"/>
+						<xs:element name="lastEditingDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Время последнего изменения</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="IsActual" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Признак актуальности записи</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:choice>
+							<xs:element name="Legal" type="organizations-registry-base:LegalType">
+								<xs:annotation>
+									<xs:documentation>Юридическое лицо</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Subsidiary">
+								<xs:annotation>
+									<xs:documentation>Обособленное подразделение</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="organizations-registry-base:SubsidiaryType">
+											<xs:sequence>
+												<xs:element name="StatusVersion">
+													<xs:annotation>
+														<xs:documentation>Статус версии </xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:string"/>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="ParentOrg">
+													<xs:annotation>
+														<xs:documentation>Информация о головной организации</xs:documentation>
+													</xs:annotation>
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element ref="organizations-registry-base:RegOrgVersion"/>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Entrp" type="organizations-registry-base:EntpsType">
+								<xs:annotation>
+									<xs:documentation>Индивидуальный предприниматель</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ForeignBranch" type="organizations-registry-base:ForeignBranchType">
+								<xs:annotation>
+									<xs:documentation>ФПИЮЛ (Филиал или представительство иностранного юридического лица)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+						<xs:element name="registryOrganizationStatus" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Статус:
+(P)UBLISHED - опубликована в одном из документов в рамках раскрытия</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="P"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="base:orgPPAGUID" minOccurs="0"/>
+			<xs:element name="organizationRoles" type="nsi-base:nsiRef" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Полномочие организации (НСИ №20)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="isRegistered" type="xs:boolean" fixed="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Зарегистрирована в ГИС ЖКХ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Экспорт сведений о поставщиках информации ИС-->
+	<xs:element name="exportDataProviderRequest">
+		<xs:annotation>
+			<xs:documentation>В качестве поискового параметра используется Идентификатор ИС из RequestHeader</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="IsActual" type="xs:boolean" fixed="true" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Выгрузить только активных поставщиков данных</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.2.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportDataProviderResult">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="exportDataProviderResult" type="tns:exportDataProviderResultType" maxOccurs="unbounded"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.2.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exportDataProviderResultType">
+		<xs:sequence>
+			<xs:element name="DataProviderGUID" type="base:GUIDType">
+				<xs:annotation>
+					<xs:documentation>Идентификатор поставщика данных</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsActual" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Статус связи: 1 - аткивен, 0- отключен</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="organizations-registry-base:RegOrg"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Асинхронные мтоды-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="ImportResult" type="base:CommonResultType" maxOccurs="unbounded"/>
+						<xs:element name="exportOrgRegistryResult" type="tns:exportOrgRegistryResultType" maxOccurs="unbounded"/>
+						<xs:element name="exportDataProviderResult" type="tns:exportDataProviderResultType" maxOccurs="unbounded"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.2.1"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

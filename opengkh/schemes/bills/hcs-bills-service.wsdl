@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by S (H) -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/bills-service/" xmlns:b="http://dom.gosuslugi.ru/schema/integration/bills/" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:ns="http://www.w3.org/2000/09/xmldsig#" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://dom.gosuslugi.ru/schema/integration/account-base/" xmlns:ns2="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" xmlns:ns3="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:ns4="http://dom.gosuslugi.ru/schema/integration/organization-registry-base/" xmlns:ns5="http://dom.gosuslugi.ru/schema/integration/payments-base/" xmlns:ns6="http://dom.gosuslugi.ru/schema/integration/bills-base/" xmlns:ns7="http://dom.gosuslugi.ru/schema/integration/organization-base/" xmlns:ns8="http://dom.gosuslugi.ru/schema/integration/premises-base/" xmlns:ns9="http://dom.gosuslugi.ru/schema/integration/organizations-registry-base/" xmlns:ns10="http://dom.gosuslugi.ru/schema/integration/organizations-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/bills-service/">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="11.0.0.7">
+			<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/bills/" schemaLocation="hcs-bills-types.xsd"/>
+			<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="Fault">
+		<wsdl:part name="Fault" element="base:Fault"/>
+	</wsdl:message>
+	<wsdl:message name="RequestHeader">
+		<wsdl:part name="Header" element="base:RequestHeader"/>
+	</wsdl:message>
+	<wsdl:message name="ResultHeader">
+		<wsdl:part name="Header" element="base:ResultHeader"/>
+	</wsdl:message>
+	<wsdl:message name="importPaymentDocumentDataRequest">
+		<wsdl:part name="importPaymentDocumentDataRequest" element="b:importPaymentDocumentRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importPaymentDocumentDataResult">
+		<wsdl:part name="importPaymentDocumentDataResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportPaymentDocumentDataRequest">
+		<wsdl:part name="exportPaymentDocumentDataRequest" element="b:exportPaymentDocumentRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportPaymentDocumentDataResult">
+		<wsdl:part name="exportPaymentDocumentDataResult" element="b:exportPaymentDocumentResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportNotificationsOfOrderExecutionRequest">
+		<wsdl:part name="exportNotificationsOfOrderExecutionRequest" element="b:exportNotificationsOfOrderExecutionRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportNotificationsOfOrderExecutionResult">
+		<wsdl:part name="exportNotificationsOfOrderExecutionResult" element="b:exportNotificationsOfOrderExecutionResult"/>
+	</wsdl:message>
+	<wsdl:message name="importAcknowledgmentRequest">
+		<wsdl:part name="importAcknowledgmentRequest" element="b:importAcknowledgmentRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importAcknowledgmentResult">
+		<wsdl:part name="importAcknowledgmentResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="importInsuranceProductRequest">
+		<wsdl:part name="importInsuranceProductRequest" element="b:importInsuranceProductRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importInsuranceProductResult">
+		<wsdl:part name="importInsuranceProductResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportInsuranceProductRequest">
+		<wsdl:part name="exportInsuranceProductRequest" element="b:exportInsuranceProductRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportInsuranceProductResult">
+		<wsdl:part name="exportInsuranceProductResult" element="b:exportInsuranceProductResult"/>
+	</wsdl:message>
+	<wsdl:message name="importRSOSettlementsRequest">
+		<wsdl:part name="importRSOSettlementsRequest" element="b:importRSOSettlementsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importRSOSettlementsResult">
+		<wsdl:part name="importRSOSettlementsResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="importIKUSettlementsRequest">
+		<wsdl:part name="importIKUSettlementsRequest" element="b:importIKUSettlementsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importIKUSettlementsResult">
+		<wsdl:part name="importIKUSettlementsResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportSettlementsRequest">
+		<wsdl:part name="exportSettlementsRequest" element="b:exportSettlementsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportSettlementsResult">
+		<wsdl:part name="exportSettlementsResult" element="b:exportSettlementsResult"/>
+	</wsdl:message>
+	<wsdl:portType name="BillsPortsType">
+		<wsdl:operation name="importPaymentDocumentData">
+			<wsdl:documentation>ВИ_ИЛС_ПД_ИМП. импорт платежных документов</wsdl:documentation>
+			<wsdl:input message="tns:importPaymentDocumentDataRequest"/>
+			<wsdl:output message="tns:importPaymentDocumentDataResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportPaymentDocumentData">
+			<wsdl:documentation>ВИ_ИЛС_ПД_ЭКСП. экспорт платежных документов</wsdl:documentation>
+			<wsdl:input message="tns:exportPaymentDocumentDataRequest"/>
+			<wsdl:output message="tns:exportPaymentDocumentDataResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportNotificationsOfOrderExecution">
+			<wsdl:documentation>Экспорт изввещений о принятии к исполнению распоряжений с результатами квитирования</wsdl:documentation>
+			<wsdl:input message="tns:exportNotificationsOfOrderExecutionRequest"/>
+			<wsdl:output message="tns:exportNotificationsOfOrderExecutionResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importAcknowledgment">
+			<wsdl:documentation>ВИ_ОПЛАТА_ИМКВИТ. Импорт пакета документов "Запрос на квитирование"</wsdl:documentation>
+			<wsdl:input message="tns:importAcknowledgmentRequest"/>
+			<wsdl:output message="tns:importAcknowledgmentResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importInsuranceProduct">
+			<wsdl:documentation>Импорт страховых продуктов</wsdl:documentation>
+			<wsdl:input message="tns:importInsuranceProductRequest"/>
+			<wsdl:output message="tns:importInsuranceProductResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportInsuranceProduct">
+			<wsdl:documentation>Экспорт страховых продуктов</wsdl:documentation>
+			<wsdl:input message="tns:exportInsuranceProductRequest"/>
+			<wsdl:output message="tns:exportInsuranceProductResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importRSOSettlements">
+			<wsdl:documentation>Импорт информации о состоянии расчетов от имени РСО</wsdl:documentation>
+			<wsdl:input message="tns:importRSOSettlementsRequest"/>
+			<wsdl:output message="tns:importRSOSettlementsResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importIKUSettlements">
+			<wsdl:documentation>Импорт информации о состоянии расчетов от имени организации - исполнителя коммунальных услуг (УО, ТСЖ и тд)</wsdl:documentation>
+			<wsdl:input message="tns:importIKUSettlementsRequest"/>
+			<wsdl:output message="tns:importIKUSettlementsResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportSettlements">
+			<wsdl:documentation>Экспорт информации о расчетах по ДРСО</wsdl:documentation>
+			<wsdl:input message="tns:exportSettlementsRequest"/>
+			<wsdl:output message="tns:exportSettlementsResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BillsBinding" type="tns:BillsPortsType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="importPaymentDocumentData">
+			<soap:operation soapAction="urn:importPaymentDocumentData"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportPaymentDocumentData">
+			<soap:operation soapAction="urn:exportPaymentDocumentData"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportNotificationsOfOrderExecution">
+			<soap:operation soapAction="urn:exportNotificationsOfOrderExecution"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importAcknowledgment">
+			<soap:operation soapAction="urn:importAcknowledgment"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importInsuranceProduct">
+			<soap:operation soapAction="urn:importInsuranceProduct"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportInsuranceProduct">
+			<soap:operation soapAction="urn:exportInsuranceProduct"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importRSOSettlements">
+			<soap:operation soapAction="urn:importRSOSettlements"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importIKUSettlements">
+			<soap:operation soapAction="urn:importIKUSettlements"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportSettlements">
+			<soap:operation soapAction="urn:exportSettlements"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BillsService">
+		<wsdl:port name="BillsPort" binding="tns:BillsBinding">
+			<soap:address location="https://api.dom.gosuslugi.ru/ext-bus-bills-service/services/Bills/"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

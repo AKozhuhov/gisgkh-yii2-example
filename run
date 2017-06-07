@@ -1,0 +1,124 @@
+#!/usr/bin/env php
+<?php
+
+$baseImage = "rucode/gisgkh-soap-php:latest";
+$image = "rucode/gisgkh-soap-php:local";
+$container = "gisgkh-soap-php";
+$dir = realpath(__DIR__);
+$port = 8080;
+$host = '127.0.0.1';
+
+$params = [
+    'u' => 'update',
+    'p:' => 'port:',
+    'h' => 'help',
+    '' => 'host:'
+];
+$options = getopt(implode('', array_keys($params)), $params);
+
+$host = $options['host'] ?: $host;
+
+if (isset($options['help']) || isset($options['h'])) {
+    echo <<<TXT
+
+Запуск тестового приложения интеграции с ГИС ЖКХ на PHP
+demo.open-gkh.ru
+
+Использование: ./run [-h|--help] [-p|--port=8080]
+
+Опции:
+    -u  --update    Обновить базовый образ из репозитория
+    -h  --help      Справка (это сообщение)
+        --host      Хост на котором будет запущено тестовое приложение (по-умолчанию {$host})
+    -p  --port      Порт на котором будет запущено тестовое приложение (по-умолчанию {$port})
+
+
+TXT;
+    return;
+}
+
+$port = @$params["port"] ?: (@$params["p"] ?: $port);
+
+$output = [];
+execute("docker ps -a -q -f \"ancestor={$image}\"", $output);
+foreach ($output as $containerId) {
+    $command = "docker rm -f $containerId";
+    executeVerbose($command);
+}
+
+execute("docker images -q -f \"dangling=true\"", $output);
+foreach ($output as $danglingImageId) {
+    $command = "docker rmi -f $danglingImageId";
+    executeVerbose($command);
+}
+
+execute("docker images -q -f \"since={$baseImage}\"", $output);
+foreach ($output as $imageId) {
+    $command = "docker rmi -f $imageId";
+    executeVerbose($command);
+}
+
+if (isset($options['update']) || isset($options['u'])) {
+    execute("docker images -q {$baseImage}", $output);
+    foreach ($output as $imageId) {
+        $command = "docker rmi -f $imageId";
+        executeVerbose($command);
+    }
+}
+
+$command = "cd docker && docker build --no-cache --rm -t {$image} . 2>&1";
+if (executeVerbose($command) != 0) {
+    die();
+};
+
+$command = "docker run -d " .
+    "-h {$container} " .
+    "-v '{$dir}:/example' " .
+    "-p {$host}:{$port}:80 " .
+    "--name={$container} {$image} 2>&1";
+if (executeVerbose($command) != 0) {
+    die();
+};
+
+$command = "docker exec -it {$container} composer --working-dir=\"/example\" install 2>&1";
+executeVerbose($command);
+
+echo <<<TXT
+
+---
+
+Консоль управления виртуальной машиной
+
+    docker exec -it {$container} /bin/bash
+    
+Открыть пример в браузере
+
+    http://{$host}:{$port}
+
+
+TXT;
+
+
+function getLocalIp()
+{
+    $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    socket_connect($sock, "8.8.8.8", 53);
+    socket_getsockname($sock, $ip);
+    socket_close($sock);
+    return $ip;
+}
+
+function executeVerbose($command)
+{
+    echo(PHP_EOL . $command . PHP_EOL . PHP_EOL);
+    system($command, $retval);
+    return $retval;
+}
+
+function execute($command, &$output)
+{
+    $output = [];
+    echo(PHP_EOL . $command . PHP_EOL . PHP_EOL);
+    exec($command, $output, $retval);
+    return $retval;
+}

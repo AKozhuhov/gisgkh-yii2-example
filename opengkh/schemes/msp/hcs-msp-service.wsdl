@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!---->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/msp-service/" xmlns:msp="http://dom.gosuslugi.ru/schema/integration/msp/" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:ns="http://www.w3.org/2000/09/xmldsig#" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://dom.gosuslugi.ru/schema/integration/individual-registry-base/" xmlns:ns2="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:ns3="http://dom.gosuslugi.ru/schema/integration/bills-base/" xmlns:ns4="http://dom.gosuslugi.ru/schema/integration/premises-base/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/msp-service/">
+	<wsdl:types>
+		<xs:schema version="11.0.0.5" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/msp/" schemaLocation="hcs-msp-types.xsd"/>
+			<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="importCitizenSubsidyRequest">
+		<wsdl:part name="importCitizenSubsidyRequest" element="msp:importCitizenSubsidyRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importCitizenSubsidyResult">
+		<wsdl:part name="importCitizenSubsidyResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="importCitizenCompensationRequest">
+		<wsdl:part name="importCitizenCompensationRequest" element="msp:importCitizenCompensationRequest"/>
+	</wsdl:message>
+	<wsdl:message name="importCitizenCompensationResult">
+		<wsdl:part name="importCitizenCompensationResult" element="base:ImportResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportCategoriesRequest">
+		<wsdl:part name="exportCategoriesRequest" element="msp:exportCategoriesRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportCategoriesResult">
+		<wsdl:part name="exportCategoriesResult" element="msp:exportCategoriesResult"/>
+	</wsdl:message>
+	<wsdl:message name="Fault">
+		<wsdl:part name="Fault" element="base:Fault"/>
+	</wsdl:message>
+	<wsdl:message name="RequestHeader">
+		<wsdl:part name="Header" element="base:RequestHeader"/>
+	</wsdl:message>
+	<wsdl:message name="ResultHeader">
+		<wsdl:part name="Header" element="base:ResultHeader"/>
+	</wsdl:message>
+	<wsdl:message name="exportCitizenSubsidyRequest">
+		<wsdl:part name="exportCitizenSubsidyRequest" element="msp:exportCitizenSubsidyRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportCitizenSubsidyResult">
+		<wsdl:part name="exportCitizenSubsidyResult" element="msp:exportCitizenSubsidyResult"/>
+	</wsdl:message>
+	<wsdl:message name="exportCitizenCompensationRequest">
+		<wsdl:part name="exportCitizenCompensationRequest" element="msp:exportCitizenCompensationRequest"/>
+	</wsdl:message>
+	<wsdl:message name="exportCitizenCompensationResult">
+		<wsdl:part name="exportCitizenCompensationResult" element="msp:exportCitizenCompensationResult"/>
+	</wsdl:message>
+	<wsdl:portType name="MSPPort">
+		<wsdl:operation name="importCitizenSubsidy">
+			<wsdl:documentation>Импорт сведений о гражданах, получающих субсидии</wsdl:documentation>
+			<wsdl:input message="tns:importCitizenSubsidyRequest"/>
+			<wsdl:output message="tns:importCitizenSubsidyResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="importCitizenCompensation">
+			<wsdl:documentation>Импорт сведений о гражданах, получающих компенсации расходов</wsdl:documentation>
+			<wsdl:input message="tns:importCitizenCompensationRequest"/>
+			<wsdl:output message="tns:importCitizenCompensationResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportCategories">
+			<wsdl:documentation>Экспорт перечня отдельных категорий граждан, имеющих право на получение компенсации расходов</wsdl:documentation>
+			<wsdl:input message="tns:exportCategoriesRequest"/>
+			<wsdl:output message="tns:exportCategoriesResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportCitizenSubsidy">
+			<wsdl:documentation>Экспорт сведений о гражданах, получающих субсидии</wsdl:documentation>
+			<wsdl:input message="tns:exportCitizenSubsidyRequest"/>
+			<wsdl:output message="tns:exportCitizenSubsidyResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+		<wsdl:operation name="exportCitizenCompensation">
+			<wsdl:documentation>Экспорт сведений о гражданах, получающих компенсации расходов</wsdl:documentation>
+			<wsdl:input message="tns:exportCitizenCompensationRequest"/>
+			<wsdl:output message="tns:exportCitizenCompensationResult"/>
+			<wsdl:fault name="InvalidRequest" message="tns:Fault"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="MSPBinding" type="tns:MSPPort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="importCitizenSubsidy">
+			<soap:operation soapAction="urn:importCitizenSubsidy"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="importCitizenCompensation">
+			<soap:operation soapAction="urn:importCitizenCompensation"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportCategories">
+			<soap:operation soapAction="urn:exportCategories"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportCitizenSubsidy">
+			<soap:operation soapAction="urn:exportCitizenSubsidy"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:ResultHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="exportCitizenCompensation">
+			<soap:operation soapAction="urn:exportCitizenCompensation"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+				<soap:header message="tns:RequestHeader" part="Header" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="InvalidRequest">
+				<soap:fault name="InvalidRequest" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="MSPService">
+		<wsdl:port name="MSPPort" binding="tns:MSPBinding">
+			<soap:address location="https://api.dom.gosuslugi.ru/ext-bus-msp-service/services/MSP/"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

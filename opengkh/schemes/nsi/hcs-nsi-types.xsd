@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by S (H) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://dom.gosuslugi.ru/schema/integration/base/" xmlns:nsi-base="http://dom.gosuslugi.ru/schema/integration/nsi-base/" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:tns="http://dom.gosuslugi.ru/schema/integration/nsi/" targetNamespace="http://dom.gosuslugi.ru/schema/integration/nsi/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="11.1.0.5">
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/base/" schemaLocation="../lib/hcs-base.xsd"/>
+	<xs:import namespace="http://dom.gosuslugi.ru/schema/integration/nsi-base/" schemaLocation="../lib/hcs-nsi-base.xsd"/>
+	<xs:element name="exportNsiItemResult">
+		<xs:annotation>
+			<xs:documentation>Возврат данных справочника поставщика (используется exportDataProviderNsiItem)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Составной тип. Данные справочника.</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="NsiItem" type="nsi-base:NsiItemType">
+							<xs:annotation>
+								<xs:documentation>Данные справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Импортировать данные справочника 1 "Дополнительные услуги"-->
+	<xs:element name="importAdditionalServicesRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт данных справочника 1 "Дополнительные услуги".</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportAdditionalServiceType" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Создание/изменение вида дополнительной услуги.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:sequence>
+										<xs:element ref="base:TransportGUID"/>
+										<xs:element name="ElementGuid" type="base:GUIDType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Идентификатор существующего элемента справочника</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:element name="AdditionalServiceTypeName" type="base:String100Type">
+										<xs:annotation>
+											<xs:documentation>Наименование вида дополнительной услуги.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:choice>
+										<xs:element ref="base:OKEI">
+											<xs:annotation>
+												<xs:documentation>Единица измерения из справочника ОКЕИ.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="StringDimensionUnit">
+											<xs:annotation>
+												<xs:documentation>Другая единица измерения.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="base:String100Type">
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="RecoverAdditionalServiceType" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Восстановление вида дополнительной услуги.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор ранее существовавшего  элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="DeleteAdditionalServiceType" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Удаление вида дополнительной услуги.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importAdditionalServicesRequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<!--Импортировать данные справочника 51 "Коммунальные услуги"-->
+	<xs:element name="importMunicipalServicesRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт данных справочника 51 "Коммунальные услуги".</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportMainMunicipalService" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Уровень 2. Создание/изменение главной коммунальной услуги.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:sequence>
+										<xs:element ref="base:TransportGUID"/>
+										<xs:element name="ElementGuid" type="base:GUIDType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:element name="MunicipalServiceRef" type="nsi-base:nsiRef">
+										<xs:annotation>
+											<xs:documentation>Ссылка на НСИ "Вид коммунальной услуги" (реестровый номер 3).</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="GeneralNeeds" type="xs:boolean" fixed="true" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Признак "Услуга предоставляется на общедомовые нужды"</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="SelfProduced" type="xs:boolean" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Признак "Самостоятельное производство коммунальной услуги"</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="MainMunicipalServiceName" type="base:String100Type">
+										<xs:annotation>
+											<xs:documentation>Наименование главной коммунальной услуги.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="MunicipalResourceRef" type="nsi-base:nsiRef" maxOccurs="unbounded">
+										<xs:annotation>
+											<xs:documentation>Ссылка на НСИ "Вид коммунального ресурса" (реестровый номер 2)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element ref="base:OKEI">
+										<xs:annotation>
+											<xs:documentation>Единница измерения из справочника ОКЕИ.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:choice>
+										<xs:element name="SortOrder">
+											<xs:annotation>
+												<xs:documentation>Порядок сортировки.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="3"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="SortOrderNotDefined" type="xs:boolean" fixed="true">
+											<xs:annotation>
+												<xs:documentation>Порядок сортировки не задан</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="RecoverMainMunicipalService" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Уровень 2. Восстановление главной коммунальной услуги (ветки).</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор ранее существовавшего  элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="HierarchyRecover" type="xs:boolean" fixed="true" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Признак восстановления всех дочерних элементов.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="DeleteMainMunicipalService" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Уровень 2. Удаление главной коммунальной услуги (ветки).</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.0.0.4"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importMunicipalServicesRequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<!--Импортировать данные справочника 59 "Работы и услуги организации"-->
+	<xs:element name="importOrganizationWorksRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт данных справочника 59 "Работы и услуги организации".</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportOrganizationWork" type="tns:ImportOrganizationWorkType" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Создание/изменение элемента справочника работ и услуг</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RecoverOrganizationWork" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Восстановление элемент (ветки) справочника работ и услуг организации.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор ранее существовавшего  элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="HierarchyRecover" type="xs:boolean" fixed="true" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Признак восстановления всех дочерних элементов.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="DeleteOrganizationWork" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Удаление элемента (ветки) справочника работ и услуг организации.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="importOrganizationWorksRequest_TransportGUIDKey">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<xs:complexType name="ImportOrganizationWorkType">
+		<xs:annotation>
+			<xs:documentation>Элемент справочника работ и услуг организации.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element ref="base:TransportGUID"/>
+				<xs:element name="ElementGuid" type="base:GUIDType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="WorkName" type="base:String500Type">
+				<xs:annotation>
+					<xs:documentation>Название работы/услуги.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceTypeRef" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Вид работ" (реестровый номер 56).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredServiceRef" type="nsi-base:nsiRef" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Обязательные работы, обеспечивающие надлежащее содержание МКД" (реестровый номер 67).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element ref="base:OKEI">
+					<xs:annotation>
+						<xs:documentation>Единница измерения из справочника ОКЕИ.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="StringDimensionUnit" type="base:String100Type">
+					<xs:annotation>
+						<xs:documentation>Другая единица измерения.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="ImportOrganizationWork" type="tns:ImportOrganizationWorkType" minOccurs="0" maxOccurs="1000">
+				<xs:annotation>
+					<xs:documentation>Дочерний  элемент</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Импортировать данные справочника 219 "Вид работ капитального ремонта"-->
+	<xs:element name="importCapitalRepairWorkRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт данных справочника 219 "Вид работ капитального ремонта".</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportCapitalRepairWork" type="tns:ImportCapitalRepairWorkType" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Создание/изменение элемента справочника виды работ капитального ремонта</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RecoverCapitalRepairWork" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Восстановление элемента справочника виды работ капитального ремонта</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="DeleteCapitalRepairWork" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Удаление элемента справочника виды работ капитального ремонта</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.5"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="ElementGuid_CR_Unique">
+			<xs:selector xpath=".//tns:ElementGuid"/>
+			<xs:field xpath="."/>
+		</xs:key>
+		<xs:key name="TransportGUID_Unique">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<xs:complexType name="ImportCapitalRepairWorkType">
+		<xs:annotation>
+			<xs:documentation>Элемент справочника виды работ капитального ремонта.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element ref="base:TransportGUID"/>
+				<xs:element name="ElementGuid" type="base:GUIDType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="ServiceName" type="base:String500Type">
+				<xs:annotation>
+					<xs:documentation>Наименование вида работ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WorkGroupRef" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Группа работ" (реестровый номер 218).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Импортировать данные справочника 302 "Основание принятия решения о мерах социальной поддержки гражданина"-->
+	<xs:element name="importBaseDecisionMSPRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на импорт данных справочника 302 "Основание принятия решения о мерах социальной поддержки гражданина".</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="ImportBaseDecisionMSP" type="tns:importBaseDecisionMSPType" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Создание/изменение элемента справочника оснований принятия решений</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="RecoverBaseDecisionMSP" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Восстановление элемента справочника оснований принятия решений</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="DeleteBaseDecisionMSP" minOccurs="0" maxOccurs="1000">
+							<xs:annotation>
+								<xs:documentation>Удаление элемента справочника оснований принятия решений</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="base:TransportGUID"/>
+									<xs:element name="ElementGuid" type="base:GUIDType">
+										<xs:annotation>
+											<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.5"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:key name="TransportGuid_Unique">
+			<xs:selector xpath=".//base:TransportGUID"/>
+			<xs:field xpath="."/>
+		</xs:key>
+		<xs:key name="ElementGuid_BDMS_Unique">
+			<xs:selector xpath=".//tns:ElementGuid"/>
+			<xs:field xpath="."/>
+		</xs:key>
+	</xs:element>
+	<xs:complexType name="importBaseDecisionMSPType">
+		<xs:annotation>
+			<xs:documentation>Элемент справочника оснований принятия решений.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element ref="base:TransportGUID"/>
+				<xs:element name="ElementGuid" type="base:GUIDType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Идентификатор существующего элемента справочника.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="DecisionName" type="base:String500Type">
+				<xs:annotation>
+					<xs:documentation>Наименование основания принятия решения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionType" type="nsi-base:nsiRef">
+				<xs:annotation>
+					<xs:documentation>Ссылка на НСИ "Тип решения о мерах социальной поддержки гражданина" (реестровый номер 301)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsAppliedToSubsidiaries" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Применяется для субсидий</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsAppliedToRefundOfCharges" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Применяется для компенсации расходов</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Экспортировать данные справочников поставщика информации  (1,51,59,219,302)-->
+	<xs:element name="exportDataProviderNsiItemRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на получение данных справочника поставщика</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="RegistryNumber">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер справочника.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="nsi-base:NsiItemRegistryNumberType">
+									<xs:enumeration value="1"/>
+									<xs:enumeration value="51"/>
+									<xs:enumeration value="59"/>
+									<xs:enumeration value="219"/>
+									<xs:enumeration value="302"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedAfter" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата и время, измененные после которой элементы справочника должны быть возвращены в ответе. Если не указана, возвращаются все элементы справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Экспортировать данные справочников поставщика информации (1,51,59...) постранично -->
+	<xs:element name="exportDataProviderNsiPagingItemRequest">
+		<xs:annotation>
+			<xs:documentation>Запрос на получение данных справочника поставщика постранично</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:sequence>
+						<xs:element name="RegistryNumber">
+							<xs:annotation>
+								<xs:documentation>Реестровый номер справочника.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="nsi-base:NsiItemRegistryNumberType">
+									<xs:enumeration value="1"/>
+									<xs:enumeration value="51"/>
+									<xs:enumeration value="59"/>
+									<xs:enumeration value="219"/>
+									<xs:enumeration value="302"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Page">
+							<xs:annotation>
+								<xs:documentation>Страница выборки. Возвращается по 1000 элементов.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:minInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ModifiedAfter" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата и время, измененные после которой элементы справочника должны быть возвращены в ответе. Если не указана, возвращаются все элементы справочника.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.5"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="exportNsiPagingItemResult">
+		<xs:annotation>
+			<xs:documentation>Возврат данных справочника поставщика постранично (используется exportDataProviderNsiPagingItem)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Составной тип. Данные справочника.</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="base:BaseType">
+					<xs:choice>
+						<xs:element name="NsiItem">
+							<xs:annotation>
+								<xs:documentation>Данные справочника.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="nsi-base:NsiItemType">
+										<xs:sequence>
+											<xs:element name="TotalItemsCount" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество записей в справочнике</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="TotalPages" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество страниц</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="CurrentPage">
+												<xs:annotation>
+													<xs:documentation>Номер текущей страницы</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element ref="base:ErrorMessage"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="11.1.0.5"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Методы для асинхронного обмена-->
+	<xs:element name="getStateResult">
+		<xs:annotation>
+			<xs:documentation>Возврат статуса отправленного сообщения</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="base:BaseAsyncResponseType">
+					<xs:choice minOccurs="0">
+						<xs:element ref="base:ErrorMessage"/>
+						<xs:element name="ImportResult" type="base:CommonResultType" maxOccurs="unbounded"/>
+						<xs:element name="NsiItem" type="nsi-base:NsiItemType"/>
+						<xs:element name="NsiPagingItem">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="nsi-base:NsiItemType">
+										<xs:sequence>
+											<xs:element name="TotalItemsCount" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество записей в справочнике</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="TotalPages" type="xs:int">
+												<xs:annotation>
+													<xs:documentation>Количество страниц</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="CurrentPage">
+												<xs:annotation>
+													<xs:documentation>Номер текущей страницы</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="NsiList" type="nsi-base:NsiListType"/>
+					</xs:choice>
+					<xs:attribute ref="base:version" use="required" fixed="10.0.1.2"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

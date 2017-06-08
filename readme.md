@@ -50,8 +50,8 @@ docker build --no-cache -rm -t opengkh/gisgkh-soap-php:local`
 docker run -d -h gisgkh-soap-php -v '{source-path}:/example' -p '{local-ip}:8080:80' --name=gisgkh-soap-php opengkh/gisgkh-soap-php:local`
 ```
 
-\*** в примере выше приложение разворачивается на порту `8080`, 
-если этот порт у вас уже занят можно выбравть любой другой. 
+\*** в примере выше приложение разворачивается на порту `8080`.
+Если этот порт у вас уже занят, можно выбрать любой другой. 
 В комманде `run` для этого достаточно указать параметр `-p` или `--port`
 
 ```

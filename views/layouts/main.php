@@ -11,7 +11,7 @@ use app\assets\AppAsset;
 
 AppAsset::register($this);
 
-$this->title = ($this->title ?: 'Интеграция с ГИС ЖКХ с помощью модуля yii2-gisgkh') . ' — демо OpenGKH';
+$this->title = ($this->title ?: 'Интеграция с ГИС ЖКХ на Yii2') . ' — демо OpenGKH';
 
 ?>
 <?php $this->beginPage() ?>

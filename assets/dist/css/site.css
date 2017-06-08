@@ -153,3 +153,7 @@ a.desc:after {
 .grid-view th {
     white-space: normal !important;
 }
+
+.popover {
+    max-width: 300px;
+}

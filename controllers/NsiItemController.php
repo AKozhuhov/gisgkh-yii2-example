@@ -120,7 +120,7 @@ class NsiItemController extends Controller
                 'value' => function (NsiElementType $nsiElement) {
                     $shortGuid = substr($nsiElement->GUID, 0, 8) . '...';
                     return <<<HTML
-<a href="javascript:void(0);" data-container="body" data-toggle="popover" data-placement="right" title="GUID" data-content="{$nsiElement->GUID}">
+<a href="javascript:void(0);" data-container="body" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="{$nsiElement->GUID}">
   {$shortGuid}
 </a>
 HTML;

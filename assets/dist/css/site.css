@@ -149,3 +149,7 @@ a.desc:after {
     white-space: normal;
     margin-bottom: 5px;
 }
+
+.grid-view th {
+    white-space: normal !important;
+}

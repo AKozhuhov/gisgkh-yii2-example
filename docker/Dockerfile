@@ -1,4 +1,4 @@
-FROM rucode/gisgkh-soap-php
+FROM opengkh/gisgkh-soap-php
 MAINTAINER oakymax "korshunov.m.e@gmail.com"
 
 RUN apt-get install zip unzip

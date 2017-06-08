@@ -21,7 +21,8 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.11",
         "yiisoft/yii2-bootstrap": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0"
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
+        "geshi/geshi": "^1.0"
     },
     "scripts": {
         "post-install-cmd": [

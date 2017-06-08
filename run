@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-$baseImage = "rucode/gisgkh-soap-php:latest";
-$image = "rucode/gisgkh-soap-php:local";
+$baseImage = "opengkh/gisgkh-soap-php:latest";
+$image = "opengkh/gisgkh-soap-php:local";
 $container = "gisgkh-soap-php";
 $dir = realpath(__DIR__);
 $port = 8080;
@@ -16,7 +16,7 @@ $params = [
 ];
 $options = getopt(implode('', array_keys($params)), $params);
 
-$host = $options['host'] ?: $host;
+$host = @$options['host'] ?: $host;
 
 if (isset($options['help']) || isset($options['h'])) {
     echo <<<TXT
@@ -28,6 +28,7 @@ demo.open-gkh.ru
 
 Опции:
     -u  --update    Обновить базовый образ из репозитория
+    -f  --force     Принудительно пересобрать образ и контейнер
     -h  --help      Справка (это сообщение)
         --host      Хост на котором будет запущено тестовое приложение (по-умолчанию {$host})
     -p  --port      Порт на котором будет запущено тестовое приложение (по-умолчанию {$port})
@@ -38,50 +39,57 @@ TXT;
 }
 
 $port = @$params["port"] ?: (@$params["p"] ?: $port);
-
+$update = isset($options['update']) || isset($options['u']);
+$force = isset($options['force']) || isset($options['f']);
 $output = [];
-execute("docker ps -a -q -f \"ancestor={$image}\"", $output);
-foreach ($output as $containerId) {
-    $command = "docker rm -f $containerId";
-    executeVerbose($command);
-}
 
-execute("docker images -q -f \"dangling=true\"", $output);
-foreach ($output as $danglingImageId) {
-    $command = "docker rmi -f $danglingImageId";
-    executeVerbose($command);
-}
+executeAndGetOutput("docker ps -q -a -f \"name={$container}\" -f \"status=exited\"", $output);
+if ($output && !$force) {
+    execute("docker start {$container}");
+} else {
+    executeAndGetOutput("docker ps -a -q -f \"ancestor={$image}\"", $output);
+    foreach ($output as $containerId) {
+        $command = "docker rm -f $containerId";
+        execute($command);
+    }
 
-execute("docker images -q -f \"since={$baseImage}\"", $output);
-foreach ($output as $imageId) {
-    $command = "docker rmi -f $imageId";
-    executeVerbose($command);
-}
+    executeAndGetOutput("docker images -q -f \"dangling=true\"", $output);
+    foreach ($output as $danglingImageId) {
+        $command = "docker rmi -f $danglingImageId";
+        execute($command);
+    }
 
-if (isset($options['update']) || isset($options['u'])) {
-    execute("docker images -q {$baseImage}", $output);
+    executeAndGetOutput("docker images -q -f \"since={$baseImage}\"", $output);
     foreach ($output as $imageId) {
         $command = "docker rmi -f $imageId";
-        executeVerbose($command);
+        execute($command);
     }
+
+    if ($update) {
+        executeAndGetOutput("docker images -q {$baseImage}", $output);
+        foreach ($output as $imageId) {
+            $command = "docker rmi -f $imageId";
+            execute($command);
+        }
+    }
+
+    $command = "cd docker && docker build --no-cache --rm -t {$image} . 2>&1";
+    if (execute($command) != 0) {
+        die();
+    };
+
+    $command = "docker run -d " .
+        "-h {$container} " .
+        "-v '{$dir}:/example' " .
+        "-p {$host}:{$port}:80 " .
+        "--name={$container} {$image} 2>&1";
+    if (execute($command) != 0) {
+        die();
+    };
+
+    $command = "docker exec -it {$container} composer --working-dir=\"/example\" install 2>&1";
+    execute($command);
 }
-
-$command = "cd docker && docker build --no-cache --rm -t {$image} . 2>&1";
-if (executeVerbose($command) != 0) {
-    die();
-};
-
-$command = "docker run -d " .
-    "-h {$container} " .
-    "-v '{$dir}:/example' " .
-    "-p {$host}:{$port}:80 " .
-    "--name={$container} {$image} 2>&1";
-if (executeVerbose($command) != 0) {
-    die();
-};
-
-$command = "docker exec -it {$container} composer --working-dir=\"/example\" install 2>&1";
-executeVerbose($command);
 
 echo <<<TXT
 
@@ -108,14 +116,14 @@ function getLocalIp()
     return $ip;
 }
 
-function executeVerbose($command)
+function execute($command)
 {
     echo(PHP_EOL . $command . PHP_EOL . PHP_EOL);
     system($command, $retval);
     return $retval;
 }
 
-function execute($command, &$output)
+function executeAndGetOutput($command, &$output)
 {
     $output = [];
     echo(PHP_EOL . $command . PHP_EOL . PHP_EOL);

@@ -47,6 +47,10 @@ class NsiController extends Controller
             $error = $e->getMessage();
         }
 
+        usort($result, function (NsiItemInfoType $a, NsiItemInfoType $b) {
+           return $a->RegistryNumber < $b->RegistryNumber ? -1 : ($a->RegistryNumber > $b->RegistryNumber ? 1 : 0);
+        });
+
         $dataProvider = new ArrayDataProvider([
             'allModels' => $result,
         ]);
